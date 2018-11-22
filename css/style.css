@@ -1,0 +1,219 @@
+#butt1 {
+  height: 30px;
+  margin-top: 5px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+#butt2 {
+  height: 30px;
+  margin-top: 5px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+#butt3 {
+  height: 30px;
+  margin-top: 5px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+canvas{
+  background-color: black;
+}
+.bar{
+  position:absolute;
+  left: 70px;
+  top:1000px;
+  width:1080px;
+  height:202.5px;
+  margin-top: -400px;
+  border: 4px solid #00004F;
+}
+.white-steps{
+  position: relative;
+  background
+  width:1200px;
+  height:200px;
+  display: inline-flex;
+}
+
+.black-steps1{
+  position: relative;
+  transform: translate(-206%);
+  left:4px;
+  width:500px;
+  height:0px;
+  display: inline-flex;
+  margin-top: 0.5px;
+}
+.black-steps2{
+  position:relative;
+  transform: translate(-524%);
+  width:250px;
+  height:0px;
+  display: inline-flex;
+  margin-top: 0.5px;
+}
+.black-steps3{
+  position:relative;
+  transform: translate(-254%);
+  width:500px;
+  height:0px;
+  display: inline-flex;
+  margin-top: 0.5px;
+}
+.black-steps4{
+  position:relative;
+  transform: translate(-622%);
+  width:250px;
+  height:0px;
+  display: inline-flex;
+  margin-top: 0.5px;
+}
+.step{}
+.white-step{
+  position:relative;
+  width: 70px;
+  height: 200px;
+  background-color: #fff8dc;
+  border: 1px solid #111111;
+}
+
+.black-step{
+  margin-right: 35px;
+  width: 35px;
+  height: 170px;
+  background-color: #2f4f4f;
+  border: 1px solid black;
+  display:inline-block;
+}
+.clicked-step{
+  background-color: red;
+}
+.synthMain{
+  height: 800px;
+  width: 1200px;
+  background-color: #400040;
+  border: solid black 2px;
+  border-radius: 5px;
+  display:inline-block;
+}
+
+.oscContainer{
+  width:677px;
+  height:480px;
+  display:inline-block;
+  margin: 1px;
+  background-color:#00004F;
+  border-radius: 5px;
+}
+
+.osc{
+  width:671px;
+  height:154px;
+  border: 1px solid black;
+  margin:2px;
+  background-color:black;
+  border-radius: 10px;
+  display:inline-flex;
+}
+.selectedOsc{
+  background: linear-gradient(to bottom, black 0%, #00FF00 100%);
+}
+
+.oscZone {
+  
+  height:145px;
+  border: 2px solid #404040;
+  margin:2px;
+  background-color:#B2B2B2;
+  border-radius: 5px;  
+}
+
+#oscZone1{
+  width:250px;
+  display:inline-block;
+}
+
+#oscZone2{
+  width:200px;
+}
+
+#oscZone3{
+  width:200px;
+}
+
+.buttonOscContainer{
+  width:250px;
+  background-color:#4F4F4F;
+  height:40px;
+  display:inline-flex;
+}
+
+#oscButton{
+  background-color:white;
+  border:1px solid black;
+  margin:2px;
+  border-radius: 15px;
+  width:50px;
+  position:relative;
+}
+
+.onOffOsc{
+  background-color:#004200;
+  border-radius:50px;
+  width:15px;
+  height:15px;
+  margin:10px;
+  border: 3px solid black;
+}
+
+.dotOnOffContainer{
+  width:50px;
+  height:39px;
+  border:1px solid black;
+  background-color:green;
+  display:inline-flex;
+  
+}
+
+
+#butt1{}
+#butt2{}
+#butt3{}
+
+#dot1{}
+#dot2{}
+#dot3{}
+
+.clicked{
+  background-color:#00FF00;
+}
+
+
+.knobVol{
+  background-color:black;
+  width:30px;
+  height:30px;
+  border-radius:50px;
+  margin-left:20px;
+  transform:translateY(-50%);
+  position:relative;
+  top:50%;
+  transform:translateY(-50%) rotate(225deg);
+  
+}
+
+.knobLabel{
+  width:4px;
+  height:14px;
+  background-color:red;
+  position:relative;
+  transform:translateX(-50%);
+  left:50%;
+}
+
+#vol1{}
+#vol2{}
+#vol3{}
+
+

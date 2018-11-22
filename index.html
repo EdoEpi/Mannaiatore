@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mannaiatore base 22/11</title>
+  
+  
+  
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+
+  <div class="synthMain">
+  <div class="bar">
+  <div class="white-steps">
+    <div class="step white-step" id="s0"></div>
+    <div class="step white-step" id="s2"></div>   
+    <div class="step white-step" id="s4"></div>
+    <div class="step white-step" id="s5"></div>
+    <div class="step white-step" id="s7"></div>
+    <div class="step white-step" id="s9"></div>
+    <div class="step white-step" id="s11"></div>
+    <div class="step white-step" id="s12"></div> 
+    <div class="step white-step" id="s14"></div>
+    <div class="step white-step" id="s16"></div>   
+    <div class="step white-step" id="s17"></div>
+    <div class="step white-step" id="s19"></div>
+    <div class="step white-step" id="s21"></div>
+    <div class="step white-step" id="s23"></div>
+    <div class="step white-step" id="s24"></div>
+    <div class= "black-steps1">   
+      <div class="step black-step" id="s1"></div>
+      <div class="step black-step" id="s3"></div>       </div>
+    <div class= "black-steps2">   
+      <div class="step black-step" id="s6"></div>
+      <div class="step black-step" id="s8"></div>
+      <div class="step black-step" id="s10"></div>       </div>
+    <div class= "black-steps3">   
+      <div class="step black-step" id="s13"></div>
+      <div class="step black-step" id="s15"></div>       </div>
+      <div class= "black-steps4">   
+      <div class="step black-step" id="s18"></div>
+      <div class="step black-step" id="s20"></div>
+      <div class="step black-step" id="s22"></div>       </div>
+</div>
+</div>
+  <div class="oscContainer">
+    <div class="osc" id="osc1">
+      <div class = "oscZone" id="oscZone1">
+        <div class="buttonOscContainer" >
+          <span id="dot1"class="onOffOsc"></span>
+          <button id="butt1" onclick="activateAudio(1)">OSC1</button>
+          <div id="container">
+            <select name="select_box" id="select_box1" >
+               <option value="">Sine</option>
+               <option value="">Triangle</option>
+               <option value="">Square</option>
+               <option value="">SawTooth</option>
+               <option value="">Nglamammt</option>
+            </select>
+          <input type="hidden" name="select_flag" id="select_flag1" value="0">
+          </div>
+          <div id="vol1" class="knobVol">
+            <div class="knobLabel"></div>  
+          </div>
+        </div>
+        
+        <canvas height="100px" width="190px" style="border: solid black 1px" id="canv1"></canvas>
+        
+        
+      </div>
+      
+      <div class = "oscZone" id="oscZone2"></div>
+      <div class = "oscZone" id="oscZone3"></div>
+    </div>
+    
+    
+    
+    
+    
+    <div class="osc" id="osc2">
+      <div class = "oscZone" id="oscZone1">
+        <div class="buttonOscContainer" >
+          
+            <div id="dot2"class="onOffOsc"></div>
+        
+          <button id="butt2" onclick= "activateAudio(2)">OSC2</button>
+          <div id="container">
+            <select name="select_box" id="select_box2" >
+               <option value="">Sine</option>
+               <option value="">Triangle</option>
+               <option value="">Square</option>
+               <option value="">SawTooth</option>
+               <option value="">Nglamammt</option>
+            </select>
+          <input type="hidden" name="select_flag" id="select_flag2" value="0">
+          </div>
+          
+          <div id="vol2" class="knobVol">
+            <div class="knobLabel"></div>  
+          </div>
+          
+        </div>
+        
+        
+        
+        <canvas height="100px" width="190px" style="border: solid black 1px" id="canv2"></canvas>
+        
+        
+      </div>
+      
+      <div class = "oscZone" id="oscZone2"></div>
+      <div class = "oscZone" id="oscZone3"></div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="osc" id="osc3">
+      
+      
+      <div class = "oscZone" id="oscZone1">
+        <div class="buttonOscContainer" >
+          
+            <div id="dot3"class="onOffOsc"></div>
+        
+          <button id="butt3" onclick="activateAudio(3)">OSC3</button>
+        <div id="container">
+            <select name="select_box" id="select_box3" >
+               <option value="">Sine</option>
+               <option value="">Triangle</option>
+               <option value="">Square</option>
+               <option value="">SawTooth</option>
+               <option value="">Nglamammt</option>
+            </select>
+          <input type="hidden" name="select_flag" id="select_flag3" value="0">
+           
+          
+         </div>
+       <div id="vol3" class="knobVol">
+            <div class="knobLabel"></div>  
+          </div>
+        </div>
+        
+        
+        
+        
+        <canvas height="100px" width="190px" style="border: solid black 1px" id="canv3"></canvas>
+        
+        
+      </div>
+      
+      <div class = "oscZone" id="oscZone2"></div>
+      <div class = "oscZone" id="oscZone3"></div>
+      
+      
+    </div>
+    
+    
+  </div>
+  
+</div>
+  
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>
