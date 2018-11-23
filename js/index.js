@@ -1,5 +1,4 @@
 var cMaster;
-var o1,o2,o3;
 var analyser1, analyser2, analyser3;
 var o1Array = new Array(25);
 var o2Array = new Array(25);
@@ -52,6 +51,7 @@ function createAudio3(){
 
 
 function attack1(freq ,selGain) {
+  var o1;
   o1 = cMaster.createOscillator();
   g = cMaster.createGain();
   o1.connect(g);
@@ -65,21 +65,24 @@ function attack1(freq ,selGain) {
   
   o1Array[tones.indexOf(freq)] = o1;
   
- 
-  
-  o1.start();
   if (sel1.options.selectedIndex=="0") {o1.type='sine'}
   if (sel1.options.selectedIndex=="1") {o1.type='triangle'}
   if (sel1.options.selectedIndex=="2") {o1.type='square'}
    if (sel1.options.selectedIndex=="3") {o1.type='sawtooth'}
-    
+ 
+  
+  o1.start();
+   
 }
 
-function release1(freq) { 
+function release1(freq, i) { 
   gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+0.8);
+  o1Array[i].stop(cMaster.currentTime+0.8);
+
 }
 
 function attack2(freq ,selGain) {
+  var o2;
   o2 = cMaster.createOscillator();
   g = cMaster.createGain();
   o2.connect(g);
@@ -100,12 +103,14 @@ function attack2(freq ,selGain) {
    if (sel2.options.selectedIndex=="3") {o2.type='sawtooth'}
 }
 
-function release2(freq) { 
+function release2(freq, i) { 
   gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+0.8);
+  o2Array[i].stop(cMaster.currentTime+0.8);
 }
 
 
 function attack3(freq ,selGain) {
+  var o3;
   o3 = cMaster.createOscillator();
   g = cMaster.createGain();
   o3.connect(g);
@@ -126,23 +131,31 @@ function attack3(freq ,selGain) {
    if (sel3.options.selectedIndex=="3") {o3.type='sawtooth'}
 }
 
-function release3(freq) { 
+function release3(freq, i) { 
   gates3[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+0.8);
+  o3Array[i].stop(cMaster.currentTime+0.8);
 }
 
 
+
 function deleteAudio(){
-  if(turnOn1 && !turnOn2 ) {
-    o1.stop();
+  if(turnOn1 && !turnOn2 && !turnOn3) {
     for(i=0;i<o1Array.length;i++)
       {if(o1Array[i]!=undefined)
         o1Array[i].stop();
       }
   }
-  if(turnOn2 && !turnOn1) {
+  if(!turnOn1 && turnOn2 && !turnOn3) {
     for(i=0;i<o2Array.length;i++)
       {if(o2Array[i]!=undefined)
         o2Array[i].stop();
+      }
+  } 
+  
+  if(!turnOn1 && !turnOn2 && turnOn3) {
+    for(i=0;i<o3Array.length;i++)
+      {if(o3Array[i]!=undefined)
+        o3Array[i].stop();
       }
   } 
  
@@ -150,6 +163,13 @@ function deleteAudio(){
 
 
 function activateAudio(x){
+  
+  for(i=0;i<o1Array.length;i++){
+    if(o1Array[i]==undefined)
+      console.log(o1Array[i]);
+  }
+  
+  
   changeColorDot(x);
   if(x==1){
    
@@ -269,6 +289,8 @@ for(var i=0;i<25;i++) {
   mouseSteps[i] = "s"+i;
   }
 keys = "qwertyuiopasdfghjklzxcvbn";
+
+
 document.querySelectorAll(".step").forEach(toggleStep)
 
 function toggleStep(step){  
@@ -310,73 +332,75 @@ function toggleStep(step){
     }
   }
    step.onmouseup= function (step) {
+     var index=mouseSteps.indexOf(step.target.id);
      if(clicked==true){
     if(!step.repeat){
        step.target.classList.toggle("clicked-step")
       
       if(turnOn1 && !turnOn2 && !turnOn3)
-        release1(tones[mouseSteps.indexOf(step.target.id)]);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index);
     
     if(!turnOn1 && turnOn2 && !turnOn3)
-        release2(tones[mouseSteps.indexOf(step.target.id)]);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index);
     
     if(!turnOn1 && !turnOn2 && turnOn3)
-        release3(tones[mouseSteps.indexOf(step.target.id)]);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index);
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)]);
-        release2(tones[mouseSteps.indexOf(step.target.id)]);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index);
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        release2(tones[mouseSteps.indexOf(step.target.id)]);
-        release3(tones[mouseSteps.indexOf(step.target.id)]);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index);
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)]);
-        release3(tones[mouseSteps.indexOf(step.target.id)]);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index);
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)]);
-        release2(tones[mouseSteps.indexOf(step.target.id)]);
-        release3(tones[mouseSteps.indexOf(step.target.id)]);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index);
     }
       clicked=false;
       }}
   }
  step.onmouseout= function(step) {
+   var index=mouseSteps.indexOf(step.target.id);
           if(clicked==true) {
           step.target.classList.toggle("clicked-step");
             if(turnOn1 && !turnOn2 && !turnOn3)
-        release1(tones[mouseSteps.indexOf(step.target.id)]);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index);
     
     if(!turnOn1 && turnOn2 && !turnOn3)
-        release2(tones[mouseSteps.indexOf(step.target.id)]);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index);
     
     if(!turnOn1 && !turnOn2 && turnOn3)
-        release3(tones[mouseSteps.indexOf(step.target.id)]);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index);
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)]);
-        release2(tones[mouseSteps.indexOf(step.target.id)]);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index);
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        release2(tones[mouseSteps.indexOf(step.target.id)]);
-        release3(tones[mouseSteps.indexOf(step.target.id)]);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index);
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)]);
-        release3(tones[mouseSteps.indexOf(step.target.id)]);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index);
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)]);
-        release2(tones[mouseSteps.indexOf(step.target.id)]);
-        release3(tones[mouseSteps.indexOf(step.target.id)]);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index);
     }
           clicked=false;
           }
@@ -384,16 +408,14 @@ function toggleStep(step){
  
 }
 
-function clickOnKeyBoard(step){
-  step.classList.toggle("clicked-step")
-  
-}
+
+
 
 
 document.onkeydown = function(e) {  
   if(!e.repeat){
-
     clickOnKeyBoard(steps[keys.indexOf(e.key)])
+    
     if(turnOn1 && !turnOn2 && !turnOn3)
         attack1(tones[keys.indexOf(e.key)], selectedGain[f1])
     
@@ -423,7 +445,7 @@ document.onkeydown = function(e) {
         attack2(tones[keys.indexOf(e.key)], selectedGain[f2])
         attack3(tones[keys.indexOf(e.key)], selectedGain[f3])
     }
-            
+    
   }
 }
 
@@ -431,38 +453,48 @@ document.onkeydown = function(e) {
 document.onkeyup = function(e) {   
   clickOnKeyBoard(steps[keys.indexOf(e.key)]);
   
-  
   if(turnOn1 && !turnOn2 && !turnOn3)
-        release1(tones[keys.indexOf(e.key)]);
+        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
     
     if(!turnOn1 && turnOn2 && !turnOn3)
-        release2(tones[keys.indexOf(e.key)]);
+        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
     
     if(!turnOn1 && !turnOn2 && turnOn3)
-        release3(tones[keys.indexOf(e.key)]);
+        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        release1(tones[keys.indexOf(e.key)]);
-        release2(tones[keys.indexOf(e.key)]);
+        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        release2(tones[keys.indexOf(e.key)]);
-        release3(tones[keys.indexOf(e.key)]);
+        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        release1(tones[keys.indexOf(e.key)]);
-        release3(tones[keys.indexOf(e.key)]);
+        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        release1(tones[keys.indexOf(e.key)]);
-        release2(tones[keys.indexOf(e.key)]);
-        release3(tones[keys.indexOf(e.key)]);
+        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
     }
-     
+  
 }
+
+
+function clickOnKeyBoard(step){
+  step.classList.toggle("clicked-step")  
+}
+
+
+
+
+
+
 
 
 function calculateDeg(deg,name){
