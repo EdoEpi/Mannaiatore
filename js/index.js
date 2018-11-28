@@ -3,6 +3,7 @@ var analyser1, analyser2, analyser3;
 var o1Array = new Array(25);
 var o2Array = new Array(25);
 var o3Array = new Array(25);
+    var lfoArray= new Array(3);
 var n = 0;
 var f1,f2,f3;      //index of the current grade calcualted by "calculateDeg" function
 var gradi = [];
@@ -21,6 +22,8 @@ var clicked= false;
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
 gainMaster.connect(cMaster.destination);
+    
+    var lfoFreq=2;
 
 
 function createAudio1(){
@@ -48,17 +51,27 @@ function createAudio3(){
   dataArray = new Uint8Array(bufferLength);
 }
 
-
-
+//function lfoCreate(g, lfoFreq, nOsc){
+//      lfo=cMaster.createOscillator();
+//      lfo.frequency.value=lfoFreq;
+//      lfo.connect(g.gain);
+//      lfoArray[nOsc]=lfo;
+//      lfo.start();
+//}
+//
 function attack1(freq ,selGain) {
   var o1;
   o1 = cMaster.createOscillator();
   g = cMaster.createGain();
+      //lfoCreate(g,lfoFreq,0);   //0 è l'indice nell'array lfo
+  
   o1.connect(g);
   g.connect(analyser1);
-  analyser1.connect(gainMaster);
+  //analyser1.connect(gainMaster);
+  analyser1.connect(analyserF);
   o1.frequency.value = freq;
   g.gain.value = 0;
+  
   var now = cMaster.currentTime;
   g.gain.linearRampToValueAtTime(selGain,now+0.1);
   gates1[freq] = g;
@@ -76,9 +89,9 @@ function attack1(freq ,selGain) {
 }
 
 function release1(freq, i) { 
-  gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+0.8);
+  gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+0.8);    //cambiato il release
   o1Array[i].stop(cMaster.currentTime+0.8);
-
+      //lfoArray[0].stop(cMaster.currentTime+0.8);
 }
 
 function attack2(freq ,selGain) {
@@ -87,7 +100,7 @@ function attack2(freq ,selGain) {
   g = cMaster.createGain();
   o2.connect(g);
   g.connect(analyser2);
-  analyser2.connect(gainMaster);
+  analyser2.connect(analyserF);
   o2.frequency.value = freq;
   g.gain.value = 0;
   var now = cMaster.currentTime;
@@ -115,7 +128,7 @@ function attack3(freq ,selGain) {
   g = cMaster.createGain();
   o3.connect(g);
   g.connect(analyser3);
-  analyser3.connect(gainMaster);
+  analyser3.connect(analyserF);
   o3.frequency.value = freq;
   g.gain.value = 0;
   var now = cMaster.currentTime;
@@ -164,18 +177,14 @@ function deleteAudio(){
 
 function activateAudio(x){
   
-  for(i=0;i<o1Array.length;i++){
-    if(o1Array[i]==undefined)
-      console.log(o1Array[i]);
-  }
-  
-  
   changeColorDot(x);
   if(x==1){
    
     if (!turnOn1) {
           createAudio1();
           drawSamples1();
+          createAudioFreq();
+          drawSamplesFreq();
           sel1.disabled = false;     
     }
     else {
@@ -193,6 +202,8 @@ function activateAudio(x){
     if (!turnOn2) {
           createAudio2();
           drawSamples2();
+          createAudioFreq();
+          drawSamplesFreq();
           sel2.disabled = false;
           
       
@@ -210,6 +221,8 @@ function activateAudio(x){
     if (!turnOn3) {
           createAudio3();
           drawSamples3();
+          createAudioFreq();
+          drawSamplesFreq();
           sel3.disabled = false;
           
       
@@ -222,8 +235,6 @@ function activateAudio(x){
   
     turnOn3=!turnOn3;  
   }
-  
-  
   
 }
 
@@ -273,7 +284,33 @@ function drawSamples3(){
   requestAnimationFrame(drawSamples3)
 }
 
+function createAudioFreq(){
+  canvasFreq = document.querySelector("#canvFreq");
+  ctxF = canvasFreq.getContext("2d");
+  analyserF = cMaster.createAnalyser();
+  analyserF.connect(gainMaster);
+  bufferLength = analyserF.frequencyBinCount;
+  dataArray = new Uint8Array(bufferLength);
+  
+}
 
+function drawSamplesFreq(){
+  analyserF.getByteFrequencyData(dataArray);//spettro di frequenza, mentre se fosse getByteTimeDomainData vedrei invece il segnale nel tempo
+  ctxF.clearRect(0,0,canvasFreq.width,canvasFreq.height);
+  ctxF.beginPath();
+  var gradient= ctxF.createLinearGradient(0,0,canvasFreq.width,0);
+  for (var i=0; i<canvasFreq.width; i++) {
+    ctxF.moveTo(i,canvasFreq.height)
+    ctxF.lineTo(i,canvasFreq.height-dataArray[i])
+    ctxF.lineWidth = 1;
+    ctxF.strokeStyle=gradient;
+    gradient.addColorStop("0","white");
+    gradient.addColorStop("0.5","blue");
+    gradient.addColorStop("1.0","grey");
+  }
+  ctxF.stroke();
+  requestAnimationFrame(drawSamplesFreq);
+}
 
 
 

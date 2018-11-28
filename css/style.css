@@ -216,4 +216,8 @@ canvas{
 #vol2{}
 #vol3{}
 
-
+#canvFreq{
+  position: relative;
+  margin: 10px;
+  transform: translate(0,-50px);
+}
