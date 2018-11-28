@@ -1,11 +1,13 @@
-var cMaster;
+﻿var cMaster;
 var analyser1, analyser2, analyser3;
 var o1Array = new Array(25);
 var o2Array = new Array(25);
 var o3Array = new Array(25);
     var lfoArray= new Array(3);
 var n = 0;
-var f1,f2,f3;      //index of the current grade calcualted by "calculateDeg" function
+var f1=10,f2=10,f3=10;      //index of the current grade calcualted by "calculateDeg" function
+var atk1=0, atk2=0, atk3=0;
+var rel1=0, rel2=0, rel3=0;
 var gradi = [];
 var selectedGain = [];
 var deg=0;
@@ -22,8 +24,16 @@ var clicked= false;
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
 gainMaster.connect(cMaster.destination);
+
     
     var lfoFreq=2;
+
+var stepAttack=0.1;       //step between each possible attack level
+var stepRelease=0.15;      //step between each possible relase level
+var attackArray = [];     //array of attack levels
+var releaseArray = [];    //array of release levels
+
+
 
 
 function createAudio1(){
@@ -32,7 +42,6 @@ function createAudio1(){
   analyser1 = cMaster.createAnalyser();
   bufferLength = analyser1.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
-  
 }
 
 function createAudio2(){
@@ -59,7 +68,11 @@ function createAudio3(){
 //      lfo.start();
 //}
 //
-function attack1(freq ,selGain) {
+
+
+
+function attack1(freq ,selGain, atkTime) {
+
   var o1;
   o1 = cMaster.createOscillator();
   g = cMaster.createGain();
@@ -73,7 +86,7 @@ function attack1(freq ,selGain) {
   g.gain.value = 0;
   
   var now = cMaster.currentTime;
-  g.gain.linearRampToValueAtTime(selGain,now+0.1);
+  g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates1[freq] = g;
   
   o1Array[tones.indexOf(freq)] = o1;
@@ -88,13 +101,15 @@ function attack1(freq ,selGain) {
    
 }
 
-function release1(freq, i) { 
-  gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+0.8);    //cambiato il release
-  o1Array[i].stop(cMaster.currentTime+0.8);
-      //lfoArray[0].stop(cMaster.currentTime+0.8);
+
+
+function release1(freq, i, relTime) { 
+  gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  o1Array[i].stop(cMaster.currentTime+relTime+0.2);
+  //lfoArray[0].stop(cMaster.currentTime+0.8);
 }
 
-function attack2(freq ,selGain) {
+function attack2(freq ,selGain, atkTime) {
   var o2;
   o2 = cMaster.createOscillator();
   g = cMaster.createGain();
@@ -104,7 +119,7 @@ function attack2(freq ,selGain) {
   o2.frequency.value = freq;
   g.gain.value = 0;
   var now = cMaster.currentTime;
-  g.gain.linearRampToValueAtTime(selGain,now+0.1);
+  g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates2[freq] = g;
   
   o2Array[tones.indexOf(freq)] = o2;
@@ -116,13 +131,13 @@ function attack2(freq ,selGain) {
    if (sel2.options.selectedIndex=="3") {o2.type='sawtooth'}
 }
 
-function release2(freq, i) { 
-  gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+0.8);
-  o2Array[i].stop(cMaster.currentTime+0.8);
+function release2(freq, i, relTime) { 
+  gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  o2Array[i].stop(cMaster.currentTime+relTime+0.2);
 }
 
 
-function attack3(freq ,selGain) {
+function attack3(freq ,selGain, atkTime) {
   var o3;
   o3 = cMaster.createOscillator();
   g = cMaster.createGain();
@@ -132,7 +147,7 @@ function attack3(freq ,selGain) {
   o3.frequency.value = freq;
   g.gain.value = 0;
   var now = cMaster.currentTime;
-  g.gain.linearRampToValueAtTime(selGain,now+0.1);
+  g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates3[freq] = g;
   
   o3Array[tones.indexOf(freq)] = o3;
@@ -144,9 +159,9 @@ function attack3(freq ,selGain) {
    if (sel3.options.selectedIndex=="3") {o3.type='sawtooth'}
 }
 
-function release3(freq, i) { 
-  gates3[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+0.8);
-  o3Array[i].stop(cMaster.currentTime+0.8);
+function release3(freq, i, relTime) { 
+  gates3[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  o3Array[i].stop(cMaster.currentTime+relTime+0.2);
 }
 
 
@@ -336,33 +351,33 @@ function toggleStep(step){
         step.target.classList.toggle("clicked-step");
         
      if(turnOn1 && !turnOn2 && !turnOn3)
-        attack1(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f1]);
+        attack1(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f1], attackArray[atk1]);
     
     if(!turnOn1 && turnOn2 && !turnOn3)
-        attack2(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f2]);
+        attack2(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f2], attackArray[atk2]);
     
     if(!turnOn1 && !turnOn2 && turnOn3)
-        attack3(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f3]);
+        attack3(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f3], attackArray[atk3]);
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        attack1(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f1]);
-        attack2(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f2]);
+        attack1(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f1], attackArray[atk1]);
+        attack2(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f2], attackArray[atk2]);
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        attack2(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f2]);
-        attack3(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f3]);
+        attack2(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f2], attackArray[atk2]);
+        attack3(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f3], attackArray[atk3]);
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        attack1(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f1]);
-        attack3(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f3]);
+        attack1(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f1], attackArray[atk1]);
+        attack3(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f3], attackArray[atk3]);
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        attack1(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f1]);
-        attack2(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f2]);
-        attack3(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f3]);
+        attack1(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f1], attackArray[atk1]);
+        attack2(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f2], attackArray[atk2]);
+        attack3(tones[mouseSteps.indexOf(step.target.id)], selectedGain[f3], attackArray[atk3]);
     }
        
        clicked=true;
@@ -375,33 +390,33 @@ function toggleStep(step){
        step.target.classList.toggle("clicked-step")
       
       if(turnOn1 && !turnOn2 && !turnOn3)
-        release1(tones[mouseSteps.indexOf(step.target.id)], index);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
     
     if(!turnOn1 && turnOn2 && !turnOn3)
-        release2(tones[mouseSteps.indexOf(step.target.id)], index);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel2]);
     
     if(!turnOn1 && !turnOn2 && turnOn3)
-        release3(tones[mouseSteps.indexOf(step.target.id)], index);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel3]);
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)], index);
-        release2(tones[mouseSteps.indexOf(step.target.id)], index);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel2]);
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        release2(tones[mouseSteps.indexOf(step.target.id)], index);
-        release3(tones[mouseSteps.indexOf(step.target.id)], index);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel2]);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel3]);
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)], index);
-        release3(tones[mouseSteps.indexOf(step.target.id)], index);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel3]);
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)], index);
-        release2(tones[mouseSteps.indexOf(step.target.id)], index);
-        release3(tones[mouseSteps.indexOf(step.target.id)], index);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel2]);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel3]);
     }
       clicked=false;
       }}
@@ -411,33 +426,33 @@ function toggleStep(step){
           if(clicked==true) {
           step.target.classList.toggle("clicked-step");
             if(turnOn1 && !turnOn2 && !turnOn3)
-        release1(tones[mouseSteps.indexOf(step.target.id)], index);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
     
     if(!turnOn1 && turnOn2 && !turnOn3)
-        release2(tones[mouseSteps.indexOf(step.target.id)], index);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel2]);
     
     if(!turnOn1 && !turnOn2 && turnOn3)
-        release3(tones[mouseSteps.indexOf(step.target.id)], index);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel3]);
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)], index);
-        release2(tones[mouseSteps.indexOf(step.target.id)], index);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel2]);
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        release2(tones[mouseSteps.indexOf(step.target.id)], index);
-        release3(tones[mouseSteps.indexOf(step.target.id)], index);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel2]);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel3]);
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)], index);
-        release3(tones[mouseSteps.indexOf(step.target.id)], index);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel3]);
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        release1(tones[mouseSteps.indexOf(step.target.id)], index);
-        release2(tones[mouseSteps.indexOf(step.target.id)], index);
-        release3(tones[mouseSteps.indexOf(step.target.id)], index);
+        release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
+        release2(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel2]);
+        release3(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel3]);
     }
           clicked=false;
           }
@@ -454,33 +469,33 @@ document.onkeydown = function(e) {
     clickOnKeyBoard(steps[keys.indexOf(e.key)])
     
     if(turnOn1 && !turnOn2 && !turnOn3)
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1])
+        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
     
     if(!turnOn1 && turnOn2 && !turnOn3)
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2])
+        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
     
     if(!turnOn1 && !turnOn2 && turnOn3)
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3])
+        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1])
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2])
+        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
+        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3])
+        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
+        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3])
+        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
+        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1])
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3])
+        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
+        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
+        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
     }
     
   }
@@ -491,33 +506,33 @@ document.onkeyup = function(e) {
   clickOnKeyBoard(steps[keys.indexOf(e.key)]);
   
   if(turnOn1 && !turnOn2 && !turnOn3)
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
     
     if(!turnOn1 && turnOn2 && !turnOn3)
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
     
     if(!turnOn1 && !turnOn2 && turnOn3)
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
+        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
+        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
+        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key));
+        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
+        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
+        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
     }
   
 }
@@ -541,6 +556,22 @@ function calculateDeg(deg,name){
     f2= gradi.indexOf(deg);
    if(name=='vol3')
     f3= gradi.indexOf(deg);
+  
+   if(name=='att1')
+     atk1=gradi.indexOf(deg);
+   if(name=='rel1')
+     rel1=gradi.indexOf(deg);
+  
+  if(name=='att2')
+     atk2=gradi.indexOf(deg);
+   if(name=='rel2')
+     rel2=gradi.indexOf(deg);
+  
+  if(name=='att3')
+     atk3=gradi.indexOf(deg);
+   if(name=='rel3')
+     rel3=gradi.indexOf(deg);
+  
 }
 
 
@@ -549,6 +580,12 @@ function calculateDeg(deg,name){
 moveKnob('vol1');
 moveKnob('vol2');
 moveKnob('vol3');
+moveKnob('att1');
+moveKnob('rel1');
+moveKnob('att2');
+moveKnob('rel2');
+moveKnob('att3');
+moveKnob('rel3');
 
 function moveKnob(name){
 
@@ -696,4 +733,16 @@ j = 0;
 for(i=0;i<=20;i++){
   selectedGain[i] = j;
   j+=numGain;
+}
+
+
+
+
+for(i=0; i<gradi.length; i++){
+  attackArray[i] = stepAttack*i;
+  
+}
+
+for(i=0; i<gradi.length; i++){
+  releaseArray[i] = stepRelease*i;  
 }

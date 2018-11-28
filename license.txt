@@ -1,7 +1,11 @@
 
 
 <!--
+<<<<<<< HEAD
 Copyright (c) 2018 by Epifani Edoardo (https://codepen.io/EdoEpi/pen/dQqRzd)
+=======
+Copyright (c) 2018 by Carmelo  (https://codepen.io/Karwelox/pen/gQBovY)
+>>>>>>> 20e59b232175bc84d01c1fb2375604d37b13494d
 
 
 Fork of an original work by Epifani Edoardo (https://codepen.io/EdoEpi/pen/PxmvaB)
