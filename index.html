@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Mannaiatore 23/11</title>
+  <title>Mannaiatore 28/11</title>
   
   
   
@@ -64,12 +64,34 @@
             </select>
           <input type="hidden" name="select_flag" id="select_flag1" value="0">
           </div>
-          <div id="vol1" class="knobVol">
+          
+          <div class="knobVolContainer">
+            <div class="attackLabel">VOL</div>
+          <div id="vol1"  class="knob volKnob" >
             <div class="knobLabel"></div>  
           </div>
+          </div>
+          
+          
         </div>
         
+        <div class="canvasKnobsContainer">
         <canvas height="100px" width="190px" style="border: solid black 1px" id="canv1"></canvas>
+          
+          
+          <div class="attackReleaseContainer">
+            <div class="attackLabel" >ATT</div>
+            <div id="att1" class="knob attackKnob">
+            <div class="knobLabel"></div>  
+          </div>
+            <div class=releaseLabel>REL</div>
+            <div id="rel1" class="knob releaseKnob">
+            <div class="knobLabel"></div>  
+          </div>
+          </div>
+          
+        </div>
+        
         
         
       </div>
@@ -100,17 +122,30 @@
           <input type="hidden" name="select_flag" id="select_flag2" value="0">
           </div>
           
-          <div id="vol2" class="knobVol">
+          <div class="knobVolContainer">
+            <div class="attackLabel">VOL</div>
+          <div id="vol2" class="knob volKnob">
             <div class="knobLabel"></div>  
+          </div>
+          </div>
+        </div>
+        
+        <div class="canvasKnobsContainer">
+        <canvas height="100px" width="190px" style="border: solid black 1px" id="canv2"></canvas>
+          
+          
+          <div class="attackReleaseContainer">
+            <div class="attackLabel" >ATT</div>
+            <div id="att2" class="knob attackKnob">
+            <div class="knobLabel"></div>  
+          </div>
+            <div class=releaseLabel>REL</div>
+            <div id="rel2" class="knob releaseKnob">
+            <div class="knobLabel"></div>  
+          </div>
           </div>
           
         </div>
-        
-        
-        
-        <canvas height="100px" width="190px" style="border: solid black 1px" id="canv2"></canvas>
-        
-        
       </div>
       
       <div class = "oscZone" id="oscZone2"></div>
@@ -145,15 +180,34 @@
            
           
          </div>
-       <div id="vol3" class="knobVol">
+          
+         <div class="knobVolContainer">
+            <div class="attackLabel">VOL</div> 
+       <div id="vol3" class="knob volKnob">
             <div class="knobLabel"></div>  
+          </div>
           </div>
         </div>
         
         
         
         
+       <div class="canvasKnobsContainer">
         <canvas height="100px" width="190px" style="border: solid black 1px" id="canv3"></canvas>
+          
+          
+          <div class="attackReleaseContainer">
+            <div class="attackLabel" >ATT</div>
+            <div id="att3" class="knob attackKnob">
+            <div class="knobLabel"></div>  
+          </div>
+            <div class=releaseLabel>REL</div>
+            <div id="rel3" class="knob releaseKnob">
+            <div class="knobLabel"></div>  
+          </div>
+          </div>
+          
+        </div>
         
         
         
