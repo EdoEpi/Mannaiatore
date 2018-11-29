@@ -1,13 +1,12 @@
-﻿var cMaster;
+var cMaster;
 var analyser1, analyser2, analyser3;
-var o1Array = new Array(25);
-var o2Array = new Array(25);
-var o3Array = new Array(25);
-    var lfoArray= new Array(3);
+var o1Array = [], o2Array = [], o3Array = [];
+var lfo1Array = [], lfo2Array=[], lfo3Array=[];
+var lfo1Gain=[], lfo2Gain=[], lfo3Gain=[];
 var n = 0;
 var f1=10,f2=10,f3=10;      //index of the current grade calcualted by "calculateDeg" function
-var atk1=0, atk2=0, atk3=0;
-var rel1=0, rel2=0, rel3=0;
+var atk1=1, atk2=1, atk3=1;
+var rel1=1, rel2=1, rel3=1;
 var gradi = [];
 var selectedGain = [];
 var deg=0;
@@ -26,7 +25,7 @@ var gainMaster= cMaster.createGain();
 gainMaster.connect(cMaster.destination);
 
     
-    var lfoFreq=2;
+    var lfoFreq=5;
 
 var stepAttack=0.1;       //step between each possible attack level
 var stepRelease=0.15;      //step between each possible relase level
@@ -60,23 +59,92 @@ function createAudio3(){
   dataArray = new Uint8Array(bufferLength);
 }
 
-//function lfoCreate(g, lfoFreq, nOsc){
-//      lfo=cMaster.createOscillator();
-//      lfo.frequency.value=lfoFreq;
-//      lfo.connect(g.gain);
-//      lfoArray[nOsc]=lfo;
-//      lfo.start();
-//}
-//
+function lfoCreate1(g, freq, nOsc, selGain, atkTime){
+      
+      lfo=cMaster.createOscillator();
+      lfoGain=cMaster.createGain();
+      lfo.frequency.value=lfoFreq;
+      lfo.connect(lfoGain);
+      lfoGain.connect(g.gain);
+      lfoGain.gain.value=0.01
+  
+      lfo1Gain[freq]=lfoGain;
+      lfo1Array[freq]=lfo;
+      now = cMaster.currentTime;
+      lfo1Gain[freq].gain.linearRampToValueAtTime(selGain,now+atkTime);
+      
+      return lfo;
+      
+}
+
+
+function lfoCreate1(g, freq, nOsc, selGain, atkTime){
+      
+      lfo=cMaster.createOscillator();
+      lfoGain=cMaster.createGain();
+      lfo.frequency.value=lfoFreq;
+      lfo.connect(lfoGain);
+      lfoGain.connect(g.gain);
+      lfoGain.gain.value=0;
+  
+      lfo1Gain[freq]=lfoGain;
+      
+      now = cMaster.currentTime;
+      lfo1Gain[freq].gain.linearRampToValueAtTime(selGain,now+atkTime);
+      
+      return lfo;
+      
+}
+
+function lfoCreate2(g, freq, nOsc, selGain, atkTime){
+      
+      lfo=cMaster.createOscillator();
+      lfoGain=cMaster.createGain();
+      lfo.frequency.value=lfoFreq;
+      lfo.connect(lfoGain);
+      lfoGain.connect(g.gain);
+      lfoGain.gain.value=0.01
+  
+      lfo2Gain[freq]=lfoGain;
+      
+      now = cMaster.currentTime;
+      lfo2Gain[freq].gain.linearRampToValueAtTime(selGain,now+atkTime);
+      
+      return lfo;
+      
+}
+
+
+function lfoCreate3(g, freq, nOsc, selGain, atkTime){
+      
+      lfo=cMaster.createOscillator();
+      lfoGain=cMaster.createGain();
+      lfo.frequency.value=lfoFreq;
+      lfo.connect(lfoGain);
+      lfoGain.connect(g.gain);
+      lfoGain.gain.value=0.1;
+  
+      lfo3Gain[freq]=lfoGain;
+      
+      now = cMaster.currentTime;
+      lfo3Gain[freq].gain.linearRampToValueAtTime(selGain,now+atkTime);
+      
+      return lfo;
+      
+}
+
 
 
 
 function attack1(freq ,selGain, atkTime) {
 
+  
+  
   var o1;
   o1 = cMaster.createOscillator();
   g = cMaster.createGain();
-      //lfoCreate(g,lfoFreq,0);   //0 è l'indice nell'array lfo
+  
+  lfo1= lfoCreate1(g,freq,0, selGain, atkTime);   //0 è l'indice nell'array lfo
   
   o1.connect(g);
   g.connect(analyser1);
@@ -86,17 +154,18 @@ function attack1(freq ,selGain, atkTime) {
   g.gain.value = 0;
   
   var now = cMaster.currentTime;
-  g.gain.linearRampToValueAtTime(selGain,now+atkTime);
+  //g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates1[freq] = g;
   
-  o1Array[tones.indexOf(freq)] = o1;
+  o1Array[tones.indexOf(freq)] = o1;    //save the value of the actual note (oscillator)
+  lfo1Array[tones.indexOf(freq)] = lfo1;  //save the value of the lfo of the actual note (oscillator)
   
   if (sel1.options.selectedIndex=="0") {o1.type='sine'}
   if (sel1.options.selectedIndex=="1") {o1.type='triangle'}
   if (sel1.options.selectedIndex=="2") {o1.type='square'}
    if (sel1.options.selectedIndex=="3") {o1.type='sawtooth'}
  
-  
+  lfo1Array[tones.indexOf(freq)].start();
   o1.start();
    
 }
@@ -104,15 +173,23 @@ function attack1(freq ,selGain, atkTime) {
 
 
 function release1(freq, i, relTime) { 
-  gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
-  o1Array[i].stop(cMaster.currentTime+relTime+0.2);
-  //lfoArray[0].stop(cMaster.currentTime+0.8);
+  
+  //gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  lfo1Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);   //release of the lfo
+  
+  o1Array[i].stop(cMaster.currentTime+relTime+0.2);     
+  lfo1Array[i].stop(cMaster.currentTime+relTime+0.2);     //delete the current lfo
 }
+
+
 
 function attack2(freq ,selGain, atkTime) {
   var o2;
   o2 = cMaster.createOscillator();
   g = cMaster.createGain();
+  
+  lfo2= lfoCreate2(g,freq,0, selGain, atkTime);
+  
   o2.connect(g);
   g.connect(analyser2);
   analyser2.connect(analyserF);
@@ -122,8 +199,10 @@ function attack2(freq ,selGain, atkTime) {
   g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates2[freq] = g;
   
+  lfo2Array[tones.indexOf(freq)] = lfo2;
   o2Array[tones.indexOf(freq)] = o2;
   
+  lfo2Array[tones.indexOf(freq)].start();
   o2.start();
   if (sel2.options.selectedIndex=="0") {o2.type='sine'}
   if (sel2.options.selectedIndex=="1") {o2.type='triangle'}
@@ -133,7 +212,10 @@ function attack2(freq ,selGain, atkTime) {
 
 function release2(freq, i, relTime) { 
   gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  lfo2Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  
   o2Array[i].stop(cMaster.currentTime+relTime+0.2);
+  lfo2Array[i].stop(cMaster.currentTime+relTime+0.2);
 }
 
 
@@ -141,6 +223,9 @@ function attack3(freq ,selGain, atkTime) {
   var o3;
   o3 = cMaster.createOscillator();
   g = cMaster.createGain();
+  
+  lfo3= lfoCreate3(g,freq,0, selGain, atkTime);
+  
   o3.connect(g);
   g.connect(analyser3);
   analyser3.connect(analyserF);
@@ -150,8 +235,10 @@ function attack3(freq ,selGain, atkTime) {
   g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates3[freq] = g;
   
+  lfo3Array[tones.indexOf(freq)] = lfo3;
   o3Array[tones.indexOf(freq)] = o3;
   
+  lfo3Array[tones.indexOf(freq)].start();
   o3.start();
   if (sel3.options.selectedIndex=="0") {o3.type='sine'}
   if (sel3.options.selectedIndex=="1") {o3.type='triangle'}
@@ -161,7 +248,11 @@ function attack3(freq ,selGain, atkTime) {
 
 function release3(freq, i, relTime) { 
   gates3[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  lfo3Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  
+  
   o3Array[i].stop(cMaster.currentTime+relTime+0.2);
+  lfo3Array[i].stop(cMaster.currentTime+relTime+0.2);
 }
 
 
@@ -307,10 +398,12 @@ function createAudioFreq(){
   bufferLength = analyserF.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
   
+  
 }
 
 function drawSamplesFreq(){
   analyserF.getByteFrequencyData(dataArray);//spettro di frequenza, mentre se fosse getByteTimeDomainData vedrei invece il segnale nel tempo
+  
   ctxF.clearRect(0,0,canvasFreq.width,canvasFreq.height);
   ctxF.beginPath();
   var gradient= ctxF.createLinearGradient(0,0,canvasFreq.width,0);
@@ -336,12 +429,13 @@ tones = [] //note
 steps = [] //tasti
 mouseSteps = []; //tasti cliccati col mouse
 for(var i=0;i<25;i++) {
-  tones[i] = Math.round(440*Math.pow(2,1/12)**i);
+  tones[i] = Math.round(262*Math.pow(2,1/12)**i);
   steps[i] = document.querySelector("#s"+i);
   mouseSteps[i] = "s"+i;
   }
-keys = "qwertyuiopasdfghjklzxcvbn";
-
+//keys = "qwertyuiopasdfghjklzxcvbn";
+//keys = "awsedftgyhujkolpòà+ùzxcvb"
+keys="q2w3er5t6y7uzsxdcvgbhnjm,"
 
 document.querySelectorAll(".step").forEach(toggleStep)
 

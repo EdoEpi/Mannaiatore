@@ -3,9 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-
-  <title>Mannaiatore 28/11</title>
-
+  <title>Man first merge 28/11</title>
   
   
   
@@ -99,8 +97,38 @@
       </div>
       
       <div class = "oscZone" id="oscZone2">
+        <div id="firstLfoRow" class="rowLfo">
+          <button class="lfoButton">LFO1</button>
+        </div>
         
+        <div id="secondLfoRow" class="rowLfo">
+          <div id="att1" class="knob lfoKnob">
+            <div class="knobLabel"></div>  
+          </div>
+          
+          <div class="displayLfoKnob1"></div>
+        </div>
+        
+        
+        <div id="thirdLfoRow" class="rowLfo">
+          
+          <div id="container">
+            <select name="select_box" id="lfoSelector" >
+               <option value="">Sine</option>
+               <option value="">Triangle</option>
+               <option value="">Square</option>
+               <option value="">SawTooth</option>
+               <option value="">Nglamammt</option>
+            </select>
+          <input type="hidden" name="select_flag" id="select_flag1" value="0">
+          </div>
+          
+        </div>
       </div>
+      
+      
+      
+      
       <div class = "oscZone" id="oscZone3"></div>
     </div>
     
@@ -226,9 +254,11 @@
     
     
   </div>
+  
   <canvas id="canvFreq"  width="480px" height= "280px" style="border: solid white 1px">
     
   </canvas>
+  
 </div>
   
   

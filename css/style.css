@@ -239,18 +239,7 @@ canvas{
   transform:translateY(-50%) rotate(0deg);
 }
 
-#knobVol{
-  //background-color:black;
-  //width:30px;
-  //height:30px;
-  //border-radius:50px;
-  margin-left:20px;
-  transform:translateY(-50%);
-  //position:relative;
-  top:50%;
-  //transform:translateY(-50%) rotate(225deg);
-  
-}
+
 
 
 .knobLabel{
@@ -301,4 +290,55 @@ canvas{
   position: relative;
   margin: 10px;
   transform: translate(0,-50px);
+}
+
+.rowLfo{
+  width:198px;
+  height:53px;
+  background-color:green;
+  //border: solid black;
+  
+}
+
+
+
+.lfoButton{
+  position:relative;
+  transform:translateX(-50%) translateY(-50%);
+  left:50%;
+  top:50%;
+  
+}
+
+.lfoButtonOpen{
+  border: solid red;
+}
+
+.lfoKnob{
+  transform:translateY(-50%);
+  top:50%;
+  left:40px;
+}
+
+.displayLfoKnob1{
+  position:relative;
+  background-color:black;
+  height:40px;
+  width:50px;
+  transform:translateY(-50%);
+  top:50%;
+  left:40%;
+  
+}
+
+#secondLfoRow{
+  display:inline-flex;
+}
+
+#lfoSelector{
+  position:relative;
+  //transform:translateY(-50%);
+  left:50%;
+  transform:translateX(-50%);
+  top:12px;
 }
