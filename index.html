@@ -98,22 +98,22 @@
       
       <div class = "oscZone" id="oscZone2">
         <div id="firstLfoRow" class="rowLfo">
-          <button class="lfoButton">LFO1</button>
+          <button class="lfoButton" onclick="activateLfo(1)">LFO1</button>
         </div>
         
         <div id="secondLfoRow" class="rowLfo">
-          <div id="att1" class="knob lfoKnob">
+          <div id="lfoKnob1" class="knob lfoKnob">
             <div class="knobLabel"></div>  
           </div>
           
-          <div class="displayLfoKnob1"></div>
+          <div id="dispLfo1" class="displayLfoKnob1">0.5 Hz</div>
         </div>
         
         
         <div id="thirdLfoRow" class="rowLfo">
           
           <div id="container">
-            <select name="select_box" id="lfoSelector" >
+            <select name="select_box" id="selLfo1" >
                <option value="">Sine</option>
                <option value="">Triangle</option>
                <option value="">Square</option>

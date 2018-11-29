@@ -96,6 +96,7 @@ canvas{
   border: solid black 2px;
   border-radius: 5px;
   display:inline-block;
+  user-select: none;
 }
 
 .oscContainer{
@@ -322,9 +323,9 @@ canvas{
 
 .displayLfoKnob1{
   position:relative;
-  background-color:black;
-  height:40px;
-  width:50px;
+  background-color:white;
+  height:50px;
+  width:70px;
   transform:translateY(-50%);
   top:50%;
   left:40%;
@@ -335,10 +336,14 @@ canvas{
   display:inline-flex;
 }
 
-#lfoSelector{
+#selLfo1{
   position:relative;
   //transform:translateY(-50%);
   left:50%;
   transform:translateX(-50%);
   top:12px;
+}
+
+#lfoKnob1{
+  transform: translateY(-50%) rotate(225deg)
 }

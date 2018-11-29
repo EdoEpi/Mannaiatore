@@ -13,6 +13,7 @@ var deg=0;
 var sel1= document.getElementById("select_box1");
 var sel2= document.getElementById("select_box2");
 var sel3= document.getElementById("select_box3");
+var selLfo1 = document.getElementById("selLfo1");
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
 var gates1=[], gates2=[], gates3=[];
@@ -23,16 +24,17 @@ var clicked= false;
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
 gainMaster.connect(cMaster.destination);
-
-    
-    var lfoFreq=5;
-
+var turnOnLfo1=false;
+var lfoFreqArray=[];
+var lfoStep=0.5;
+var lfoFreq1=0.5;   
+    var lfoFreq=1;
+var stepLfo=0.5;
 var stepAttack=0.1;       //step between each possible attack level
 var stepRelease=0.15;      //step between each possible relase level
 var attackArray = [];     //array of attack levels
 var releaseArray = [];    //array of release levels
-
-
+var dispLfo1=document.getElementById("dispLfo1");
 
 
 function createAudio1(){
@@ -59,30 +61,14 @@ function createAudio3(){
   dataArray = new Uint8Array(bufferLength);
 }
 
-function lfoCreate1(g, freq, nOsc, selGain, atkTime){
-      
-      lfo=cMaster.createOscillator();
-      lfoGain=cMaster.createGain();
-      lfo.frequency.value=lfoFreq;
-      lfo.connect(lfoGain);
-      lfoGain.connect(g.gain);
-      lfoGain.gain.value=0.01
-  
-      lfo1Gain[freq]=lfoGain;
-      lfo1Array[freq]=lfo;
-      now = cMaster.currentTime;
-      lfo1Gain[freq].gain.linearRampToValueAtTime(selGain,now+atkTime);
-      
-      return lfo;
-      
-}
+
 
 
 function lfoCreate1(g, freq, nOsc, selGain, atkTime){
       
       lfo=cMaster.createOscillator();
       lfoGain=cMaster.createGain();
-      lfo.frequency.value=lfoFreq;
+      lfo.frequency.value=lfoFreqArray[lfoFreq1];
       lfo.connect(lfoGain);
       lfoGain.connect(g.gain);
       lfoGain.gain.value=0;
@@ -91,8 +77,14 @@ function lfoCreate1(g, freq, nOsc, selGain, atkTime){
       
       now = cMaster.currentTime;
       lfo1Gain[freq].gain.linearRampToValueAtTime(selGain,now+atkTime);
-      
-      return lfo;
+  
+      if (selLfo1.options.selectedIndex=="0") {lfo.type='sine'}
+  if (selLfo1.options.selectedIndex=="1") {lfo.type='triangle'}
+  if (selLfo1.options.selectedIndex=="2") {lfo.type='square'}
+   if (selLfo1.options.selectedIndex=="3") {lfo.type='sawtooth'}
+  
+      lfo1Array[tones.indexOf(freq)] = lfo;
+      lfo1Array[tones.indexOf(freq)].start();
       
 }
 
@@ -144,7 +136,7 @@ function attack1(freq ,selGain, atkTime) {
   o1 = cMaster.createOscillator();
   g = cMaster.createGain();
   
-  lfo1= lfoCreate1(g,freq,0, selGain, atkTime);   //0 è l'indice nell'array lfo
+     //0 è l'indice nell'array lfo
   
   o1.connect(g);
   g.connect(analyser1);
@@ -154,18 +146,21 @@ function attack1(freq ,selGain, atkTime) {
   g.gain.value = 0;
   
   var now = cMaster.currentTime;
-  //g.gain.linearRampToValueAtTime(selGain,now+atkTime);
+  g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates1[freq] = g;
-  
   o1Array[tones.indexOf(freq)] = o1;    //save the value of the actual note (oscillator)
-  lfo1Array[tones.indexOf(freq)] = lfo1;  //save the value of the lfo of the actual note (oscillator)
+    
   
   if (sel1.options.selectedIndex=="0") {o1.type='sine'}
   if (sel1.options.selectedIndex=="1") {o1.type='triangle'}
   if (sel1.options.selectedIndex=="2") {o1.type='square'}
    if (sel1.options.selectedIndex=="3") {o1.type='sawtooth'}
  
-  lfo1Array[tones.indexOf(freq)].start();
+  if(turnOnLfo1){
+  lfoCreate1(g,freq,0, selGain, atkTime);
+ 
+  }
+  
   o1.start();
    
 }
@@ -174,11 +169,19 @@ function attack1(freq ,selGain, atkTime) {
 
 function release1(freq, i, relTime) { 
   
-  //gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
-  lfo1Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);   //release of the lfo
   
-  o1Array[i].stop(cMaster.currentTime+relTime+0.2);     
-  lfo1Array[i].stop(cMaster.currentTime+relTime+0.2);     //delete the current lfo
+  
+  if(turnOnLfo1){
+    
+    lfo1Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
+  lfo1Array[i].stop(cMaster.currentTime+relTime+0.2);}
+  //release of the lfo
+  
+  
+    gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  
+    o1Array[i].stop(cMaster.currentTime+relTime+0.2);  
+     
 }
 
 
@@ -397,8 +400,17 @@ function createAudioFreq(){
   analyserF.connect(gainMaster);
   bufferLength = analyserF.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
-  
-  
+    
+}
+
+
+function activateLfo(x){
+  if(x==1){
+   
+    
+  turnOnLfo1=!turnOnLfo1
+  }
+
 }
 
 function drawSamplesFreq(){
@@ -666,6 +678,22 @@ function calculateDeg(deg,name){
    if(name=='rel3')
      rel3=gradi.indexOf(deg);
   
+  if(name=='lfoKnob1')
+    
+    {
+      //if(turnOnLfo1) { 
+      dispLfo1.removeChild(dispLfo1.childNodes[0]);
+      
+      lfoFreq1=gradi.indexOf(deg);
+    //dispLfo1=String(lfoFreq1);
+      var n1 = Number((lfoFreqArray[lfoFreq1]).toFixed(2));
+      var n = lfoFreqArray[lfoFreq1];
+    var textnode =document.createTextNode(String(n1)+ " Hz") ;         
+    dispLfo1.appendChild(textnode); 
+      //}
+    }
+    
+  
 }
 
 
@@ -680,6 +708,7 @@ moveKnob('att2');
 moveKnob('rel2');
 moveKnob('att3');
 moveKnob('rel3');
+moveKnob('lfoKnob1');
 
 function moveKnob(name){
 
@@ -833,10 +862,13 @@ for(i=0;i<=20;i++){
 
 
 for(i=0; i<gradi.length; i++){
-  attackArray[i] = stepAttack*i;
-  
+  attackArray[i] = stepAttack*i;  
 }
 
 for(i=0; i<gradi.length; i++){
   releaseArray[i] = stepRelease*i;  
+}
+
+for(i=0; i<gradi.length; i++){
+  lfoFreqArray[i] = stepLfo*(i+1);
 }
