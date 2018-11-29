@@ -98,6 +98,7 @@
       
       <div class = "oscZone" id="oscZone2">
         <div id="firstLfoRow" class="rowLfo">
+          <span id="lfoDot1" class="onOffLfo"></span>
           <button class="lfoButton" onclick="activateLfo(1)">LFO1</button>
         </div>
         
@@ -106,14 +107,14 @@
             <div class="knobLabel"></div>  
           </div>
           
-          <div id="dispLfo1" class="displayLfoKnob1">0.5 Hz</div>
+          <div id="dispLfo1" class="displayLfoKnob">0.5 Hz</div>
         </div>
         
         
         <div id="thirdLfoRow" class="rowLfo">
           
           <div id="container">
-            <select name="select_box" id="selLfo1" >
+            <select class="selectorLfo" name="select_box" id="selLfo1" >
                <option value="">Sine</option>
                <option value="">Triangle</option>
                <option value="">Square</option>
@@ -180,7 +181,40 @@
         </div>
       </div>
       
-      <div class = "oscZone" id="oscZone2"></div>
+      <div class = "oscZone" id="oscZone2">
+        <div id="firstLfoRow" class="rowLfo">
+          <span id="lfoDot2" class="onOffLfo"></span>
+          <button class="lfoButton" onclick="activateLfo(2)">LFO2</button>
+        </div>
+        
+        <div id="secondLfoRow" class="rowLfo">
+          <div id="lfoKnob2" class="knob lfoKnob">
+            <div class="knobLabel"></div>  
+          </div>
+          
+          <div id="dispLfo2" class="displayLfoKnob">0.5 Hz</div>
+        </div>
+        
+        
+        <div id="thirdLfoRow" class="rowLfo">
+          
+          <div id="container">
+            <select class="selectorLfo" name="select_box" id="selLfo2" >
+               <option value="">Sine</option>
+               <option value="">Triangle</option>
+               <option value="">Square</option>
+               <option value="">SawTooth</option>
+               <option value="">Nglamammt</option>
+            </select>
+          <input type="hidden" name="select_flag" id="select_flag1" value="0">
+          </div>
+          
+        </div>
+        
+      </div>
+      
+      
+      
       <div class = "oscZone" id="oscZone3"></div>
     </div>
     
@@ -246,7 +280,41 @@
         
       </div>
       
-      <div class = "oscZone" id="oscZone2"></div>
+      <div class = "oscZone" id="oscZone2">
+        
+        <div id="firstLfoRow" class="rowLfo">
+          <span id="lfoDot3" class="onOffLfo"></span>
+          <button class="lfoButton" onclick="activateLfo(3)">LFO3</button>
+        </div>
+        
+        <div id="secondLfoRow" class="rowLfo">
+          <div id="lfoKnob3" class="knob lfoKnob">
+            <div class="knobLabel"></div>  
+          </div>
+          
+          <div id="dispLfo3" class="displayLfoKnob">0.5 Hz</div>
+        </div>
+        
+        
+        <div id="thirdLfoRow" class="rowLfo">
+          
+          <div id="container">
+            <select class="selectorLfo" name="select_box" id="selLfo3" >
+               <option value="">Sine</option>
+               <option value="">Triangle</option>
+               <option value="">Square</option>
+               <option value="">SawTooth</option>
+               <option value="">Nglamammt</option>
+            </select>
+          <input type="hidden" name="select_flag" id="select_flag1" value="0">
+          </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      
       <div class = "oscZone" id="oscZone3"></div>
       
       
