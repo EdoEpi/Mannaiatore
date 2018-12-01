@@ -47,6 +47,8 @@ var delayTimeArray=[];
 var delayGainArray=[];
 var stepTimeDelay=0.1;
 var stepGainDelay=0.05
+var delayGain = cMaster.createGain();
+var delay = cMaster.createDelay(4);
 
 
 function createAudio1(){
@@ -164,9 +166,7 @@ function attack1(freq ,selGain, atkTime) {
   
   o1.connect(g);
   
-  if(effectDelay){
-    createDelay(g, analyser1, analyserF);
-  }
+  
   
   g.connect(analyser1);
   analyser1.connect(analyserF);   //connect(analyserF)
@@ -185,8 +185,12 @@ function attack1(freq ,selGain, atkTime) {
    if (sel1.options.selectedIndex=="3") {o1.type='sawtooth'}
  
   if(turnOnLfo1){
-  lfoCreate1(g,freq,0, selGain, atkTime);
+  lfoCreate1(gates1[freq],freq,0, selGain, atkTime);
  
+  }
+  
+  if(effectDelay){
+    createDelay(gates1[freq], analyser1, analyserF);
   }
   
   o1.start();
@@ -220,10 +224,6 @@ function attack2(freq ,selGain, atkTime) {
   
   o2.connect(g);
   
-  if(effectDelay){
-    createDelay(g, analyser2, analyserF);
-  }
-  
   g.connect(analyser2);
   analyser2.connect(analyserF);
   o2.frequency.value = freq;
@@ -240,8 +240,12 @@ function attack2(freq ,selGain, atkTime) {
    if (sel2.options.selectedIndex=="3") {o2.type='sawtooth'}
   
   if(turnOnLfo2){
-  lfoCreate2(g,freq,0, selGain, atkTime);
+  lfoCreate2(gates2[freq],freq,0, selGain, atkTime);
  
+  }
+  
+  if(effectDelay){
+    createDelay(gates2[freq], analyser2, analyserF);
   }
   
   o2.start();
@@ -269,10 +273,6 @@ function attack3(freq ,selGain, atkTime) {
   
   o3.connect(g);
   
-  if(effectDelay){
-    createDelay(g, analyser3, analyserF);
-  }
-  
   g.connect(analyser3);
   analyser3.connect(analyserF);
   o3.frequency.value = freq;
@@ -289,8 +289,12 @@ function attack3(freq ,selGain, atkTime) {
    if (sel3.options.selectedIndex=="3") {o3.type='sawtooth'}
  
    if(turnOnLfo3){
-  lfoCreate3(g,freq,0, selGain, atkTime);
+  lfoCreate3(gates3[freq],freq,0, selGain, atkTime);
  
+  }
+  
+  if(effectDelay){
+    createDelay(gates3[freq], analyser3, analyserF);
   }
   
   o3.start();
@@ -496,10 +500,11 @@ function drawSamplesFreq(){
 
 
 function createDelay(g, analyser, analyserF){
-  var delay = cMaster.createDelay(4);
+  //var delayGain = cMaster.createGain();
+  //var delay = cMaster.createDelay(4);
+  
   delay.delayTime.value = delayTimeArray[dTime];
-  console.log(delayTimeArray[dTime], delay.delayTime.value);
-  var delayGain = cMaster.createGain();
+  
   delayGain.gain.value=delayGainArray[dGain];
   
   g.connect(delay)
@@ -730,18 +735,66 @@ function clickOnKeyBoard(step){
 
 
 
-
-
-
-
-
 function calculateDeg(deg,name){
-  if(name=='vol1')
+  
+  if(name=='vol1'){
     f1= gradi.indexOf(deg);
-  if(name=='vol2')
+    
+    for(i=0;i<gates1.length;i++){
+     if(gates1[i]!=undefined)
+            gates1[i].gain.linearRampToValueAtTime(selectedGain[f1],cMaster.currentTime+attackArray[atk1]);
+    }
+    
+    if(turnOnLfo1){
+      
+      for(i=0;i<lfo1Gain.length;i++){
+     if(lfo1Gain[i]!=undefined)
+            lfo1Gain[i].gain.linearRampToValueAtTime(selectedGain[f1],cMaster.currentTime+attackArray[atk1]);
+    }
+      
+    }
+      
+    
+  }
+    
+  if(name=='vol2'){
+    
     f2= gradi.indexOf(deg);
-   if(name=='vol3')
-    f3= gradi.indexOf(deg);
+    
+    for(i=0;i<gates2.length;i++){
+     if(gates2[i]!=undefined)
+            gates2[i].gain.linearRampToValueAtTime(selectedGain[f2],cMaster.currentTime+attackArray[atk2]);
+    }
+    
+    if(turnOnLfo2){
+      
+      for(i=0;i<lfo2Gain.length;i++){
+     if(lfo2Gain[i]!=undefined)
+            lfo2Gain[i].gain.linearRampToValueAtTime(selectedGain[f2],cMaster.currentTime+attackArray[atk2]);
+    }
+      
+    }
+  }
+    
+   if(name=='vol3'){
+     
+     f3= gradi.indexOf(deg);
+     
+     for(i=0;i<gates3.length;i++){
+     if(gates3[i]!=undefined)
+            gates3[i].gain.linearRampToValueAtTime(selectedGain[f3],cMaster.currentTime+attackArray[atk3]);
+    }
+    
+    if(turnOnLfo3){
+      
+      for(i=0;i<lfo3Gain.length;i++){
+     if(lfo3Gain[i]!=undefined)
+            lfo3Gain[i].gain.linearRampToValueAtTime(selectedGain[f3],cMaster.currentTime+attackArray[atk3]);
+    }
+      
+    }
+   }
+    
   
    if(name=='att1')
      atk1=gradi.indexOf(deg);
@@ -768,6 +821,10 @@ function calculateDeg(deg,name){
       var textnode =document.createTextNode(String(n1)+ " Hz") ;         
       dispLfo1.appendChild(textnode); 
       
+      for(i=0;i< lfo1Array.length;i++){
+        if(lfo1Array[i]!=undefined)
+          lfo1Array[i].frequency.value=lfoFreqArray[lfoFreq1];
+      }
     }
   
   if(name=='lfoKnob2')
@@ -779,6 +836,10 @@ function calculateDeg(deg,name){
       var textnode =document.createTextNode(String(n2)+ " Hz") ;         
       dispLfo2.appendChild(textnode); 
       
+       for(i=0;i< lfo2Array.length;i++){
+        if(lfo2Array[i]!=undefined)
+          lfo2Array[i].frequency.value=lfoFreqArray[lfoFreq2];
+      }
     }
   
   if(name=='lfoKnob3')
@@ -790,13 +851,24 @@ function calculateDeg(deg,name){
       var textnode =document.createTextNode(String(n3)+ " Hz") ;         
       dispLfo3.appendChild(textnode); 
       
+      for(i=0;i< lfo3Array.length;i++){
+        if(lfo3Array[i]!=undefined)
+          lfo3Array[i].frequency.value=lfoFreqArray[lfoFreq3];
+      }
     }
   
-  if(name=='dTimeKnob')
-    dTime=gradi.indexOf(deg);
+  if(name=='dTimeKnob'){
+    
+     dTime=gradi.indexOf(deg);
+      delay.delayTime.value = delayTimeArray[dTime];
+  }
+   
   
-  if(name=='dGainKnob')
+  if(name=='dGainKnob'){
     dGain=gradi.indexOf(deg);
+    delayGain.gain.value=delayGainArray[dGain];
+  }
+    
     
   
 }
