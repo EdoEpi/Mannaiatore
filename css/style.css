@@ -140,6 +140,7 @@ canvas{
 }
 
 #oscZone3{
+  display:inline-block;
   width:200px;
 }
 
@@ -160,11 +161,12 @@ canvas{
 }
 
 .onOffOsc{
+  position:relative;
   background-color:#004200;
   border-radius:50px;
   width:15px;
   height:15px;
-  margin:10px;
+  margin:4%;
   border: 3px solid black;
 }
 
@@ -235,8 +237,9 @@ canvas{
 }
 
 .volKnob{
-  left:14px;
-  top:25px;
+  position:relative;
+  left:25%;
+  top:37%;
   transform:translateY(-50%) rotate(0deg);
 }
 
@@ -381,5 +384,70 @@ canvas{
 }
 
 .clickedLfo{
+  background-color:#00FF00;
+}
+
+.selectOscContainer{
+  position:relative;
+  left:5%;
+  
+}
+
+.select_box{
+  position:relative;
+  top:8%;
+}
+
+.delayRow{
+  position:relative;
+  display:inline-flex;
+  width:200px;
+  height:55px;
+  
+}
+
+
+.delayButton{
+  border:solid black 2px;
+  position:relative;
+  width:50px;
+  height:25px;
+  margin-top:10%;
+  transform:translateX(-50%);
+  left:50%;
+}
+
+.delayFeatureContainer{
+  display:inline-block;
+  position:relative;
+  
+  margin-right:5%;
+  width:60px;
+  height:55px;  
+}
+
+.delayLabel{
+  position:relative;
+  top:2%;
+  text-align:center;
+  font-size:12px;
+  font-family: "Arial";
+  color:white;
+}
+
+
+.onOffDelay{
+  position:relative;
+  background-color:#004200;
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  border: solid black 2px;
+  left:50%;
+  transform:translateX(-50%);
+  top:2%;
+}
+
+.delayActive{
   background-color:#00FF00;
 }

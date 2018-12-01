@@ -3,6 +3,9 @@ var analyser1, analyser2, analyser3;
 var o1Array = [], o2Array = [], o3Array = [];
 var lfo1Array = [], lfo2Array=[], lfo3Array=[];
 var lfo1Gain=[], lfo2Gain=[], lfo3Gain=[];
+var tones = [] //note
+var steps = [] //tasti
+var mouseSteps = []; //tasti cliccati col mouse
 var n = 0;
 var f1=10,f2=10,f3=10;      //index of the current grade calcualted by "calculateDeg" function
 var atk1=1, atk2=1, atk3=1;
@@ -37,6 +40,13 @@ var stepRelease=0.15;      //step between each possible relase level
 var attackArray = [];     //array of attack levels
 var releaseArray = [];    //array of release levels
 var dispLfo1=document.getElementById("dispLfo1");
+var dTime=10;
+var dGain=10;
+var effectDelay=false;
+var delayTimeArray=[];
+var delayGainArray=[];
+var stepTimeDelay=0.1;
+var stepGainDelay=0.05
 
 
 function createAudio1(){
@@ -153,9 +163,13 @@ function attack1(freq ,selGain, atkTime) {
      //0 è l'indice nell'array lfo
   
   o1.connect(g);
+  
+  if(effectDelay){
+    createDelay(g, analyser1, analyserF);
+  }
+  
   g.connect(analyser1);
-  //analyser1.connect(gainMaster);
-  analyser1.connect(analyserF);
+  analyser1.connect(analyserF);   //connect(analyserF)
   o1.frequency.value = freq;
   g.gain.value = 0;
   
@@ -178,7 +192,6 @@ function attack1(freq ,selGain, atkTime) {
   o1.start();
    
 }
-
 
 
 function release1(freq, i, relTime) { 
@@ -206,6 +219,11 @@ function attack2(freq ,selGain, atkTime) {
   g = cMaster.createGain();
   
   o2.connect(g);
+  
+  if(effectDelay){
+    createDelay(g, analyser2, analyserF);
+  }
+  
   g.connect(analyser2);
   analyser2.connect(analyserF);
   o2.frequency.value = freq;
@@ -250,6 +268,11 @@ function attack3(freq ,selGain, atkTime) {
   g = cMaster.createGain();
   
   o3.connect(g);
+  
+  if(effectDelay){
+    createDelay(g, analyser3, analyserF);
+  }
+  
   g.connect(analyser3);
   analyser3.connect(analyserF);
   o3.frequency.value = freq;
@@ -392,6 +415,7 @@ function changeColorDotLfo(x){
 
 function drawSamples1(){
   analyser1.getByteTimeDomainData(dataArray);
+  analyser1.maxDecibels=50;
   ctx1.clearRect(0,0,canvas1.width,canvas1.height);
   ctx1.beginPath();
   for (var i=0; i<canvas1.width; i++) {
@@ -430,7 +454,9 @@ function createAudioFreq(){
   canvasFreq = document.querySelector("#canvFreq");
   ctxF = canvasFreq.getContext("2d");
   analyserF = cMaster.createAnalyser();
+  
   analyserF.connect(gainMaster);
+  
   bufferLength = analyserF.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
     
@@ -451,7 +477,7 @@ function activateLfo(x){
 
 function drawSamplesFreq(){
   analyserF.getByteFrequencyData(dataArray);//spettro di frequenza, mentre se fosse getByteTimeDomainData vedrei invece il segnale nel tempo
-  
+  analyserF.maxDecibels=0;
   ctxF.clearRect(0,0,canvasFreq.width,canvasFreq.height);
   ctxF.beginPath();
   var gradient= ctxF.createLinearGradient(0,0,canvasFreq.width,0);
@@ -469,13 +495,31 @@ function drawSamplesFreq(){
 }
 
 
+function createDelay(g, analyser, analyserF){
+  var delay = cMaster.createDelay(4);
+  delay.delayTime.value = delayTimeArray[dTime];
+  console.log(delayTimeArray[dTime], delay.delayTime.value);
+  var delayGain = cMaster.createGain();
+  delayGain.gain.value=delayGainArray[dGain];
+  
+  g.connect(delay)
+  delayGain.connect(delay);
+  delay.connect(delayGain);
+  delay.connect(analyserF);
+  delay.connect(analyser);
+}
+
+function activateDelay(){
+  effectDelay=!effectDelay;
+  changeColorDelay();
+}
+
+function changeColorDelay(){
+  document.getElementById("delayOnOff").classList.toggle("delayActive");
+}
 
 
 
-
-tones = [] //note
-steps = [] //tasti
-mouseSteps = []; //tasti cliccati col mouse
 for(var i=0;i<25;i++) {
   tones[i] = Math.round(262*Math.pow(2,1/12)**i);
   steps[i] = document.querySelector("#s"+i);
@@ -747,6 +791,12 @@ function calculateDeg(deg,name){
       dispLfo3.appendChild(textnode); 
       
     }
+  
+  if(name=='dTimeKnob')
+    dTime=gradi.indexOf(deg);
+  
+  if(name=='dGainKnob')
+    dGain=gradi.indexOf(deg);
     
   
 }
@@ -766,6 +816,8 @@ moveKnob('rel3');
 moveKnob('lfoKnob1');
 moveKnob('lfoKnob2');
 moveKnob('lfoKnob3');
+moveKnob('dTimeKnob');
+moveKnob('dGainKnob')
 
 function moveKnob(name){
 
@@ -928,4 +980,12 @@ for(i=0; i<gradi.length; i++){
 
 for(i=0; i<gradi.length; i++){
   lfoFreqArray[i] = stepLfo*(i+1);
+}
+
+for(i=0; i<gradi.length;i++){
+  delayTimeArray[i] = stepTimeDelay*i;
+}
+
+for(i=0; i<gradi.length;i++){
+  delayGainArray[i] = stepGainDelay*i;
 }
