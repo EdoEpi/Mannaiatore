@@ -49,6 +49,8 @@ var stepTimeDelay=0.1;
 var stepGainDelay=0.05
 var delayGain = cMaster.createGain();
 var delay = cMaster.createDelay(4);
+var keysTriggered = [];
+var flagsTriggered=[];
 
 
 function createAudio1(){
@@ -200,18 +202,17 @@ function attack1(freq ,selGain, atkTime) {
 
 function release1(freq, i, relTime) { 
   
-  
-  
-  if(turnOnLfo1){
-    
-    lfo1Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
-  lfo1Array[i].stop(cMaster.currentTime+relTime+0.2);}
-  //release of the lfo
-  
-  
-    gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+     gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
   
     o1Array[i].stop(cMaster.currentTime+relTime+0.2);  
+ 
+  if(turnOnLfo1){
+  lfo1Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
+  lfo1Array[i].stop(cMaster.currentTime+relTime+0.2);}
+ 
+  
+  
+   
      
 }
 
@@ -253,16 +254,14 @@ function attack2(freq ,selGain, atkTime) {
 }
 
 function release2(freq, i, relTime) { 
-
+    
+  gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+    o2Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  
   if(turnOnLfo2){
     lfo2Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
-    lfo2Array[i].stop(cMaster.currentTime+relTime+0.2);
-  }
+    lfo2Array[i].stop(cMaster.currentTime+relTime+0.2);}
   
-  
-    gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
-  
-    o2Array[i].stop(cMaster.currentTime+relTime+0.2); 
 }
 
 
@@ -302,15 +301,13 @@ function attack3(freq ,selGain, atkTime) {
 }
 
 function release3(freq, i, relTime) { 
-  if(turnOnLfo3){
-    lfo3Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
-    lfo3Array[i].stop(cMaster.currentTime+relTime+0.2);
-  }
-  
   
     gates3[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
-  
     o3Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  
+ if(turnOnLfo3){
+    lfo3Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
+    lfo3Array[i].stop(cMaster.currentTime+relTime+0.2);}
 }
 
 
@@ -537,6 +534,7 @@ keys="q2w3er5t6y7uzsxdcvgbhnjm,"
 document.querySelectorAll(".step").forEach(toggleStep)
 
 function toggleStep(step){  
+  
    step.onmousedown= function (step) {
      if(!step.repeat) {
         step.target.classList.toggle("clicked-step");
@@ -655,76 +653,106 @@ function toggleStep(step){
 
 
 
-document.onkeydown = function(e) {  
+document.onkeydown = function(e) {
   if(!e.repeat){
-    clickOnKeyBoard(steps[keys.indexOf(e.key)])
     
-    if(turnOn1 && !turnOn2 && !turnOn3)
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
     
-    if(!turnOn1 && turnOn2 && !turnOn3)
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
+    k=keys.indexOf(e.key);
+    keysTriggered[k] = e;
     
-    if(!turnOn1 && !turnOn2 && turnOn3)
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
+    clickOnKeyBoard(steps[k])
+    
+    if(turnOn1 && !turnOn2 && !turnOn3){
+        attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
+        flagsTriggered[k] ='100';
+    }
+    
+    if(!turnOn1 && turnOn2 && !turnOn3){
+      
+        attack2(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f2], attackArray[atk2])
+         flagsTriggered[k]= '010';
+    }
+    
+    if(!turnOn1 && !turnOn2 && turnOn3){
+        attack3(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f3], attackArray[atk3])
+        flagsTriggered[k] ='001';
+    }
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
+        attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
+        attack2(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f2], attackArray[atk2])
+        flagsTriggered[k] ='110';
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
+        attack2(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f2], attackArray[atk2])
+        attack3(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f3], attackArray[atk3])
+        flagsTriggered[k] ='011';
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
+        attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
+        attack3(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f3], attackArray[atk3])
+        flagsTriggered[k] ='101';
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
+        attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
+        attack2(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f2], attackArray[atk2])
+        attack3(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f3], attackArray[atk3])
+       flagsTriggered[k] ='111';
     }
     
+   
+   
   }
 }
 
 
 document.onkeyup = function(e) {   
+  k=keys.indexOf(e.key);
+  console.log(flagsTriggered[k]);
+  
   clickOnKeyBoard(steps[keys.indexOf(e.key)]);
   
-  if(turnOn1 && !turnOn2 && !turnOn3)
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
+  if(flagsTriggered[k] == '100'){
+    console.log(k)
+        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+     
+  }
     
-    if(!turnOn1 && turnOn2 && !turnOn3)
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
-    
-    if(!turnOn1 && !turnOn2 && turnOn3)
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
-    
-    if(turnOn1 && turnOn2 && !turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
+    if(flagsTriggered[k] == '010'){
+      console.log(k)
+        release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
+      
     }
     
-    if(!turnOn1 && turnOn2 && turnOn3){
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
+    if(flagsTriggered[k] == '001')
+        release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
+    
+    if(flagsTriggered[k] == '110'){
+      console.log("4")
+        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+        release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
     }
     
-    if(turnOn1 && !turnOn2 && turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
+    if(flagsTriggered[k] == '011'){
+        release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
+        release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
     }
     
-    if(turnOn1 && turnOn2 && turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
+    if(flagsTriggered[k] == '101'){
+        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+        release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
     }
+    
+    if(flagsTriggered[k] == '111'){
+        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+        release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
+        release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
+    }
+  
+  keysTriggered[k]=undefined;
   
 }
 
