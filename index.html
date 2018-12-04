@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Man 2/12</title>
+  <title>Man first merge 30/11</title>
   
   
   
@@ -54,8 +54,8 @@
         <div class="buttonOscContainer" >
           <span id="dot1"class="onOffOsc"></span>
           <button id="butt1" onclick="activateAudio(1)">OSC1</button>
-          <div class="selectOscContainer">
-            <select id="select_box1" class="select_box" >
+          <div id="container">
+            <select name="select_box" id="select_box1" >
                <option value="">Sine</option>
                <option value="">Triangle</option>
                <option value="">Square</option>
@@ -98,8 +98,7 @@
       
       <div class = "oscZone" id="oscZone2">
         <div id="firstLfoRow" class="rowLfo">
-          <span id="lfoDot1" class="onOffLfo"></span>
-          <button class="lfoButton" onclick="activateLfo(1)">LFO1</button>
+          <button id="lfoButton1" class="lfoButton" onclick="activateLfo(1)" >LFO1</button>
         </div>
         
         <div id="secondLfoRow" class="rowLfo">
@@ -130,29 +129,7 @@
       
       
       
-      <div class = "oscZone" id="oscZone3">
-        <div class="delayRow">
-          
-          <div class=delayFeatureContainer>
-            <div id="delayOnOff" class="onOffDelay"></div>
-            <button id="delay" onclick="activateDelay()" class="delayButton">DELAY</button>
-          </div>
-          <div class="delayFeatureContainer">
-            <div class="delayLabel">TIME</div>
-            <div id="dTimeKnob"  class="knob volKnob" >
-            <div class="knobLabel"></div>  
-          </div>
-          </div>
-          
-          <div class="delayFeatureContainer">
-            <div class="delayLabel">GAIN</div>
-            <div id="dGainKnob"  class="knob volKnob" >
-            <div class="knobLabel"></div>  
-          </div>
-          </div>
-        </div>
-        
-      </div>
+      <div class = "oscZone" id="oscZone3"></div>
     </div>
     
     
@@ -166,8 +143,8 @@
             <div id="dot2"class="onOffOsc"></div>
         
           <button id="butt2" onclick= "activateAudio(2)">OSC2</button>
-          <div class="selectOscContainer">
-            <select class="select_box" id="select_box2" >
+          <div id="container">
+            <select name="select_box" id="select_box2" >
                <option value="">Sine</option>
                <option value="">Triangle</option>
                <option value="">Square</option>
@@ -206,7 +183,7 @@
       <div class = "oscZone" id="oscZone2">
         <div id="firstLfoRow" class="rowLfo">
           <span id="lfoDot2" class="onOffLfo"></span>
-          <button class="lfoButton" onclick="activateLfo(2)">LFO2</button>
+          <button id="lfoButton2" class="lfoButton" onclick="activateLfo(2)">LFO2</button>
         </div>
         
         <div id="secondLfoRow" class="rowLfo">
@@ -256,8 +233,8 @@
             <div id="dot3"class="onOffOsc"></div>
         
           <button id="butt3" onclick="activateAudio(3)">OSC3</button>
-        <div class="selectOscContainer">
-            <select class="select_box" id="select_box3" >
+        <div id="container">
+            <select name="select_box" id="select_box3" >
                <option value="">Sine</option>
                <option value="">Triangle</option>
                <option value="">Square</option>
@@ -306,7 +283,7 @@
         
         <div id="firstLfoRow" class="rowLfo">
           <span id="lfoDot3" class="onOffLfo"></span>
-          <button class="lfoButton" onclick="activateLfo(3)">LFO3</button>
+          <button id="lfoButton3" class="lfoButton" onclick="activateLfo(3)">LFO3</button>
         </div>
         
         <div id="secondLfoRow" class="rowLfo">
