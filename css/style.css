@@ -99,9 +99,24 @@ canvas{
   user-select: none;
 }
 
+.mainWindowContainer{
+  width:685px;
+  height:530px;
+  background-color:grey;
+  display:inline-flex;
+  position:absolute;
+}
+
+.effectsContainer{
+  width:520px;
+  width:220px;
+  //background-color:red;
+  margin:2px;
+}
+
 .oscContainer{
-  width:677px;
-  height:480px;
+  width:470px;
+  height:525px;
   display:inline-block;
   margin: 1px;
   background-color:#00004F;
@@ -109,7 +124,7 @@ canvas{
 }
 
 .osc{
-  width:671px;
+  width:467px;
   height:170px;
   border: 1px solid black;
   margin:2px;
@@ -291,12 +306,12 @@ canvas{
 
 #canvFreq{
   position: relative;
-  margin: 10px;
-  transform: translate(0,-50px);
+  top:50px;
+  left:700px;
 }
 
 .rowLfo{
-  width:198px;
+  width:200px;
   height:53px;
   //background-color:green;
   //border: solid black;
@@ -400,7 +415,8 @@ canvas{
   display:inline-flex;
   width:200px;
   height:55px;
-  
+  margin:3px;
+  border: solid black 1px;
 }
 
 
@@ -446,5 +462,62 @@ canvas{
 }
 
 .delayActive{
+  background-color:#00FF00;
+}
+
+.masterKnobsContainer{
+  position:relative;
+  width:490px;
+  height:180px;
+  background-color:white;
+  left:210px;
+  top:80px;
+  display:inline-flex;
+  
+}
+
+.masterVolContainer{
+  background-color:white;
+  position:relative;
+  left:355px;
+  width:130px;
+  height:175px;
+  margin:1px;
+  display:inline-block;
+  
+}
+
+.masterLabel{
+  width:130px;
+  //background-color:green;
+  height:30px;
+  text-align:center;
+  
+}
+
+.masterKnob{
+  position:relative;
+  background-color:black;
+  width:100px;
+  height:100px;
+  border-radius:50px;
+  top:50px;
+  left:17px;
+  transform:translateY(-50%);
+    
+}
+
+.muteButton{
+  position:relative;
+  width:70px;
+  height:30px;
+  text-align:center;
+  top:10px;
+  left:33px;
+  border: solid black 2px;
+  
+}
+
+.muteActive{
   background-color:#00FF00;
 }
