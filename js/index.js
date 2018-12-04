@@ -3,6 +3,9 @@ var analyser1, analyser2, analyser3;
 var o1Array = [], o2Array = [], o3Array = [];
 var lfo1Array = [], lfo2Array=[], lfo3Array=[];
 var lfo1Gain=[], lfo2Gain=[], lfo3Gain=[];
+var tones = [] //note
+var steps = [] //tasti
+var mouseSteps = []; //tasti cliccati col mouse
 var n = 0;
 var f1=10,f2=10,f3=10;      //index of the current grade calcualted by "calculateDeg" function
 var atk1=1, atk2=1, atk3=1;
@@ -36,7 +39,19 @@ var stepAttack=0.1;       //step between each possible attack level
 var stepRelease=0.15;      //step between each possible relase level
 var attackArray = [];     //array of attack levels
 var releaseArray = [];    //array of release levels
-//var dispLfo1=document.getElementById("dispLfo1");
+var dispLfo1=document.getElementById("dispLfo1");
+var dTime=10;
+var dGain=10;
+var effectDelay=false;
+var delayTimeArray=[];
+var delayGainArray=[];
+var stepTimeDelay=0.1;
+var stepGainDelay=0.05
+var delayGain = cMaster.createGain();
+var delay = cMaster.createDelay(4);
+var keysTriggered = [];
+var flagsTriggered=[];
+var periodLfo1=2, periodLfo2=2, periodLfo3=2;                //1/initial frequency
 
 
 function createAudio1(){
@@ -74,20 +89,15 @@ function lfoCreate1(g, freq, nOsc, selGain, atkTime){
       lfo.connect(lfoGain);
       lfoGain.connect(g.gain);
       lfoGain.gain.value=0;
-  
       lfo1Gain[freq]=lfoGain;
-      
       now = cMaster.currentTime;
       lfo1Gain[freq].gain.linearRampToValueAtTime(selGain,now+atkTime);
-  
       if (selLfo1.options.selectedIndex=="0") {lfo.type='sine'}
-  if (selLfo1.options.selectedIndex=="1") {lfo.type='triangle'}
-  if (selLfo1.options.selectedIndex=="2") {lfo.type='square'}
-   if (selLfo1.options.selectedIndex=="3") {lfo.type='sawtooth'}
-  
+      if (selLfo1.options.selectedIndex=="1") {lfo.type='triangle'}
+      if (selLfo1.options.selectedIndex=="2") {lfo.type='square'}
+      if (selLfo1.options.selectedIndex=="3") {lfo.type='sawtooth'}
       lfo1Array[tones.indexOf(freq)] = lfo;
-      lfo1Array[tones.indexOf(freq)].start();
-      
+      lfo1Array[tones.indexOf(freq)].start();  
 }
 
 function lfoCreate2(g, freq, nOsc, selGain, atkTime){
@@ -143,9 +153,6 @@ function lfoCreate3(g, freq, nOsc, selGain, atkTime){
 
 
 function attack1(freq ,selGain, atkTime) {
-
-  
-  
   var o1;
   o1 = cMaster.createOscillator();
   g = cMaster.createGain();
@@ -153,9 +160,9 @@ function attack1(freq ,selGain, atkTime) {
      //0 è l'indice nell'array lfo
   
   o1.connect(g);
+  
   g.connect(analyser1);
-  //analyser1.connect(gainMaster);
-  analyser1.connect(analyserF);
+  analyser1.connect(analyserF);   //connect(analyserF)
   o1.frequency.value = freq;
   g.gain.value = 0;
   
@@ -171,8 +178,12 @@ function attack1(freq ,selGain, atkTime) {
    if (sel1.options.selectedIndex=="3") {o1.type='sawtooth'}
  
   if(turnOnLfo1){
-  lfoCreate1(g,freq,0, selGain, atkTime);
+  lfoCreate1(gates1[freq],freq,0, selGain, atkTime);
  
+  }
+  
+  if(effectDelay){
+    createDelay(gates1[freq], analyser1, analyserF);
   }
   
   o1.start();
@@ -180,21 +191,16 @@ function attack1(freq ,selGain, atkTime) {
 }
 
 
-
 function release1(freq, i, relTime) { 
   
-  
-  
-  if(turnOnLfo1){
-    
-    lfo1Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
-  lfo1Array[i].stop(cMaster.currentTime+relTime+0.2);}
-  //release of the lfo
-  
-  
-    gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+     gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
   
     o1Array[i].stop(cMaster.currentTime+relTime+0.2);  
+ 
+  if(turnOnLfo1){
+  lfo1Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
+  lfo1Array[i].stop(cMaster.currentTime+relTime+0.2);
+  }
      
 }
 
@@ -206,6 +212,7 @@ function attack2(freq ,selGain, atkTime) {
   g = cMaster.createGain();
   
   o2.connect(g);
+  
   g.connect(analyser2);
   analyser2.connect(analyserF);
   o2.frequency.value = freq;
@@ -222,8 +229,12 @@ function attack2(freq ,selGain, atkTime) {
    if (sel2.options.selectedIndex=="3") {o2.type='sawtooth'}
   
   if(turnOnLfo2){
-  lfoCreate2(g,freq,0, selGain, atkTime);
+  lfoCreate2(gates2[freq],freq,0, selGain, atkTime);
  
+  }
+  
+  if(effectDelay){
+    createDelay(gates2[freq], analyser2, analyserF);
   }
   
   o2.start();
@@ -231,16 +242,14 @@ function attack2(freq ,selGain, atkTime) {
 }
 
 function release2(freq, i, relTime) { 
-
+    
+  gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+    o2Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  
   if(turnOnLfo2){
     lfo2Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
-    lfo2Array[i].stop(cMaster.currentTime+relTime+0.2);
-  }
+    lfo2Array[i].stop(cMaster.currentTime+relTime+0.2);}
   
-  
-    gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
-  
-    o2Array[i].stop(cMaster.currentTime+relTime+0.2); 
 }
 
 
@@ -250,6 +259,7 @@ function attack3(freq ,selGain, atkTime) {
   g = cMaster.createGain();
   
   o3.connect(g);
+  
   g.connect(analyser3);
   analyser3.connect(analyserF);
   o3.frequency.value = freq;
@@ -266,8 +276,12 @@ function attack3(freq ,selGain, atkTime) {
    if (sel3.options.selectedIndex=="3") {o3.type='sawtooth'}
  
    if(turnOnLfo3){
-  lfoCreate3(g,freq,0, selGain, atkTime);
+  lfoCreate3(gates3[freq],freq,0, selGain, atkTime);
  
+  }
+  
+  if(effectDelay){
+    createDelay(gates3[freq], analyser3, analyserF);
   }
   
   o3.start();
@@ -275,15 +289,13 @@ function attack3(freq ,selGain, atkTime) {
 }
 
 function release3(freq, i, relTime) { 
-  if(turnOnLfo3){
-    lfo3Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
-    lfo3Array[i].stop(cMaster.currentTime+relTime+0.2);
-  }
-  
   
     gates3[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
-  
     o3Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  
+ if(turnOnLfo3){
+    lfo3Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
+    lfo3Array[i].stop(cMaster.currentTime+relTime+0.2);}
 }
 
 
@@ -392,6 +404,7 @@ function changeColorDotLfo(x){
 
 function drawSamples1(){
   analyser1.getByteTimeDomainData(dataArray);
+  analyser1.maxDecibels=50;
   ctx1.clearRect(0,0,canvas1.width,canvas1.height);
   ctx1.beginPath();
   for (var i=0; i<canvas1.width; i++) {
@@ -430,7 +443,9 @@ function createAudioFreq(){
   canvasFreq = document.querySelector("#canvFreq");
   ctxF = canvasFreq.getContext("2d");
   analyserF = cMaster.createAnalyser();
+  
   analyserF.connect(gainMaster);
+  
   bufferLength = analyserF.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
     
@@ -442,27 +457,32 @@ function activateLfo(x){
     turnOnLfo1=!turnOnLfo1;
   if(!turnOnLfo1) 
     lfoButton1.style.animation= "";
-  
+  if(turnOnLfo1){
+    lfoButton1.style.animation= "neon "+ periodLfo1 + "s ease-in-out infinite";
+  }
   
   if(x==2)    
     turnOnLfo2=!turnOnLfo2;
   if(!turnOnLfo2)
     lfoButton2.style.animation= "";
-  
+  if(turnOnLfo2){
+    lfoButton2.style.animation= "neon "+ periodLfo2 + "s ease-in-out infinite";
+  }
   
   if(x==3)    
     turnOnLfo3=!turnOnLfo3;
   if(!turnOnLfo3) 
     lfoButton3.style.animation= "";
-  
-
+  if(turnOnLfo3){
+    lfoButton3.style.animation= "neon "+ periodLfo3 + "s ease-in-out infinite";
+  }
   
   changeColorDotLfo(x);  
 }
 
 function drawSamplesFreq(){
   analyserF.getByteFrequencyData(dataArray);//spettro di frequenza, mentre se fosse getByteTimeDomainData vedrei invece il segnale nel tempo
-  analyserF.fftSize=4096;
+  analyserF.maxDecibels=0;
   ctxF.clearRect(0,0,canvasFreq.width,canvasFreq.height);
   ctxF.beginPath();
   var gradient= ctxF.createLinearGradient(0,0,canvasFreq.width,0);
@@ -480,13 +500,32 @@ function drawSamplesFreq(){
 }
 
 
+function createDelay(g, analyser, analyserF){
+  //var delayGain = cMaster.createGain();
+  //var delay = cMaster.createDelay(4);
+  
+  delay.delayTime.value = delayTimeArray[dTime];
+  
+  delayGain.gain.value=delayGainArray[dGain];
+  
+  g.connect(delay)
+  delayGain.connect(delay);
+  delay.connect(delayGain);
+  delay.connect(analyserF);
+  delay.connect(analyser);
+}
+
+function activateDelay(){
+  effectDelay=!effectDelay;
+  changeColorDelay();
+}
+
+function changeColorDelay(){
+  document.getElementById("delayOnOff").classList.toggle("delayActive");
+}
 
 
 
-
-tones = [] //note
-steps = [] //tasti
-mouseSteps = []; //tasti cliccati col mouse
 for(var i=0;i<25;i++) {
   tones[i] = Math.round(262*Math.pow(2,1/12)**i);
   steps[i] = document.querySelector("#s"+i);
@@ -499,6 +538,7 @@ keys="q2w3er5t6y7uzsxdcvgbhnjm,"
 document.querySelectorAll(".step").forEach(toggleStep)
 
 function toggleStep(step){  
+  
    step.onmousedown= function (step) {
      if(!step.repeat) {
         step.target.classList.toggle("clicked-step");
@@ -617,76 +657,106 @@ function toggleStep(step){
 
 
 
-document.onkeydown = function(e) {  
+document.onkeydown = function(e) {
   if(!e.repeat){
-    clickOnKeyBoard(steps[keys.indexOf(e.key)])
     
-    if(turnOn1 && !turnOn2 && !turnOn3)
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
     
-    if(!turnOn1 && turnOn2 && !turnOn3)
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
+    k=keys.indexOf(e.key);
+    keysTriggered[k] = e;
     
-    if(!turnOn1 && !turnOn2 && turnOn3)
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
+    clickOnKeyBoard(steps[k])
+    
+    if(turnOn1 && !turnOn2 && !turnOn3){
+        attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
+        flagsTriggered[k] ='100';
+    }
+    
+    if(!turnOn1 && turnOn2 && !turnOn3){
+      
+        attack2(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f2], attackArray[atk2])
+         flagsTriggered[k]= '010';
+    }
+    
+    if(!turnOn1 && !turnOn2 && turnOn3){
+        attack3(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f3], attackArray[atk3])
+        flagsTriggered[k] ='001';
+    }
     
     if(turnOn1 && turnOn2 && !turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
+        attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
+        attack2(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f2], attackArray[atk2])
+        flagsTriggered[k] ='110';
     }
     
     if(!turnOn1 && turnOn2 && turnOn3){
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
+        attack2(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f2], attackArray[atk2])
+        attack3(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f3], attackArray[atk3])
+        flagsTriggered[k] ='011';
     }
     
     if(turnOn1 && !turnOn2 && turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
+        attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
+        attack3(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f3], attackArray[atk3])
+        flagsTriggered[k] ='101';
     }
     
     if(turnOn1 && turnOn2 && turnOn3){
-        attack1(tones[keys.indexOf(e.key)], selectedGain[f1], attackArray[atk1])
-        attack2(tones[keys.indexOf(e.key)], selectedGain[f2], attackArray[atk2])
-        attack3(tones[keys.indexOf(e.key)], selectedGain[f3], attackArray[atk3])
+        attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
+        attack2(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f2], attackArray[atk2])
+        attack3(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f3], attackArray[atk3])
+       flagsTriggered[k] ='111';
     }
     
+   
+   
   }
 }
 
 
 document.onkeyup = function(e) {   
+  k=keys.indexOf(e.key);
+  console.log(flagsTriggered[k]);
+  
   clickOnKeyBoard(steps[keys.indexOf(e.key)]);
   
-  if(turnOn1 && !turnOn2 && !turnOn3)
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
+  if(flagsTriggered[k] == '100'){
+    console.log(k)
+        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+     
+  }
     
-    if(!turnOn1 && turnOn2 && !turnOn3)
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
-    
-    if(!turnOn1 && !turnOn2 && turnOn3)
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
-    
-    if(turnOn1 && turnOn2 && !turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
+    if(flagsTriggered[k] == '010'){
+      console.log(k)
+        release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
+      
     }
     
-    if(!turnOn1 && turnOn2 && turnOn3){
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
+    if(flagsTriggered[k] == '001')
+        release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
+    
+    if(flagsTriggered[k] == '110'){
+      console.log("4")
+        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+        release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
     }
     
-    if(turnOn1 && !turnOn2 && turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
+    if(flagsTriggered[k] == '011'){
+        release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
+        release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
     }
     
-    if(turnOn1 && turnOn2 && turnOn3){
-        release1(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel1]);
-        release2(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel2]);
-        release3(tones[keys.indexOf(e.key)], keys.indexOf(e.key), releaseArray[rel3]);
+    if(flagsTriggered[k] == '101'){
+        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+        release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
     }
+    
+    if(flagsTriggered[k] == '111'){
+        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+        release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
+        release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
+    }
+  
+  keysTriggered[k]=undefined;
   
 }
 
@@ -697,18 +767,66 @@ function clickOnKeyBoard(step){
 
 
 
-
-
-
-
-
 function calculateDeg(deg,name){
-  if(name=='vol1')
+  
+  if(name=='vol1'){
     f1= gradi.indexOf(deg);
-  if(name=='vol2')
+    
+    for(i=0;i<gates1.length;i++){
+     if(gates1[i]!=undefined)
+            gates1[i].gain.linearRampToValueAtTime(selectedGain[f1],cMaster.currentTime+attackArray[atk1]);
+    }
+    
+    if(turnOnLfo1){
+      
+      for(i=0;i<lfo1Gain.length;i++){
+     if(lfo1Gain[i]!=undefined)
+            lfo1Gain[i].gain.linearRampToValueAtTime(selectedGain[f1],cMaster.currentTime+attackArray[atk1]);
+    }
+      
+    }
+      
+    
+  }
+    
+  if(name=='vol2'){
+    
     f2= gradi.indexOf(deg);
-   if(name=='vol3')
-    f3= gradi.indexOf(deg);
+    
+    for(i=0;i<gates2.length;i++){
+     if(gates2[i]!=undefined)
+            gates2[i].gain.linearRampToValueAtTime(selectedGain[f2],cMaster.currentTime+attackArray[atk2]);
+    }
+    
+    if(turnOnLfo2){
+      
+      for(i=0;i<lfo2Gain.length;i++){
+     if(lfo2Gain[i]!=undefined)
+            lfo2Gain[i].gain.linearRampToValueAtTime(selectedGain[f2],cMaster.currentTime+attackArray[atk2]);
+    }
+      
+    }
+  }
+    
+   if(name=='vol3'){
+     
+     f3= gradi.indexOf(deg);
+     
+     for(i=0;i<gates3.length;i++){
+     if(gates3[i]!=undefined)
+            gates3[i].gain.linearRampToValueAtTime(selectedGain[f3],cMaster.currentTime+attackArray[atk3]);
+    }
+    
+    if(turnOnLfo3){
+      
+      for(i=0;i<lfo3Gain.length;i++){
+     if(lfo3Gain[i]!=undefined)
+            lfo3Gain[i].gain.linearRampToValueAtTime(selectedGain[f3],cMaster.currentTime+attackArray[atk3]);
+    }
+      
+    }
+   }
+    
   
    if(name=='att1')
      atk1=gradi.indexOf(deg);
@@ -734,11 +852,15 @@ function calculateDeg(deg,name){
       //var n = lfoFreqArray[lfoFreq1];
       var textnode =document.createTextNode(String(n1)+ " Hz") ;         
       dispLfo1.appendChild(textnode); 
-      if(turnOnLfo1){
-        n1=1/n1;
-        lfoButton1.style.animation= "neon "+ n1 + "s ease-in-out infinite";
-      }
       
+      for(i=0;i< lfo1Array.length;i++){
+        if(lfo1Array[i]!=undefined)
+          lfo1Array[i].frequency.value=lfoFreqArray[lfoFreq1];
+      }
+      if(turnOnLfo1){
+        periodLfo1=1/n1;
+        lfoButton1.style.animation= "neon "+ periodLfo1 + "s ease-in-out infinite";
+      }
     }
   
   if(name=='lfoKnob2')
@@ -749,9 +871,14 @@ function calculateDeg(deg,name){
       var n2 = Number((lfoFreqArray[lfoFreq2]).toFixed(2));
       var textnode =document.createTextNode(String(n2)+ " Hz") ;         
       dispLfo2.appendChild(textnode); 
+      
+      for(i=0;i< lfo2Array.length;i++){
+        if(lfo2Array[i]!=undefined)
+          lfo2Array[i].frequency.value=lfoFreqArray[lfoFreq2];
+      }
       if(turnOnLfo2){
-        n2=1/n2;
-        lfoButton2.style.animation= "neon "+ n2 + "s ease-in-out infinite";
+        periodLfo2=1/n2;
+        lfoButton2.style.animation= "neon "+ periodLfo2 + "s ease-in-out infinite";
       }
     }
   
@@ -763,11 +890,29 @@ function calculateDeg(deg,name){
       var n3 = Number((lfoFreqArray[lfoFreq3]).toFixed(2));
       var textnode =document.createTextNode(String(n3)+ " Hz") ;         
       dispLfo3.appendChild(textnode); 
+      
+      for(i=0;i< lfo3Array.length;i++){
+        if(lfo3Array[i]!=undefined)
+          lfo3Array[i].frequency.value=lfoFreqArray[lfoFreq3];
+      }
       if(turnOnLfo3){
-        n3=1/n3;
-        lfoButton3.style.animation= "neon "+ n3 + "s ease-in-out infinite";
+        periodLfo3=1/n3;
+        lfoButton3.style.animation= "neon "+ periodLfo3 + "s ease-in-out infinite";
       }
     }
+  
+  if(name=='dTimeKnob'){
+    
+     dTime=gradi.indexOf(deg);
+      delay.delayTime.value = delayTimeArray[dTime];
+  }
+   
+  
+  if(name=='dGainKnob'){
+    dGain=gradi.indexOf(deg);
+    delayGain.gain.value=delayGainArray[dGain];
+  }
+    
     
   
 }
@@ -787,6 +932,8 @@ moveKnob('rel3');
 moveKnob('lfoKnob1');
 moveKnob('lfoKnob2');
 moveKnob('lfoKnob3');
+moveKnob('dTimeKnob');
+moveKnob('dGainKnob')
 
 function moveKnob(name){
 
@@ -949,4 +1096,12 @@ for(i=0; i<gradi.length; i++){
 
 for(i=0; i<gradi.length; i++){
   lfoFreqArray[i] = stepLfo*(i+1);
+}
+
+for(i=0; i<gradi.length;i++){
+  delayTimeArray[i] = stepTimeDelay*i;
+}
+
+for(i=0; i<gradi.length;i++){
+  delayGainArray[i] = stepGainDelay*i;
 }
