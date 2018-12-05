@@ -48,6 +48,7 @@
       <div class="step black-step" id="s22"></div>       </div>
 </div>
 </div>
+  <div class="mainWindowContainer">
   <div class="oscContainer">
     <div class="osc" id="osc1">
       <div class = "oscZone" id="oscZone1">
@@ -127,29 +128,7 @@
       
       
       
-      <div class = "oscZone" id="oscZone3">
-        <div class="delayRow">
-          
-          <div class=delayFeatureContainer>
-            <div id="delayOnOff" class="onOffDelay"></div>
-            <button id="delay" onclick="activateDelay()" class="delayButton">DELAY</button>
-          </div>
-          <div class="delayFeatureContainer">
-            <div class="delayLabel">TIME</div>
-            <div id="dTimeKnob"  class="knob volKnob" >
-            <div class="knobLabel"></div>  
-          </div>
-          </div>
-          
-          <div class="delayFeatureContainer">
-            <div class="delayLabel">GAIN</div>
-            <div id="dGainKnob"  class="knob volKnob" >
-            <div class="knobLabel"></div>  
-          </div>
-          </div>
-        </div>
-        
-      </div>
+      
     </div>
     
     
@@ -231,7 +210,7 @@
       
       
       
-      <div class = "oscZone" id="oscZone3"></div>
+      
     </div>
     
     
@@ -328,8 +307,77 @@
       
       
       
-      <div class = "oscZone" id="oscZone3"></div>
+     
       
+      
+    </div>
+    
+    </div>
+    
+    <div class="effectsContainer">
+      
+      <div class="delayRow">
+          
+          <div class=delayFeatureContainer>
+            <div id="delayOnOff" class="onOffDelay"></div>
+            <button id="delay" onclick="activateDelay()" class="delayButton">DELAY</button>
+          </div>
+          <div class="delayFeatureContainer">
+            <div class="delayLabel">TIME</div>
+            <div id="dTimeKnob"  class="knob volKnob" >
+            <div class="knobLabel"></div>  
+          </div>
+          </div>
+          
+          <div class="delayFeatureContainer">
+            <div class="delayLabel">GAIN</div>
+            <div id="dGainKnob"  class="knob volKnob" >
+            <div class="knobLabel"></div>  
+          </div>
+          </div>
+        </div>
+      
+      <div class="filterRow">
+        <div class=filterFeatureContainer>
+            <div id="filterOnOff" class="onOffFilter"></div>
+            <button id="filter" onclick="activateFilter()" class="filterButton">FILTER</button>
+        </div>
+        
+        <div class="filterFeatureContainer">
+          <div class="filterLabel">FREQ</div>
+          <div id="filtFreqKnob"  class="knob volKnob" >
+            <div class="knobLabel"></div>  
+          </div>
+        </div>
+          
+        <div class="filterFeatureContainer">
+          <div class="filterLabel">Q</div>
+          <div id="filtQKnob"  class="knob volKnob" >
+            <div class="knobLabel"></div>  
+          </div>
+        </div>
+        
+               
+        <select class="selectorFilt" class="select_box" id="selFilt" >
+          <option value="">Lowpass</option>
+          <option value="">Highpass</option>
+          <option value="">Bandpass</option>
+        </select>
+        <input type="hidden" name="select_flag" id="select_flag1" value="0">
+      </div>
+      
+      <div class="distortionRow">
+        <div class=distortionFeatureContainer>
+            <div id="distortionOnOff" class="onOffDistortion"></div>
+            <button id="distortion" onclick="activateDistortion()" class="distortionButton">DISTORTION</button>
+        </div>
+        <div class="distortionFeatureContainer">
+          <div class="distortionLabel">DRIVE</div>
+          <div id="distDriveKnob"  class="knob volKnob" >
+            <div class="knobLabel"></div>  
+          </div>
+        </div>
+      </div>
       
     </div>
     
