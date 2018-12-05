@@ -467,6 +467,7 @@ canvas{
   background-color:#00FF00;
 }
 
+
 .filterRow{
   position:relative;
   display:inline-flex;
@@ -580,5 +581,61 @@ canvas{
 }
 
 .distortionActive{
+  background-color:#00FF00;
+}
+.masterKnobsContainer{
+  position:relative;
+  width:490px;
+  height:180px;
+  background-color:white;
+  left:210px;
+  top:80px;
+  display:inline-flex;
+  
+}
+
+.masterVolContainer{
+  background-color:white;
+  position:relative;
+  left:355px;
+  width:130px;
+  height:175px;
+  margin:1px;
+  display:inline-block;
+  
+}
+
+.masterLabel{
+  width:130px;
+  //background-color:green;
+  height:30px;
+  text-align:center;
+  
+}
+
+.masterKnob{
+  position:relative;
+  background-color:black;
+  width:100px;
+  height:100px;
+  border-radius:50px;
+  top:50px;
+  left:17px;
+  transform:translateY(-50%);
+    
+}
+
+.muteButton{
+  position:relative;
+  width:70px;
+  height:30px;
+  text-align:center;
+  top:10px;
+  left:33px;
+  border: solid black 2px;
+  
+}
+
+.muteActive{
   background-color:#00FF00;
 }

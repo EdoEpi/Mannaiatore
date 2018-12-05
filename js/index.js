@@ -1,4 +1,4 @@
-var cMaster;
+﻿var cMaster;
 var analyser1, analyser2, analyser3;
 var o1Array = [], o2Array = [], o3Array = [];
 var lfo1Array = [], lfo2Array=[], lfo3Array=[];
@@ -244,6 +244,11 @@ function changeParametFilter(freqFilt, qFilt){
 filter.type = "lowpass";
 filter.frequency.value = 300;
 filter.Q.value = 20;
+var periodLfo1=2, periodLfo2=2, periodLfo3=2;                //1/initial frequency
+var muteButton=document.getElementById("muteBut");
+var muteFlag=false;
+var MasterGainIndex=10;
+var counterMute=0;
 
 function createAudio1(){
   canvas1 = document.querySelector("#canv1");
@@ -647,28 +652,32 @@ function createAudioFreq(){
 
 
 function activateLfo(x){
-  if(x==1)    
+  if(x==1){   
     turnOnLfo1=!turnOnLfo1;
   if(!turnOnLfo1) 
     lfoButton1.style.animation= "";
   if(turnOnLfo1){
+    console.log(periodLfo1);
     lfoButton1.style.animation= "neon "+ periodLfo1 + "s ease-in-out infinite";
   }
+  }
   
-  if(x==2)    
+  if(x==2){    
     turnOnLfo2=!turnOnLfo2;
   if(!turnOnLfo2)
     lfoButton2.style.animation= "";
   if(turnOnLfo2){
     lfoButton2.style.animation= "neon "+ periodLfo2 + "s ease-in-out infinite";
   }
+  }
   
-  if(x==3)    
+  if(x==3){    
     turnOnLfo3=!turnOnLfo3;
   if(!turnOnLfo3) 
     lfoButton3.style.animation= "";
   if(turnOnLfo3){
     lfoButton3.style.animation= "neon "+ periodLfo3 + "s ease-in-out infinite";
+  }
   }
   
   changeColorDotLfo(x);  
@@ -723,10 +732,30 @@ function activateFilter(){
   
 }
 
+
 function activateDistortion(){
   effectDistortion=!effectDistortion;
   insertEffect();
   document.getElementById("distortionOnOff").classList.toggle("distortionActive");
+}
+
+function activateMute(){
+  if(!(muteFlag && masterGainIndex==0)){
+  muteFlag=!muteFlag;
+  changeColorMute();
+  
+  if(muteFlag){
+    gainMaster.gain.value = 0;
+  }
+  else{
+    gainMaster.gain.value = selectedGain[masterGainIndex];
+  }
+    
+  }
+}
+
+function changeColorMute(){
+  muteButton.classList.toggle("muteActive");
 }
 
 
@@ -923,12 +952,12 @@ document.onkeyup = function(e) {
   clickOnKeyBoard(steps[keys.indexOf(e.key)]);
   
   if(flagsTriggered[k] == '100'){
+
         release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
      
   }
     
     if(flagsTriggered[k] == '010'){
-      console.log(k)
         release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
       
     }
@@ -937,7 +966,6 @@ document.onkeyup = function(e) {
         release3(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel3]);
     
     if(flagsTriggered[k] == '110'){
-      console.log("4")
         release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
         release2(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel2]);
     }
@@ -1059,8 +1087,9 @@ function calculateDeg(deg,name){
         if(lfo1Array[i]!=undefined)
           lfo1Array[i].frequency.value=lfoFreqArray[lfoFreq1];
       }
+      periodLfo1=1/n1;
       if(turnOnLfo1){
-        periodLfo1=1/n1;
+        
         lfoButton1.style.animation= "neon "+ periodLfo1 + "s ease-in-out infinite";
       }
     }
@@ -1078,8 +1107,8 @@ function calculateDeg(deg,name){
         if(lfo2Array[i]!=undefined)
           lfo2Array[i].frequency.value=lfoFreqArray[lfoFreq2];
       }
+      periodLfo2=1/n2;
       if(turnOnLfo2){
-        periodLfo2=1/n2;
         lfoButton2.style.animation= "neon "+ periodLfo2 + "s ease-in-out infinite";
       }
     }
@@ -1097,8 +1126,8 @@ function calculateDeg(deg,name){
         if(lfo3Array[i]!=undefined)
           lfo3Array[i].frequency.value=lfoFreqArray[lfoFreq3];
       }
+      periodLfo3=1/n3;
       if(turnOnLfo3){
-        periodLfo3=1/n3;
         lfoButton3.style.animation= "neon "+ periodLfo3 + "s ease-in-out infinite";
       }
     }
@@ -1113,6 +1142,21 @@ function calculateDeg(deg,name){
   if(name=='dGainKnob'){
     dGain=gradi.indexOf(deg);
     delayGain.gain.value=delayGainArray[dGain];
+  }
+  
+  if(name=='mKnob'){
+    masterGainIndex = gradi.indexOf(deg);
+    gainMaster.gain.value = selectedGain[masterGainIndex];
+     
+    if( masterGainIndex==0 && counterMute=='0') {
+      activateMute();
+      counterMute++;
+    }
+    if( masterGainIndex!=0 && counterMute!='0'){
+      activateMute();
+      counterMute=0;
+     
+    }
   }
     
   if(name=='filtFreqKnob'){
@@ -1154,9 +1198,11 @@ moveKnob('lfoKnob2');
 moveKnob('lfoKnob3');
 moveKnob('dTimeKnob');
 moveKnob('dGainKnob');
+
 moveKnob('filtFreqKnob');
 moveKnob('filtQKnob');
 moveKnob('distDriveKnob');
+moveKnob('mKnob');
 
 function moveKnob(name){
 
@@ -1229,12 +1275,10 @@ window.addEventListener('mousemove',function(e){
       if(deg==135){
         
         calculateMax();
-        //if(indice==0){console.log(indice);
-                      //indice++;}
-        //calculateCoord(); 
+        
         if(delta<=oldDelta) tryFlag=false;
         else tryFlag=true;
-        //console.log(indice);
+        
         
         
       }
@@ -1243,7 +1287,7 @@ window.addEventListener('mousemove',function(e){
       
     
     spinner.style.transform = `translateY(-50%) rotate(${deg}deg)`
-    //feedback.innerHTML = deg;
+    
     
     
     
@@ -1263,7 +1307,7 @@ function calculateMax(){
       
     }
   indice++;
-  //console.log(indice);
+  
 }
 
 function calculateCoord(){

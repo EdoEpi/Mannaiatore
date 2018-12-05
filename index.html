@@ -308,8 +308,6 @@
       
       
      
-      
-      
     </div>
     
     </div>
@@ -365,6 +363,7 @@
         </select>
         <input type="hidden" name="select_flag" id="select_flag1" value="0">
       </div>
+
       
       <div class="distortionRow">
         <div class=distortionFeatureContainer>
@@ -381,12 +380,54 @@
       
     </div>
     
+    </div>
+    
+    <div class="effectsContainer">
+      
+      <div class="delayRow">
+          
+          <div class=delayFeatureContainer>
+            <div id="delayOnOff" class="onOffDelay"></div>
+            <button id="delay" onclick="activateDelay()" class="delayButton">DELAY</button>
+          </div>
+          <div class="delayFeatureContainer">
+            <div class="delayLabel">TIME</div>
+            <div id="dTimeKnob"  class="knob volKnob" >
+            <div class="knobLabel"></div>  
+          </div>
+          </div>
+          
+          <div class="delayFeatureContainer">
+            <div class="delayLabel">GAIN</div>
+            <div id="dGainKnob"  class="knob volKnob" >
+            <div class="knobLabel"></div>  
+          </div>
+          </div>
+        </div>
+      
+      <div class="delayRow"></div>
+      
+      <div class="delayRow"></div>
+      
+    </div>
+    
     
   </div>
   
   <canvas id="canvFreq"  width="480px" height= "280px" style="border: solid white 1px">
-    
   </canvas>
+  
+  <div class="masterKnobsContainer">
+    <div class="masterVolContainer">
+      <div class="masterLabel">MASTER</div>
+      <div id="mKnob" class="masterKnob">
+        <div class="knobLabel"></div> 
+      </div>
+      
+      <button id="muteBut" class="muteButton" onclick="activateMute()">MUTE</button>
+      
+    </div>
+  </div>
   
 </div>
   
