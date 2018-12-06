@@ -1,4 +1,4 @@
-﻿var cMaster;
+var cMaster;
 var analyser1, analyser2, analyser3;
 var o1Array = [], o2Array = [], o3Array = [];
 var lfo1Array = [], lfo2Array=[], lfo3Array=[];
@@ -6,76 +6,90 @@ var lfo1Gain=[], lfo2Gain=[], lfo3Gain=[];
 var tones = [] //note
 var steps = [] //tasti
 var mouseSteps = []; //tasti cliccati col mouse
+var gradi = [];
+var selectedGain = [];
+var gates1=[], gates2=[], gates3=[];
+var lfoFreqArray=[];
+var attackArray = [];     //array of attack levels
+var releaseArray = [];    //array of release levels
+var delayTimeArray=[];
+var delayGainArray=[];
+var filterQArray=[];
+var distortionDriveArray=[];
+var filterFreqArray=[];
+var keysTriggered = [];
+var flagsTriggered=[];
+
 var n = 0;
 var f1=10,f2=10,f3=10;      //index of the current grade calcualted by "calculateDeg" function
 var atk1=1, atk2=1, atk3=1;
 var rel1=1, rel2=1, rel3=1;
-var gradi = [];
-var selectedGain = [];
 var deg=0;
+var lfoStep=0.5;
+var lfoFreq1=0, lfoFreq2=0, lfoFreq3=0;       //default value of the index of the lfo frequencies
+var stepLfo=0.5;
+var stepAttack=0.1;       //step between each possible attack level
+var stepRelease=0.15;      //step between each possible relase level
+var dTime=10;
+var dGain=10;
+var masterGainIndex=10;
+var stepTimeDelay=0.1;
+var stepGainDelay=0.05;
+var stepDriveDistortion=50;
+var stepQFilter=52.63157368421053;
+var freqFiltIndex=10;
+var qFiltIndex=10;
+var driveIndex=10;
+var periodLfo1;
+var periodLfo2;
+var periodLfo3;              // 1/initial frequency
+var flagEffect='000';
+var freqFilt;
+var qFilt;
+var drive;
+var counterMute=0;
+
 var sel1= document.getElementById("select_box1");
 var sel2= document.getElementById("select_box2");
 var sel3= document.getElementById("select_box3");
 var selLfo1 = document.getElementById("selLfo1");
 var selLfo2 = document.getElementById("selLfo2");
 var selLfo3 = document.getElementById("selLfo3");
+var dispLfo1=document.getElementById("dispLfo1");
+var muteButton=document.getElementById("muteBut");
+
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
 var turnOnLfo1=false, turnOnLfo2=false, turnOnLfo3=false;
-var gates1=[], gates2=[], gates3=[];
 sel1.disabled=true;
 sel2.disabled=true;
 sel3.disabled=true;
 var clicked= false;
+var effectDelay=false;
+var effectFilter=false;
+var effectDistortion=false;
+var muteFlag=false;
 
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
+var delay = cMaster.createDelay(4);
+var delayGain = cMaster.createGain();
 var distortion = cMaster.createWaveShaper();
 var filter = cMaster.createBiquadFilter();
 var dryGain=cMaster.createGain();
 var analyserF = cMaster.createAnalyser();
-
-var lfoFreqArray=[];
-var lfoStep=0.5;
-var lfoFreq1=0, lfoFreq2=0, lfoFreq3=0;       //default value of the index of the lfo frequencies
-    var lfoFreq=1;
-var stepLfo=0.5;
-var stepAttack=0.1;       //step between each possible attack level
-var stepRelease=0.15;      //step between each possible relase level
-var attackArray = [];     //array of attack levels
-var releaseArray = [];    //array of release levels
-var dispLfo1=document.getElementById("dispLfo1");
-var dTime=10;
-var dGain=10;
-var effectDelay=false;
-var effectFilter=false;
-var effectDistortion=false;
-var delayTimeArray=[];
-var delayGainArray=[];
-var filterQArray=[];
-var distortionDriveArray=[];
-var filterFreqArray=[];
-
-var stepTimeDelay=0.1;
-var stepGainDelay=0.05;
-var stepDriveDistortion=50;
-var stepQFilter=52.63157368421053;
-var delayGain = cMaster.createGain();
-var delay = cMaster.createDelay(4);
-var keysTriggered = [];
-var flagsTriggered=[];
-var periodLfo1=2, periodLfo2=2, periodLfo3=2;                // 1/initial frequency
-var flagEffect='000';
-var freqFiltIndex=10;
-var qFiltIndex=10;
-var driveIndex=10;
-var freqFilt=758.538;
-var qFilt=500.00005;
-var drive=500;
-
 dryGain.connect(gainMaster);
 gainMaster.connect(analyserF);
 analyserF.connect(cMaster.destination);
+
+
+
+
+
+
+initializeVariables();
+
+
 
 function insertEffect(){
   
@@ -87,6 +101,7 @@ function insertEffect(){
   }
   
   if (effectDelay && !effectFilter && !effectDistortion){
+    dryGain.connect(gainMaster);
     dryGain.connect(delay);
     delayGain.connect(delay);
     delay.connect(delayGain);
@@ -107,6 +122,7 @@ function insertEffect(){
   }
   
   if (effectDelay && effectFilter && !effectDistortion){
+    dryGain.connect(filter);
     dryGain.connect(delay);
     delayGain.connect(delay);
     delay.connect(delayGain);
@@ -116,6 +132,7 @@ function insertEffect(){
   }
   
   if (effectDelay && !effectFilter && effectDistortion){
+    dryGain.connect(distortion);
     dryGain.connect(delay);
     delayGain.connect(delay);
     delay.connect(delayGain);
@@ -132,6 +149,7 @@ function insertEffect(){
   }
   
   if (effectDelay && effectFilter && effectDistortion){
+    dryGain.connect(filter);
     dryGain.connect(delay);
     delayGain.connect(delay);
     delay.connect(delayGain);
@@ -146,70 +164,73 @@ function insertEffect(){
 
 function disconnectEffect(){
   
-  if (flagEffect=='000'&& !effectDelay)
+  if (flagEffect=='000'){
     dryGain.disconnect(gainMaster);
-  if(flagEffect=='000' && effectDelay){}
+  }
+    
   
   if (flagEffect=='100'){
+    dryGain.disconnect(gainMaster);
     dryGain.disconnect(delay);
     delayGain.disconnect(delay);
     delay.disconnect(delayGain);
     delay.disconnect(gainMaster);
-    //flagEffect='100';
+    
+    
   }
   
   if (flagEffect=='010'){
     dryGain.disconnect(filter);
     filter.disconnect(gainMaster);
-    //flagEffect='010';
+    
   }
+ 
   
   if (flagEffect=='001'){
     dryGain.disconnect(distortion);
     distortion.disconnect(gainMaster);
-    //flagEffect='001';
+    
   }
   
   if (flagEffect=='110'){
+    dryGain.disconnect(filter);
     dryGain.disconnect(delay);
     delayGain.disconnect(delay);
     delay.disconnect(delayGain);
     delay.disconnect(filter);
     filter.disconnect(gainMaster);
-    //flagEffect='110';
+    
   }
+ 
   
   if (flagEffect=='101'){
+    dryGain.disconnect(distortion);
     dryGain.disconnect(delay);
     delayGain.disconnect(delay);
     delay.disconnect(delayGain);
     delay.disconnect(distortion);
     distortion.disconnect(gainMaster);
-    //flagEffect='101';
   }
   
   if (flagEffect=='011'){
     dryGain.disconnect(filter);
     filter.disconnect(distortion);
     distortion.disconnect(gainMaster);
-    //flagEffect='011';
   }
   
   if (flagEffect=='111'){
+    dryGain.disconnect(filter);
     dryGain.disconnect(delay);
     delayGain.disconnect(delay);
     delay.disconnect(delayGain);
     delay.disconnect(filter);
     filter.disconnect(distortion);
     distortion.disconnect(gainMaster);
-    //flagEffect='111';
   }
     
 }
 
-//distortion.connect(filter);
-//filter.connect(gainMaster);
-//gainMaster.connect(cMaster.destination);
+
 
 
 
@@ -233,22 +254,14 @@ function changeParametDistortion(drive){
   distortion.oversample = '4x';
 }
 
-function changeParametFilter(freqFilt, qFilt){
+function changeParametFilter(){
   if (selFilt.options.selectedIndex=="0") {filter.type = "lowpass"}
   if (selFilt.options.selectedIndex=="1") {filter.type = "highpass"}
   if (selFilt.options.selectedIndex=="2") {filter.type = "bandpass"}
-  filter.frequency.value = freqFilt;
-  filter.Q.value = qFilt;
-  //filter.gain.value = 25;
+  
 }
-filter.type = "lowpass";
-filter.frequency.value = 300;
-filter.Q.value = 20;
-var periodLfo1=2, periodLfo2=2, periodLfo3=2;                //1/initial frequency
-var muteButton=document.getElementById("muteBut");
-var muteFlag=false;
-var MasterGainIndex=10;
-var counterMute=0;
+
+
 
 function createAudio1(){
   canvas1 = document.querySelector("#canv1");
@@ -358,7 +371,7 @@ function attack1(freq ,selGain, atkTime) {
   o1.connect(g);
   
   g.connect(analyser1);
-  analyser1.connect(dryGain);   //connect(analyserF)
+  analyser1.connect(dryGain);   
   o1.frequency.value = freq;
   g.gain.value = 0;
   
@@ -375,13 +388,9 @@ function attack1(freq ,selGain, atkTime) {
  
   if(turnOnLfo1){
   lfoCreate1(gates1[freq],freq,0, selGain, atkTime);
- 
   }
   
-  if(effectDelay){
-    
-    createDelay();
-  }
+  if(effectFilter) changeParametFilter();
   
   o1.start();
    
@@ -430,9 +439,7 @@ function attack2(freq ,selGain, atkTime) {
  
   }
   
-  if(effectDelay){
-    createDelay(gates2[freq], analyser2, analyserF);
-  }
+  if(effectFilter) changeParametFilter();
   
   o2.start();
   
@@ -477,9 +484,8 @@ function attack3(freq ,selGain, atkTime) {
  
   }
   
-  if(effectDelay){
-    createDelay(gates3[freq], analyser3, analyserF);
-  }
+  if(effectFilter) changeParametFilter();
+
   
   o3.start();
   
@@ -639,12 +645,6 @@ function drawSamples3(){
 function createAudioFreq(){
   canvasFreq = document.querySelector("#canvFreq");
   ctxF = canvasFreq.getContext("2d");
-  
-  
-  //analyserF.connect(filter);
-  //analyserF.connect(distortion);
-  //analyserF.connect(gainMaster);
-  
   bufferLength = analyserF.frequencyBinCount;
   dataArray = new Uint8Array(bufferLength);
     
@@ -657,7 +657,6 @@ function activateLfo(x){
   if(!turnOnLfo1) 
     lfoButton1.style.animation= "";
   if(turnOnLfo1){
-    console.log(periodLfo1);
     lfoButton1.style.animation= "neon "+ periodLfo1 + "s ease-in-out infinite";
   }
   }
@@ -703,18 +702,6 @@ function drawSamplesFreq(){
 }
 
 
-function createDelay(){
-  //var delayGain = cMaster.createGain();
-  //var delay = cMaster.createDelay(4);
-  delay.delayTime.value = delayTimeArray[dTime];
-  delayGain.gain.value=delayGainArray[dGain];
-  //g.connect(delay);
-  //delayGain.connect(delay);
-  //delay.connect(delayGain);
-  //delay.connect(analyserF);
-  //delay.connect(analyser);
-}
-
 function changeColorDelay(){
   document.getElementById("delayOnOff").classList.toggle("delayActive");
 }
@@ -758,15 +745,6 @@ function changeColorMute(){
   muteButton.classList.toggle("muteActive");
 }
 
-
-for(var i=0;i<25;i++) {
-  tones[i] = Math.round(262*Math.pow(2,1/12)**i);
-  steps[i] = document.querySelector("#s"+i);
-  mouseSteps[i] = "s"+i;
-  }
-//keys = "qwertyuiopasdfghjklzxcvbn";
-//keys = "awsedftgyhujkolpòà+ùzxcvb"
-keys="q2w3er5t6y7uzsxdcvgbhnjm,"
 
 document.querySelectorAll(".step").forEach(toggleStep)
 
@@ -1144,6 +1122,7 @@ function calculateDeg(deg,name){
     delayGain.gain.value=delayGainArray[dGain];
   }
   
+  
   if(name=='mKnob'){
     masterGainIndex = gradi.indexOf(deg);
     gainMaster.gain.value = selectedGain[masterGainIndex];
@@ -1161,15 +1140,15 @@ function calculateDeg(deg,name){
     
   if(name=='filtFreqKnob'){
     freqFiltIndex=gradi.indexOf(deg);
-    freqFilt=filterFreqArray[freqFiltIndex];
-    changeParametFilter(freqFilt, qFilt);
+    filter.frequency.value=filterFreqArray[freqFiltIndex];
+    
     
   }
   
   if(name=='filtQKnob'){
     qFiltIndex=gradi.indexOf(deg);
-    qFilt=filterQArray[qFiltIndex];
-    changeParametFilter(freqFilt, qFilt);
+    filter.Q.value=filterQArray[qFiltIndex];
+    
     
   }
   
@@ -1183,26 +1162,6 @@ function calculateDeg(deg,name){
 
 
 
-
-moveKnob('vol1');
-moveKnob('vol2');
-moveKnob('vol3');
-moveKnob('att1');
-moveKnob('rel1');
-moveKnob('att2');
-moveKnob('rel2');
-moveKnob('att3');
-moveKnob('rel3');
-moveKnob('lfoKnob1');
-moveKnob('lfoKnob2');
-moveKnob('lfoKnob3');
-moveKnob('dTimeKnob');
-moveKnob('dGainKnob');
-
-moveKnob('filtFreqKnob');
-moveKnob('filtQKnob');
-moveKnob('distDriveKnob');
-moveKnob('mKnob');
 
 function moveKnob(name){
 
@@ -1333,57 +1292,101 @@ function expandSelect(id){
    }
 
 
-
-for(i=0;i<10;i++){
-  gradi[i] = 225+i*15;
-}
-k=10;
-for(i=0;i<10;i++){
-  gradi[k] = 0+i*15;
-  k++;
-}
-
-numGain=1/gradi.length;
-j = 0;
-for(i=0;i<=20;i++){
-  selectedGain[i] = j;
-  j+=numGain;
-}
-
-
-
-
-for(i=0; i<gradi.length; i++){
-  attackArray[i] = stepAttack*i;  
-}
-
-for(i=0; i<gradi.length; i++){
-  releaseArray[i] = stepRelease*i;  
-}
-
-for(i=0; i<gradi.length; i++){
-  lfoFreqArray[i] = stepLfo*(i+1);
-}
-
-for(i=0; i<gradi.length;i++){
-  delayTimeArray[i] = stepTimeDelay*i;
-}
-
-for(i=0; i<gradi.length;i++){
-  delayGainArray[i] = stepGainDelay*i;
-}
-
-//for(i=0; i<gradi.length;i++){
-//  filterFreqArray[i] = 1000*i;
-//}
-
-var filterFreqArray=[20,28.7690,41.3828,59.5270,85.6266,123.1696,177.1734,254.855,366.5961,527.3302,758.538,1091.1189,1569.5199,2257.6757,3247.5534,4671.4429,6719.6365,9665.8604,13904.8559,20000];
-
-
-for(i=0; i<gradi.length;i++){
-  filterQArray[i] = stepQFilter*i+0.0001;
-}
-
-for(i=0; i<gradi.length;i++){
-  distortionDriveArray[i] = stepDriveDistortion *i;
+function initializeVariables(){
+  
+        for(var i=0;i<25;i++) {
+        tones[i] = Math.round(262*Math.pow(2,1/12)**i);
+        steps[i] = document.querySelector("#s"+i);
+        mouseSteps[i] = "s"+i;
+        }
+      keys="q2w3er5t6y7uzsxdcvgbhnjm,"
+  
+  
+       for(i=0;i<10;i++){
+       gradi[i] = 225+i*15;
+     }
+     k=10;
+     for(i=0;i<10;i++){
+       gradi[k] = 0+i*15;
+       k++;
+     }
+     
+     numGain=1/gradi.length;
+     j = 0;
+     for(i=0;i<=20;i++){
+       selectedGain[i] = j;
+       j+=numGain;
+     }
+     
+     
+     
+     
+     for(i=0; i<gradi.length; i++){
+       attackArray[i] = stepAttack*i;  
+     }
+     
+     for(i=0; i<gradi.length; i++){
+       releaseArray[i] = stepRelease*i;  
+     }
+     
+     for(i=0; i<gradi.length; i++){
+       lfoFreqArray[i] = stepLfo*(i+1);
+     }
+     
+     for(i=0; i<gradi.length;i++){
+       delayTimeArray[i] = stepTimeDelay*i;
+     }
+     
+     for(i=0; i<gradi.length;i++){
+       delayGainArray[i] = stepGainDelay*i;
+     }
+     
+     
+     filterFreqArray =[20,28.7690,41.3828,59.5270,85.6266,123.1696,177.1734,254.855,366.5961,527.3302,758.538,1091.1189,1569.5199,2257.6757,3247.5534,4671.4429,6719.6365,9665.8604,13904.8559,20000];
+     
+     
+     for(i=0; i<gradi.length;i++){
+       filterQArray[i] = stepQFilter*i+0.0001;
+     }
+     
+     for(i=0; i<gradi.length;i++){
+       distortionDriveArray[i] = stepDriveDistortion *i;
+     }
+  
+  
+  
+  delayGain.gain.value=delayGainArray[dGain];
+  delay.delayTime.value = delayTimeArray[dTime];
+  gainMaster.gain.value = selectedGain[masterGainIndex];
+  periodLfo1=lfoFreqArray[lfoFreq1];
+  periodLfo2=lfoFreqArray[lfoFreq2];
+  periodLfo3=lfoFreqArray[lfoFreq3];
+  drive=distortionDriveArray[driveIndex];
+  freqFilt=filterFreqArray[freqFiltIndex];
+  qFilt=filterQArray[qFiltIndex];
+  
+  filter.type = "lowpass";
+  filter.frequency.value = filterFreqArray[10];
+  filter.Q.value = 20;
+  
+  changeParametDistortion(drive);
+  
+  moveKnob('vol1');
+  moveKnob('vol2');
+  moveKnob('vol3');
+  moveKnob('att1');
+  moveKnob('rel1');
+  moveKnob('att2');
+  moveKnob('rel2');
+  moveKnob('att3');
+  moveKnob('rel3');
+  moveKnob('lfoKnob1');
+  moveKnob('lfoKnob2');
+  moveKnob('lfoKnob3');
+  moveKnob('dTimeKnob');
+  moveKnob('dGainKnob');
+  moveKnob('filtFreqKnob');
+  moveKnob('filtQKnob');
+  moveKnob('distDriveKnob');
+  moveKnob('mKnob');
 }
