@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>log prova</title>
+  <title>prova midi</title>
   
   
   
@@ -348,14 +348,11 @@
             <div class="knobLabel"></div>  
           </div>
         </div>
-          
-        <div class="filterFeatureContainer">
-          <div class="filterLabel">Q</div>
-          <div id="filtQKnob"  class="knob volKnob" >
-            <div class="knobLabel"></div>  
-          </div>
-        </div>
         
+         
+          
+        
+       
                
         <select class="selectorFilt" class="select_box" id="selFilt" >
           <option value="">Lowpass</option>
@@ -392,6 +389,9 @@
   </canvas>
   
   <div class="masterKnobsContainer">
+    
+    <button id="midiButt" class="midiButton" onclick="activateMidi()">MIDI</button>
+    
     <div class="masterVolContainer">
       <div class="masterLabel">MASTER</div>
       <div id="mKnob" class="masterKnob">
@@ -408,6 +408,7 @@
  </div>
   <script src='https://unpkg.com/logscpace@1.0.1/index.js'></script>
 <script src='https://unpkg.com/logscpace@1.0.1/package.json'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/tone/13.3.11/Tone.min.js'></script>
 
   
 

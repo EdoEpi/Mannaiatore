@@ -626,6 +626,7 @@ canvas{
 }
 
 .muteButton{
+  background-color:white;
   position:relative;
   width:70px;
   height:30px;
@@ -637,5 +638,18 @@ canvas{
 }
 
 .muteActive{
+  background-color:#00FF00;
+}
+
+
+.midiButton{
+  position:relative;
+  border: solid black 2px;
+  height:40px;
+  width:40px;
+  top:40px;
+}
+
+.midiActive{
   background-color:#00FF00;
 }

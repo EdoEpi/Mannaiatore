@@ -19,6 +19,9 @@ var distortionDriveArray=[];
 var filterFreqArray=[];
 var keysTriggered = [];
 var flagsTriggered=[];
+var midiArray=[];
+var midiArrayFreq=[];
+var midiO1Array=[], midiO2Array=[], midiO3Array=[];
 
 var n = 0;
 var f1=10,f2=10,f3=10;      //index of the current grade calcualted by "calculateDeg" function
@@ -57,6 +60,7 @@ var selLfo2 = document.getElementById("selLfo2");
 var selLfo3 = document.getElementById("selLfo3");
 var dispLfo1=document.getElementById("dispLfo1");
 var muteButton=document.getElementById("muteBut");
+var midiButton=document.getElementById("midiButt");
 
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
@@ -69,6 +73,7 @@ var effectDelay=false;
 var effectFilter=false;
 var effectDistortion=false;
 var muteFlag=false;
+var midiFlag=false;
 
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
@@ -305,8 +310,15 @@ function lfoCreate1(g, freq, nOsc, selGain, atkTime){
       if (selLfo1.options.selectedIndex=="1") {lfo.type='triangle'}
       if (selLfo1.options.selectedIndex=="2") {lfo.type='square'}
       if (selLfo1.options.selectedIndex=="3") {lfo.type='sawtooth'}
+  
+  if(!midiFlag){
       lfo1Array[tones.indexOf(freq)] = lfo;
       lfo1Array[tones.indexOf(freq)].start();  
+  }
+  if(midiFlag){
+      lfo1Array[midiArrayFreq.indexOf(freq)] = lfo;
+      lfo1Array[midiArrayFreq.indexOf(freq)].start();  
+  }
 }
 
 function lfoCreate2(g, freq, nOsc, selGain, atkTime){
@@ -328,11 +340,16 @@ function lfoCreate2(g, freq, nOsc, selGain, atkTime){
       if (selLfo2.options.selectedIndex=="2") {lfo.type='square'}
       if (selLfo2.options.selectedIndex=="3") {lfo.type='sawtooth'}
   
+      if(!midiFlag){
       lfo2Array[tones.indexOf(freq)] = lfo;
-      lfo2Array[tones.indexOf(freq)].start();
+      lfo2Array[tones.indexOf(freq)].start();  
+  }
+  if(midiFlag){
+      lfo2Array[midiArrayFreq.indexOf(freq)] = lfo;
+      lfo2Array[midiArrayFreq.indexOf(freq)].start();  
+  }
       
 }
-
 
 function lfoCreate3(g, freq, nOsc, selGain, atkTime){
       
@@ -353,8 +370,14 @@ function lfoCreate3(g, freq, nOsc, selGain, atkTime){
       if (selLfo3.options.selectedIndex=="2") {lfo.type='square'}
       if (selLfo3.options.selectedIndex=="3") {lfo.type='sawtooth'}
   
+      if(!midiFlag){
       lfo3Array[tones.indexOf(freq)] = lfo;
-      lfo3Array[tones.indexOf(freq)].start();
+      lfo3Array[tones.indexOf(freq)].start();  
+  }
+  if(midiFlag){
+      lfo3Array[midiArrayFreq.indexOf(freq)] = lfo;
+      lfo3Array[midiArrayFreq.indexOf(freq)].start();  
+  }
       
 }
 
@@ -378,8 +401,16 @@ function attack1(freq ,selGain, atkTime) {
   var now = cMaster.currentTime;
   g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates1[freq] = g;
-  o1Array[tones.indexOf(freq)] = o1;    //save the value of the actual note (oscillator)
-    
+  
+     //save the value of the actual note (oscillator)
+  
+  if(!midiFlag){
+    o1Array[tones.indexOf(freq)] = o1; 
+  }
+  if(midiFlag){
+  midiO1Array[midiArrayFreq.indexOf(freq)]= o1;
+  }
+  
   
   if (sel1.options.selectedIndex=="0") {o1.type='sine'}
   if (sel1.options.selectedIndex=="1") {o1.type='triangle'}
@@ -387,6 +418,7 @@ function attack1(freq ,selGain, atkTime) {
    if (sel1.options.selectedIndex=="3") {o1.type='sawtooth'}
  
   if(turnOnLfo1){
+    
   lfoCreate1(gates1[freq],freq,0, selGain, atkTime);
   }
   
@@ -401,7 +433,16 @@ function release1(freq, i, relTime) {
   
      gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
   
-    o1Array[i].stop(cMaster.currentTime+relTime+0.2);  
+  
+  if(!midiFlag){
+    o1Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  }
+  if(midiFlag){
+    midiO1Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  }
+  
+    
+    
  
   if(turnOnLfo1){
   lfo1Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
@@ -427,7 +468,13 @@ function attack2(freq ,selGain, atkTime) {
   g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates2[freq] = g;
   
-  o2Array[tones.indexOf(freq)] = o2;
+  if(!midiFlag){
+    o2Array[tones.indexOf(freq)] = o2;
+  }
+  else{
+  midiO2Array[midiArrayFreq.indexOf(freq)]= o2;
+  }
+  
   
   if (sel2.options.selectedIndex=="0") {o2.type='sine'}
   if (sel2.options.selectedIndex=="1") {o2.type='triangle'}
@@ -448,7 +495,14 @@ function attack2(freq ,selGain, atkTime) {
 function release2(freq, i, relTime) { 
     
   gates2[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+    
+  
+  if(midiFlag){
+    midiO2Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  }
+  else{
     o2Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  }
   
   if(turnOnLfo2){
     lfo2Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
@@ -472,7 +526,13 @@ function attack3(freq ,selGain, atkTime) {
   g.gain.linearRampToValueAtTime(selGain,now+atkTime);
   gates3[freq] = g;
   
-  o3Array[tones.indexOf(freq)] = o3;
+  if(!midiFlag){
+    o3Array[tones.indexOf(freq)] = o3;
+  }
+  else{
+  midiO3Array[midiArrayFreq.indexOf(freq)]= o3;
+  }
+  
   
   if (sel3.options.selectedIndex=="0") {o3.type='sine'}
   if (sel3.options.selectedIndex=="1") {o3.type='triangle'}
@@ -494,7 +554,13 @@ function attack3(freq ,selGain, atkTime) {
 function release3(freq, i, relTime) { 
   
     gates3[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
+  
+    if(midiFlag){
+    midiO3Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  }
+  else{
     o3Array[i].stop(cMaster.currentTime+relTime+0.2); 
+  } 
   
  if(turnOnLfo3){
     lfo3Gain[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime); 
@@ -745,13 +811,15 @@ function changeColorMute(){
   muteButton.classList.toggle("muteActive");
 }
 
-
+if(!midiFlag){
 document.querySelectorAll(".step").forEach(toggleStep)
+}
 
 function toggleStep(step){  
   
+    
    step.onmousedown= function (step) {
-     if(!step.repeat) {
+     if(!step.repeat &&!midiFlag) {
         step.target.classList.toggle("clicked-step");
         
      if(turnOn1 && !turnOn2 && !turnOn3)
@@ -790,7 +858,7 @@ function toggleStep(step){
    step.onmouseup= function (step) {
      var index=mouseSteps.indexOf(step.target.id);
      if(clicked==true){
-    if(!step.repeat){
+    if(!step.repeat && !midiFlag){
        step.target.classList.toggle("clicked-step")
       
       if(turnOn1 && !turnOn2 && !turnOn3)
@@ -827,7 +895,7 @@ function toggleStep(step){
   }
  step.onmouseout= function(step) {
    var index=mouseSteps.indexOf(step.target.id);
-          if(clicked==true) {
+          if(clicked==true &&!midiFlag) {
           step.target.classList.toggle("clicked-step");
             if(turnOn1 && !turnOn2 && !turnOn3)
         release1(tones[mouseSteps.indexOf(step.target.id)], index, releaseArray[rel1]);
@@ -861,15 +929,13 @@ function toggleStep(step){
           clicked=false;
           }
  }
- 
+    
+
 }
 
 
-
-
-
 document.onkeydown = function(e) {
-  if(!e.repeat){
+  if(!e.repeat &&!midiFlag){
     
     
     k=keys.indexOf(e.key);
@@ -925,13 +991,14 @@ document.onkeydown = function(e) {
 
 
 document.onkeyup = function(e) {   
+  if(!midiFlag){
   k=keys.indexOf(e.key);
   
   clickOnKeyBoard(steps[keys.indexOf(e.key)]);
   
   if(flagsTriggered[k] == '100'){
-
-        release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
+                   
+    release1(tones[keys.indexOf(keysTriggered[k].key)], keys.indexOf(keysTriggered[k].key), releaseArray[rel1]);
      
   }
     
@@ -965,7 +1032,7 @@ document.onkeyup = function(e) {
     }
   
   keysTriggered[k]=undefined;
-  
+  }
 }
 
 
@@ -1145,12 +1212,12 @@ function calculateDeg(deg,name){
     
   }
   
-  if(name=='filtQKnob'){
+  /*if(name=='filtQKnob'){
     qFiltIndex=gradi.indexOf(deg);
     filter.Q.value=filterQArray[qFiltIndex];
     
     
-  }
+  }*/
   
   if(name=='distDriveKnob'){
     driveIndex=gradi.indexOf(deg);
@@ -1345,13 +1412,19 @@ function initializeVariables(){
      filterFreqArray =[20,28.7690,41.3828,59.5270,85.6266,123.1696,177.1734,254.855,366.5961,527.3302,758.538,1091.1189,1569.5199,2257.6757,3247.5534,4671.4429,6719.6365,9665.8604,13904.8559,20000];
      
      
-     for(i=0; i<gradi.length;i++){
+     /*for(i=0; i<gradi.length;i++){
        filterQArray[i] = stepQFilter*i+0.0001;
-     }
+     }*/
      
      for(i=0; i<gradi.length;i++){
        distortionDriveArray[i] = stepDriveDistortion *i;
      }
+  
+  
+  for(i=0;i<88;i++){
+    midiArray[i]=21+i;
+    midiArrayFreq[i] = Math.round(27.5*Math.pow(2,1/12)**i);
+  }
   
   
   
@@ -1371,6 +1444,9 @@ function initializeVariables(){
   
   changeParametDistortion(drive);
   
+  
+ 
+  
   moveKnob('vol1');
   moveKnob('vol2');
   moveKnob('vol3');
@@ -1386,7 +1462,144 @@ function initializeVariables(){
   moveKnob('dTimeKnob');
   moveKnob('dGainKnob');
   moveKnob('filtFreqKnob');
-  moveKnob('filtQKnob');
+  //moveKnob('filtQKnob');
   moveKnob('distDriveKnob');
   moveKnob('mKnob');
+}
+
+
+
+function onMIDISuccess(midiAccess) {
+    for (var input of midiAccess.inputs.values())
+        input.onmidimessage = getMIDIMessage;
+    }
+
+function getMIDIMessage(midiMessage) {
+
+    if(midiFlag){
+    //console.log(midiMessage);
+     if(midiMessage.data[0]==144)
+    attackMidi(midiMessage.data);
+  
+    if(midiMessage.data[0]==128)
+      releaseMidi(midiMessage.data);}
+      
+  
+}
+
+
+navigator.requestMIDIAccess()
+    .then(onMIDISuccess);
+
+
+
+function attackMidi(data){
+  
+    
+    
+    k=data[1];
+    freqM = midiArrayFreq[midiArray.indexOf(k)];
+    if(turnOn1 && !turnOn2 && !turnOn3){
+      
+        attack1(freqM, selectedGain[f1], attackArray[atk1])
+        
+    }
+    
+    if(!turnOn1 && turnOn2 && !turnOn3){
+      
+        attack2(freqM, selectedGain[f2], attackArray[atk2])
+         
+    }
+    
+    if(!turnOn1 && !turnOn2 && turnOn3){
+        attack3(freqM, selectedGain[f3], attackArray[atk3])
+        
+    }
+    
+    if(turnOn1 && turnOn2 && !turnOn3){
+        attack1(freqM, selectedGain[f1], attackArray[atk1])
+        attack2(freqM, selectedGain[f2], attackArray[atk2])
+        
+    }
+    
+    if(!turnOn1 && turnOn2 && turnOn3){
+        attack2(freqM, selectedGain[f2], attackArray[atk2])
+        attack3(freqM, selectedGain[f3], attackArray[atk3])
+        
+    }
+    
+    if(turnOn1 && !turnOn2 && turnOn3){
+        attack1(freqM, selectedGain[f1], attackArray[atk1])
+        attack3(freqM, selectedGain[f3], attackArray[atk3])
+        
+    }
+    
+    if(turnOn1 && turnOn2 && turnOn3){
+        attack1(freqM, selectedGain[f1], attackArray[atk1])
+        attack2(freqM, selectedGain[f2], attackArray[atk2])
+        attack3(freqM, selectedGain[f3], attackArray[atk3])
+       
+    }
+    
+   
+   
+  
+  
+}
+
+function releaseMidi(data){
+  k=data[1];
+  freqM=midiArrayFreq[midiArray.indexOf(k)];
+  index = midiArrayFreq.indexOf(freqM);
+  
+  
+  release1(freqM, index, releaseArray[rel1]);
+  
+  if(turnOn1 && !turnOn2 && !turnOn3){
+        release1(freqM, index, releaseArray[rel1]);
+    }
+    
+    if(!turnOn1 && turnOn2 && !turnOn3){
+        release2(freqM, index, releaseArray[rel2]);
+    }
+    
+    if(!turnOn1 && !turnOn2 && turnOn3){
+        release3(freqM, index, releaseArray[rel3]);
+        
+    }
+    
+    if(turnOn1 && turnOn2 && !turnOn3){
+        release1(freqM, index, releaseArray[rel1]);
+        release2(freqM, index, releaseArray[rel2]);
+    }
+    
+    if(!turnOn1 && turnOn2 && turnOn3){
+        release2(freqM, index, releaseArray[rel2]);
+        release3(freqM, index, releaseArray[rel3]);
+    }
+    
+    if(turnOn1 && !turnOn2 && turnOn3){
+        release1(freqM, index, releaseArray[rel1]);
+        release3(freqM, index, releaseArray[rel3]);
+        
+    }
+    
+    if(turnOn1 && turnOn2 && turnOn3){
+        release1(freqM, index, releaseArray[rel1]);
+        release2(freqM, index, releaseArray[rel2]);
+        release3(freqM, index, releaseArray[rel3]);
+       
+    }
+  
+}
+
+function activateMidi(){
+  
+  midiFlag=!midiFlag;
+  changeColorMidi();
+  
+}
+
+function changeColorMidi(){
+  midiButton.classList.toggle("midiActive");
 }
