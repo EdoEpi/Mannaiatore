@@ -22,6 +22,9 @@ var flagsTriggered=[];
 var midiArray=[];
 var midiArrayFreq=[];
 var midiO1Array=[], midiO2Array=[], midiO3Array=[];
+var arpEventsArray=[];
+var arpOrderedArray=[]
+var arpNotesArray=[];
 
 var n = 0;
 var f1=10,f2=10,f3=10;      //index of the current grade calcualted by "calculateDeg" function
@@ -45,12 +48,13 @@ var qFiltIndex=10;
 var driveIndex=10;
 var periodLfo1;
 var periodLfo2;
-var periodLfo3;              // 1/initial frequency
+var periodLfo3;              
 var flagEffect='000';
 var freqFilt;
 var qFilt;
 var drive;
 var counterMute=0;
+var arpIndex=0;
 
 var sel1= document.getElementById("select_box1");
 var sel2= document.getElementById("select_box2");
@@ -61,6 +65,7 @@ var selLfo3 = document.getElementById("selLfo3");
 var dispLfo1=document.getElementById("dispLfo1");
 var muteButton=document.getElementById("muteBut");
 var midiButton=document.getElementById("midiButt");
+var arpButton=document.getElementById("arpButton");
 
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
@@ -74,6 +79,7 @@ var effectFilter=false;
 var effectDistortion=false;
 var muteFlag=false;
 var midiFlag=false;
+var arpFlag=false;
 
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
@@ -811,9 +817,9 @@ function changeColorMute(){
   muteButton.classList.toggle("muteActive");
 }
 
-if(!midiFlag){
+
 document.querySelectorAll(".step").forEach(toggleStep)
-}
+
 
 function toggleStep(step){  
   
@@ -934,14 +940,112 @@ function toggleStep(step){
 }
 
 
+
+function arpeggiatorPlay(event){
+   
+  
+  numNotes=arpOrderedArray.length;
+  if(arpOrderedArray.length>0){
+    console.log(arpOrderedArray[arpIndex].key);
+    attackFunction(arpOrderedArray[arpIndex]);
+    releaseFunction(arpOrderedArray[arpIndex]);
+    arpIndex = (arpIndex+1)%numNotes;
+    
+  }
+    
+}
+
+setInterval(arpeggiatorPlay, 200)
+
 document.onkeydown = function(e) {
-  if(!e.repeat &&!midiFlag){
-    
-    
+  
+  if(!e.repeat){
+  if(!midiFlag &&!arpFlag){
+    attackFunction(e);
+  }
+  
+  if(arpFlag){
     k=keys.indexOf(e.key);
-    keysTriggered[k] = e;
+    arpEventsArray[k] = e;
     
     clickOnKeyBoard(steps[k])
+    
+    arpInsertNotes();
+    
+    //console.log(arpEventsArray);
+    //console.log(arpOrderedArray);
+    
+  }
+  }
+}
+
+
+function arpInsertNotes(){
+  cleanOrdered();   //delete everything from the notesArray everytime we change the array of the events
+  var count=0;
+  
+  
+  
+  for(i=0;i<arpEventsArray.length;i++){
+    if(arpEventsArray[i]!=-1){
+      arpOrderedArray[count]=arpEventsArray[i];
+      count++;
+    }
+  }
+  
+  arpIndex=0;   //everytime we add a note, the arp starts from the beginning
+}
+
+function cleanOrdered(){
+  arpOrderedArray = arpOrderedArray.splice(0,0)
+  
+}
+
+
+
+document.onkeyup = function(e) {
+   
+  k=keys.indexOf(e.key);
+  
+  if(arpFlag){
+    clickOnKeyBoard(steps[k])
+  arpEventsArray[k] = -1;
+  arpDeleteNotes(e);
+  arpIndex=0;   //everytime we delete a note, the arp starts from the beginning
+  
+  }
+  
+  if(!arpFlag){
+    releaseFunction(e);
+  }
+  
+  
+  
+  
+  
+}
+
+function arpDeleteNotes(e){
+  for(i=0;i<arpOrderedArray.length;i++){
+    if(arpOrderedArray[i].key==e.key){
+      arpOrderedArray.splice(i,1);
+      
+    }
+  }
+  
+  
+  
+  
+}
+
+
+
+function attackFunction(e){
+  k=keys.indexOf(e.key);
+    keysTriggered[k] = e;
+  
+    if(!arpFlag)  
+      clickOnKeyBoard(steps[k])
     
     if(turnOn1 && !turnOn2 && !turnOn3){
         attack1(tones[keys.indexOf(keysTriggered[k].key)], selectedGain[f1], attackArray[atk1])
@@ -984,17 +1088,14 @@ document.onkeydown = function(e) {
        flagsTriggered[k] ='111';
     }
     
-   
-   
-  }
 }
 
-
-document.onkeyup = function(e) {   
+function releaseFunction(e){
   if(!midiFlag){
   k=keys.indexOf(e.key);
   
-  clickOnKeyBoard(steps[keys.indexOf(e.key)]);
+    if(!arpFlag)
+        clickOnKeyBoard(steps[keys.indexOf(e.key)]);
   
   if(flagsTriggered[k] == '100'){
                    
@@ -1426,6 +1527,9 @@ function initializeVariables(){
     midiArrayFreq[i] = Math.round(27.5*Math.pow(2,1/12)**i);
   }
   
+  for(i=0; i<20;i++){
+    arpEventsArray[i]=-1;
+  }
   
   
   delayGain.gain.value=delayGainArray[dGain];
@@ -1602,4 +1706,15 @@ function activateMidi(){
 
 function changeColorMidi(){
   midiButton.classList.toggle("midiActive");
+}
+
+
+function activateArp(){
+  arpFlag=!arpFlag
+  changeColorArp();
+  
+}
+
+function changeColorArp(){
+  arpButton.classList.toggle("arpActive");
 }

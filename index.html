@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>prova midi</title>
+  <title>prova arp 2</title>
   
   
   
@@ -67,7 +67,7 @@
           </div>
           
           <div class="knobVolContainer">
-            <div class="attackLabel">VOL</div>
+            <div id="volLabel" class="attackLabel">VOL</div>
           <div id="vol1"  class="knob volKnob" >
             <div class="knobLabel"></div>  
           </div>
@@ -154,7 +154,7 @@
           </div>
           
           <div class="knobVolContainer">
-            <div class="attackLabel">VOL</div>
+            <div id="volLabel" class="attackLabel">VOL</div>
           <div id="vol2" class="knob volKnob">
             <div class="knobLabel"></div>  
           </div>
@@ -243,7 +243,7 @@
          </div>
           
          <div class="knobVolContainer">
-            <div class="attackLabel">VOL</div> 
+            <div id="volLabel" class="attackLabel">VOL</div> 
        <div id="vol3" class="knob volKnob">
             <div class="knobLabel"></div>  
           </div>
@@ -323,14 +323,14 @@
           </div>
           <div class="delayFeatureContainer">
             <div class="delayLabel">TIME</div>
-            <div id="dTimeKnob"  class="knob volKnob" >
+            <div id="dTimeKnob"  class="knob" >
             <div class="knobLabel"></div>  
           </div>
           </div>
           
           <div class="delayFeatureContainer">
-            <div class="delayLabel">GAIN</div>
-            <div id="dGainKnob"  class="knob volKnob" >
+            <div id="dGainLabel" class="delayLabel">GAIN</div>
+            <div id="dGainKnob"  class="knob" >
             <div class="knobLabel"></div>  
           </div>
           </div>
@@ -343,8 +343,8 @@
         </div>
         
         <div class="filterFeatureContainer">
-          <div class="filterLabel">FREQ</div>
-          <div id="filtFreqKnob"  class="knob volKnob" >
+          <div id="filtFreqLabel" class="filterLabel">FREQ</div>
+          <div id="filtFreqKnob"  class="knob" >
             <div class="knobLabel"></div>  
           </div>
         </div>
@@ -366,11 +366,11 @@
       <div class="distortionRow">
         <div class=distortionFeatureContainer>
             <div id="distortionOnOff" class="onOffDistortion"></div>
-            <button id="distortion" onclick="activateDistortion()" class="distortionButton">DISTORTION</button>
+            <button id="distortion" onclick="activateDistortion()" class="distortionButton">DIST</button>
         </div>
         <div class="distortionFeatureContainer">
-          <div class="distortionLabel">DRIVE</div>
-          <div id="distDriveKnob"  class="knob volKnob" >
+          <div id="distDriveLabel" class="distortionLabel">DRIVE</div>
+          <div id="distDriveKnob"  class="knob" >
             <div class="knobLabel"></div>  
           </div>
         </div>
@@ -390,7 +390,16 @@
   
   <div class="masterKnobsContainer">
     
-    <button id="midiButt" class="midiButton" onclick="activateMidi()">MIDI</button>
+    <div class="midiContainer">
+      <button id="midiButt" class="midiButton" onclick="activateMidi()">MIDI</button>
+    </div>
+    
+    <div class="arpContainer">
+      <button id="arpButton" class="arpButton" onclick="activateArp()">ARPEGGIATOR</button>
+      
+    </div>
+    
+    <div class="bohContainer"></div>
     
     <div class="masterVolContainer">
       <div class="masterLabel">MASTER</div>
@@ -401,15 +410,15 @@
       <button id="muteBut" class="muteButton" onclick="activateMute()">MUTE</button>
       
     </div>
+    
+    
+    
   </div>
   
 </div>
   
  </div>
-  <script src='https://unpkg.com/logscpace@1.0.1/index.js'></script>
-<script src='https://unpkg.com/logscpace@1.0.1/package.json'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/tone/13.3.11/Tone.min.js'></script>
-
+  
   
 
     <script  src="js/index.js"></script>

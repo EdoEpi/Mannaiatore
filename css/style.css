@@ -219,6 +219,11 @@ canvas{
   
 }
 
+#volLabel{
+  position:relative;
+  left:11px;
+  
+}
 .attackLabel{
 
   background-color:#4F4F4F;
@@ -253,7 +258,7 @@ canvas{
 
 .volKnob{
   position:relative;
-  left:25%;
+  left:26px;
   top:37%;
   transform:translateY(-50%) rotate(0deg);
 }
@@ -427,9 +432,8 @@ canvas{
   position:relative;
   width:50px;
   height:25px;
-  margin-top:10%;
-  transform:translateX(-50%);
-  left:50%;
+  margin-top:6px;
+  left:4px;
 }
 
 .delayFeatureContainer{
@@ -441,13 +445,55 @@ canvas{
   height:55px;  
 }
 
+#dTimeKnob{
+  top:20px;
+  left:13px;
+  position:relative;
+  
+}
+
+#filtFreqKnob{
+  top:20px;
+  left:18px;
+  position:relative;
+  
+}
+
+#distDriveKnob{
+  top:20px;
+  left:13px;
+  position:relative;
+}
+
 .delayLabel{
   position:relative;
-  top:2%;
+  top:1px;
   text-align:center;
   font-size:12px;
   font-family: "Arial";
   color:white;
+}
+
+#dGainLabel{
+  position: relative;
+  left:2px;
+}
+
+#dGainKnob{
+  position:relative;
+  top:20px;
+  left:15px;
+}
+
+#filtFreqLabel{
+  position: relative;
+  left:6px;
+}
+
+#distDriveLabel{
+  position:relative;
+  left:-2px;
+  top:2px;
 }
 
 
@@ -458,9 +504,8 @@ canvas{
   height:15px;
   border-radius:50%;
   border: solid black 2px;
-  left:50%;
-  transform:translateX(-50%);
-  top:2%;
+  left:17.5px;
+  top:1px;
 }
 
 .delayActive{
@@ -483,9 +528,8 @@ canvas{
   position:relative;
   width:50px;
   height:25px;
-  margin-top:10%;
-  transform:translateX(-50%);
-  left:50%;
+  margin-top:7px;
+  left:4px;
 }
 
 .filterFeatureContainer{
@@ -498,7 +542,7 @@ canvas{
 
 .filterLabel{
   position:relative;
-  top:2%;
+  top:1px;
   text-align:center;
   font-size:12px;
   font-family: "Arial";
@@ -513,9 +557,8 @@ canvas{
   height:15px;
   border-radius:50%;
   border: solid black 2px;
-  left:50%;
-  transform:translateX(-50%);
-  top:2%;
+  left:17.5px;
+  top:1px;
 }
 
 .filterActive{
@@ -545,9 +588,8 @@ canvas{
   position:relative;
   width:50px;
   height:25px;
-  margin-top:10%;
-  transform:translateX(-50%);
-  left:50%;
+  margin-top:7px;
+  left:4px;
 }
 
 .distortionFeatureContainer{
@@ -575,9 +617,8 @@ canvas{
   height:15px;
   border-radius:50%;
   border: solid black 2px;
-  left:50%;
-  transform:translateX(-50%);
-  top:2%;
+  left:17.5px;
+  top:1px;
 }
 
 .distortionActive{
@@ -597,12 +638,12 @@ canvas{
 .masterVolContainer{
   background-color:white;
   position:relative;
-  left:355px;
+  //left:20px;
   width:130px;
   height:175px;
-  margin:1px;
+  margin-right:1px;
   display:inline-block;
-  
+  border: solid black 1px;
 }
 
 .masterLabel{
@@ -646,10 +687,63 @@ canvas{
   position:relative;
   border: solid black 2px;
   height:40px;
-  width:40px;
-  top:40px;
+  width:48px;
+  left:1px;
+  
+  top:50px;
 }
 
 .midiActive{
   background-color:#00FF00;
+}
+
+.midiContainer{
+  background-color:white;
+  position:relative;
+  border: solid black 1px;
+  width:50px;
+  height:175px;
+  margin-left:1px;
+  display:inline-block;
+  
+}
+
+
+.arpContainer{
+  background-color:white;
+  position:relative;
+  border: solid black 1px;
+  width:100px;
+  height:175px;
+  margin-left:1px;
+  display:inline-block;
+  
+}
+
+.bohContainer{
+  background-color:white;
+  position:relative;
+  
+  width:200px;
+  height:175px;
+  margin-left:1px;
+  display:inline-block;
+  
+}
+
+.arpButton{
+  background-color:white;
+  position:relative;
+  width:95px;
+  height:30px;
+  text-align:center;
+  top:5px;
+  left:2px;
+  border: solid black 2px;
+  
+}
+
+.arpActive{
+  background-color:#00FF00;
+  
 }
