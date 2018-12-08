@@ -941,12 +941,12 @@ function toggleStep(step){
 
 
 
-function arpeggiatorPlay(event){
+function arpeggiatorPlay(){
    
   
   numNotes=arpOrderedArray.length;
   if(arpOrderedArray.length>0){
-    console.log(arpOrderedArray[arpIndex].key);
+    //console.log(arpOrderedArray[arpIndex]);
     attackFunction(arpOrderedArray[arpIndex]);
     releaseFunction(arpOrderedArray[arpIndex]);
     arpIndex = (arpIndex+1)%numNotes;
@@ -967,13 +967,11 @@ document.onkeydown = function(e) {
   if(arpFlag){
     k=keys.indexOf(e.key);
     arpEventsArray[k] = e;
-    
     clickOnKeyBoard(steps[k])
     
     arpInsertNotes();
     
-    //console.log(arpEventsArray);
-    //console.log(arpOrderedArray);
+ 
     
   }
   }
@@ -984,11 +982,12 @@ function arpInsertNotes(){
   cleanOrdered();   //delete everything from the notesArray everytime we change the array of the events
   var count=0;
   
-  
+  console.log(arpEventsArray);
   
   for(i=0;i<arpEventsArray.length;i++){
     if(arpEventsArray[i]!=-1){
       arpOrderedArray[count]=arpEventsArray[i];
+      
       count++;
     }
   }
@@ -1527,7 +1526,7 @@ function initializeVariables(){
     midiArrayFreq[i] = Math.round(27.5*Math.pow(2,1/12)**i);
   }
   
-  for(i=0; i<20;i++){
+  for(i=0; i<tones.length;i++){
     arpEventsArray[i]=-1;
   }
   
