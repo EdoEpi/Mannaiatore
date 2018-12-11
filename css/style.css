@@ -747,3 +747,16 @@ canvas{
   background-color:#00FF00;
   
 }
+
+.chordDisplay{
+  
+  background-color:black;
+  height:80px;
+  width:120px;
+  position:relative;
+  top:30px;
+  left:45px;
+  color:white;
+  text-align:center;
+  font-size:30px;
+}

@@ -23,8 +23,8 @@ var midiArray=[];
 var midiArrayFreq=[];
 var midiO1Array=[], midiO2Array=[], midiO3Array=[];
 var arpEventsArray=[];
-var arpOrderedArray=[]
-var arpNotesArray=[];
+var arpOrderedArray=[];
+var notesNamesArray=[];
 
 var n = 0;
 var f1=10,f2=10,f3=10;      //index of the current grade calcualted by "calculateDeg" function
@@ -66,6 +66,7 @@ var dispLfo1=document.getElementById("dispLfo1");
 var muteButton=document.getElementById("muteBut");
 var midiButton=document.getElementById("midiButt");
 var arpButton=document.getElementById("arpButton");
+var chordDisplay=document.getElementById("chordDisp");
 
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
@@ -80,6 +81,7 @@ var effectDistortion=false;
 var muteFlag=false;
 var midiFlag=false;
 var arpFlag=false;
+var chordFlag=false;
 
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
@@ -940,11 +942,341 @@ function toggleStep(step){
 }
 
 
+function chordRecognitionTriad(){
+  var third=0, fifth=0;
+  
+  var primo = keys.indexOf(arpOrderedArray[0].key);
+  var secondo = keys.indexOf(arpOrderedArray[1].key);
+  var terzo = keys.indexOf(arpOrderedArray[2].key);
+  
+  third = keys.indexOf(arpOrderedArray[1].key) - keys.indexOf(arpOrderedArray[0].key);
+  fifth = keys.indexOf(arpOrderedArray[2].key) - keys.indexOf(arpOrderedArray[1].key);
+  
+  if(third == 4 && fifth == 3){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] +"+")
+  }
+  
+  else if(third == 3 && fifth == 4){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length]+"-")
+  }
+  
+  else if(third == 4 && fifth == 4){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length]+"+ aug")
+  }
+  
+  else if(third == 4 && fifth == 2){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length]+"+ dim")
+  }
+  
+  /*else if(third == 3 && fifth == 5){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length]+"- aug")
+  }*/
+  
+  else if(third == 3 && fifth == 3){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length]+"- dim")
+  }
+  
+  
+  
+  else if(third == 3 && fifth == 5){
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length]+"+ 1st invertion")
+  }
+  
+  /*else if(third == 4 && fifth == 4){
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length]+"+ aug 1st invertion")
+  }*/
+  
+  else if(third == 2 && fifth == 6){
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length]+"+ dim 1st invertion")
+  }
+  
+  else if(third == 4 && fifth == 5){
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length]+"- 1st invertion")
+  }
+  
+  /*else if(third == 5 && fifth == 4){
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length]+"- aug 1st invertion")
+  }*/
+  
+  else if(third == 3 && fifth == 6){
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length]+"- dim 1st invertion")
+  }
+  
+  else if(third == 5 && fifth == 4){
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length]+"+ 2nd invertion")
+  }
+  
+  /*else if(third == 4 && fifth == 4){
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length]+"+ aug 2nd invertion")
+  }*/
+  
+  else if(third == 6 && fifth == 4){
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length]+"+ dim 2nd invertion")
+  }
+  else if(third == 5 && fifth == 3){
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length]+"- 2nd invertion")
+  }
+  
+  /*else if(third == 4 && fifth == 3){
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length]+"- aug 2nd invertion")
+  }*/
+  
+  else if(third == 6 && fifth == 3){
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length]+"- dim 2nd invertion")
+  }
+  
+  
+  
+  chordFlag=true;
+  
+}
+
+function chordRecognitionTertian(){
+  
+   var third=0, fifth=0, seventh=0;
+  
+  var primo = keys.indexOf(arpOrderedArray[0].key);
+  var secondo = keys.indexOf(arpOrderedArray[1].key);
+  var terzo = keys.indexOf(arpOrderedArray[2].key);
+  var quarto = keys.indexOf(arpOrderedArray[3].key);
+  
+  third = secondo - primo;
+  fifth = terzo - secondo;
+  seventh = quarto - terzo;
+  
+  
+  if (third==4 && fifth==3 && seventh==4){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Maj7");
+  }
+  
+  else if (third==4 && fifth==3 && seventh==3){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7");
+  }
+  
+  else if (third==3 && fifth==4 && seventh==4){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7");
+  }
+  
+  else if (third==3 && fifth==4 && seventh==3){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7-");
+  }
+  
+  else if (third==4 && fifth==4 && seventh==3){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Maj7 aug");
+  }
+  
+  else if (third==4 && fifth==4 && seventh==2){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7 aug");
+  }
+  
+  else if (third==3 && fifth==5 && seventh==3){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7 aug");
+  }
+  
+  else if (third==3 && fifth==5 && seventh==2){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7- aug");
+  }
+  
+  else if (third==4 && fifth==2 && seventh==5){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Maj7 dim");
+  }
+  
+  else if (third==4 && fifth==2 && seventh==4){
+    //changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7 dim");
+  }
+  
+  else if (third==3 && fifth==3 && seventh==5){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7 dim");
+  }
+  
+  else if (third==3 && fifth==3 && seventh==4){
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7- dim");
+  }
+  
+  ////PRIMO RIVOLTO
+  
+  
+  if (third==3 && fifth==4 && seventh==1){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Maj7 1st inversion");
+  }
+  
+  else if (third==3 && fifth==3 && seventh==2){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7 1st inversion");
+  }
+  
+  else if (third==4 && fifth==4 && seventh==1){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 1st inversion");
+  }
+  
+  else if (third==4 && fifth==3 && seventh==2){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7- 1st inversion");
+  }
+  
+  else if (third==4 && fifth==3 && seventh==1){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Maj7 aug 1st inversion");
+  }
+  
+  else if (third==4 && fifth==2 && seventh==2){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7 aug 1st inversion");
+  }
+  
+  else if (third==5 && fifth==3 && seventh==1){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 aug 1st inversion");
+  }
+  
+  else if (third==5 && fifth==2 && seventh==2){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7- aug 1st inversion");
+  }
+  
+  else if (third==2 && fifth==5 && seventh==1){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Maj7 dim 1st inversion");
+  }
+  
+  else if (third==2 && fifth==4 && seventh==2){
+    //changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7 dim 1st inversion");
+  }
+  
+  else if (third==3 && fifth==5 && seventh==1){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 dim 1st inversion");
+  }
+  
+  else if (third==3 && fifth==4 && seventh==2){
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7- dim 1st inversion");
+  }
+  
+  
+  
+  //////// SECONDO RIVOLTO
+  
+  
+  if (third==4 && fifth==1 && seventh==4){
+    cochangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Maj7 2nd inversion");
+  }
+  
+  else if (third==3 && fifth==2 && seventh==4){
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7 2nd inversion");
+  }
+  
+  else if (third==4 && fifth==1 && seventh==3){
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 2nd inversion");
+  }
+  
+  else if (third==3 && fifth==2 && seventh==3){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7- 2nd inversion");
+  }
+  
+  else if (third==3 && fifth==1 && seventh==4){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Maj7 aug 2nd inversion");
+  }
+  
+  else if (third==2 && fifth==2 && seventh==4){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7 aug 2nd inversion");
+  }
+  
+  else if (third==3 && fifth==1 && seventh==3){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 aug 2nd inversion");
+  }
+  
+  else if (third==2 && fifth==2 && seventh==3){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7- aug 2nd inversion");
+  }
+  
+  else if (third==5 && fifth==1 && seventh==4){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Maj7 dim 2nd inversion");
+  }
+  
+  else if (third==4 && fifth==2 && seventh==4){
+    //changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7 dim 2nd  inversion");
+  }
+  
+  else if (third==5 && fifth==1 && seventh==3){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 dim 2nd  inversion");
+  }
+  
+  else if (third==4 && fifth==2 && seventh==3){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7- dim 2nd inversion");
+  }
+  
+  
+  //////// TERZO RIVOLTO
+  
+  
+  if (third==1 && fifth==4 && seventh==3){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Maj7 3rd inversion");
+  }
+  
+  else if (third==2 && fifth==4 && seventh==3){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7 3rd inversion");
+  }
+  
+  else if (third==1 && fifth==3 && seventh==4){
+    changeDisplayChordchangeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 3rd inversion");
+  }
+  
+  else if (third==2 && fifth==3 && seventh==4){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7- 3rd inversion");
+  }
+  
+  else if (third==1 && fifth==4 && seventh==4){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Maj7 aug 3rd inversion");
+  }
+  
+  else if (third==2 && fifth==4 && seventh==4){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7 aug 3rd inversion");
+  }
+  
+  else if (third==1 && fifth==3 && seventh==5){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 aug 3rd inversion");
+  }
+  
+  else if (third==2 && fifth==3 && seventh==5){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7- aug 3rd inversion");
+  }
+  
+  else if (third==1 && fifth==4 && seventh==2){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Maj7 dim 3rd inversion");
+  }
+  
+  else if (third==2 && fifth==4 && seventh==2){
+    //changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7 dim 3rd inversion");
+  }
+  
+  else if (third==1 && fifth==3 && seventh==3){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 dim 3rd inversion");
+  }
+  
+  else if (third==2 && fifth==3 && seventh==3){
+    changeDisplayChordchangeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7- dim 3rd inversion");
+  }
+  
+  chordFlag=true;
+  
+}
+
+function changeDisplayChord(nameChord){
+  
+   chordDisplay.removeChild(chordDisplay.childNodes[0]);
+   var textnode =document.createTextNode(String(nameChord)) ;         
+   chordDisplay.appendChild(textnode); 
+  
+}
+
 
 function arpeggiatorPlay(){
    
   
+  
   numNotes=arpOrderedArray.length;
+  if(numNotes==4 && !chordFlag){
+    chordRecognitionTertian();
+    
+  }
+  
+  if(numNotes==3 && !chordFlag){
+    chordRecognitionTriad();
+    
+  }
+  
   if(arpOrderedArray.length>0){
     //console.log(arpOrderedArray[arpIndex]);
     attackFunction(arpOrderedArray[arpIndex]);
@@ -968,13 +1300,15 @@ document.onkeydown = function(e) {
     k=keys.indexOf(e.key);
     arpEventsArray[k] = e;
     clickOnKeyBoard(steps[k])
-    
+    changeDisplayChord("-");
     arpInsertNotes();
     
  
     
   }
   }
+  
+  
 }
 
 
@@ -982,7 +1316,8 @@ function arpInsertNotes(){
   cleanOrdered();   //delete everything from the notesArray everytime we change the array of the events
   var count=0;
   
-  console.log(arpEventsArray);
+  //console.log(arpEventsArray);
+  
   
   for(i=0;i<arpEventsArray.length;i++){
     if(arpEventsArray[i]!=-1){
@@ -990,9 +1325,11 @@ function arpInsertNotes(){
       
       count++;
     }
+    
   }
-  
+  //console.log(arpOrderedArray);
   arpIndex=0;   //everytime we add a note, the arp starts from the beginning
+  chordFlag=false;
 }
 
 function cleanOrdered(){
@@ -1004,12 +1341,16 @@ function cleanOrdered(){
 
 document.onkeyup = function(e) {
    
+  chordFlag = false;
+  
   k=keys.indexOf(e.key);
   
   if(arpFlag){
     clickOnKeyBoard(steps[k])
   arpEventsArray[k] = -1;
+    //console.log(arpEventsArray);
   arpDeleteNotes(e);
+    changeDisplayChord("-");
   arpIndex=0;   //everytime we delete a note, the arp starts from the beginning
   
   }
@@ -1530,6 +1871,7 @@ function initializeVariables(){
     arpEventsArray[i]=-1;
   }
   
+  notesNamesArray = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];  
   
   delayGain.gain.value=delayGainArray[dGain];
   delay.delayTime.value = delayTimeArray[dTime];
