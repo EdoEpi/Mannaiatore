@@ -630,7 +630,7 @@ canvas{
   height:180px;
   background-color:white;
   left:210px;
-  top:80px;
+  top:230px;
   display:inline-flex;
   
 }
@@ -687,10 +687,9 @@ canvas{
   position:relative;
   border: solid black 2px;
   height:40px;
-  width:48px;
-  left:1px;
-  
-  top:50px;
+  width:60px;
+  left:10px;
+  top:7px;
 }
 
 .midiActive{
@@ -735,10 +734,10 @@ canvas{
   background-color:white;
   position:relative;
   width:95px;
-  height:30px;
+  height:40px;
   text-align:center;
-  top:5px;
-  left:2px;
+  top:7px;
+  left:30px;
   border: solid black 2px;
   
 }
@@ -758,5 +757,33 @@ canvas{
   left:45px;
   color:white;
   text-align:center;
-  font-size:30px;
+  font-size:20px;
+}
+
+.improButton{
+  background-color:white;
+  width:84px;
+  height:40px;
+  top:7px;
+  position:relative;
+  left:150px;
+  border: solid black 2px;
+  text-align:center;
+}
+
+.specialContainer{
+  width:450px;
+  height:55px;
+  background-color:yellow;
+  position:absolute;
+  top:544px;
+  left:400px;
+  display:inline-flex;
+  
+  
+}
+
+.improActive{
+  background-color:#00FF00;
+  
 }
