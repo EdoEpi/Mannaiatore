@@ -89,6 +89,7 @@ var midiButton=document.getElementById("midiButt");
 var arpButton=document.getElementById("arpButton");
 var chordDisplay=document.getElementById("chordDisp");
 var improviserButton=document.getElementById("improviserButton");
+var noteDisplay = document.getElementById("noteDisp");
 
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
@@ -1573,10 +1574,22 @@ function insertImproArray(){
 function improSound(){
   
   attackFunction(improArray[improIndex]);
+  
+  changeDisplayNote(improArray[improIndex]);
+  
+  
   releaseFunction(improArray[improIndex]);
   improIndex = improvvisator();
 }
+
+function changeDisplayNote(event){
+  var note = (keys.indexOf(event.key))%notesNamesArray.length;
+  noteDisplay.removeChild(noteDisplay.childNodes[0]);
+   var textnode =document.createTextNode(String(notesNamesArrayBis[note])) ;         
+   noteDisplay.appendChild(textnode);
   
+}
+
 function improPlay(){
   if(improFlag){
     numNotes=arpOrderedArray.length;
@@ -2183,6 +2196,8 @@ function initializeVariables(){
   }
   
   notesNamesArray = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];  
+  
+   notesNamesArrayBis = ["C", "Db/C#", "D", "Eb/D#", "E", "F", "Gb/F#", "G", "Ab/G#", "A", "Bb/A#", "B"]; 
   
   Maj7=[2, 2, 1, 2, 2, 2];
   Seven=[2,2,1,2,2,1];
