@@ -76,7 +76,8 @@ var arpIndex=0;
 var tonica;
 var modo;
 var improIndex=0;
-
+var octaveIndex=2;
+    
 var sel1= document.getElementById("select_box1");
 var sel2= document.getElementById("select_box2");
 var sel3= document.getElementById("select_box3");
@@ -90,6 +91,7 @@ var arpButton=document.getElementById("arpButton");
 var chordDisplay=document.getElementById("chordDisp");
 var improviserButton=document.getElementById("improviserButton");
 var noteDisplay = document.getElementById("noteDisp");
+var octaveDisplay = document.getElementById("octaveDisp");
 
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
@@ -2594,4 +2596,46 @@ function improvvisator(){
   }
   
   
+}
+
+function changeOctave(x){
+  
+  if(x=='+'){
+    if(octaveIndex<5){
+      octaveIndex++;
+      changeOctaveTones();
+    }
+  }
+  
+  if(x=='-'){
+    if(octaveIndex>0){
+      octaveIndex--;
+      changeOctaveTones();
+    }
+  }
+  changeOctaveDisplay()
+}
+
+function changeOctaveDisplay(){
+  text=String(octaveIndex)
+   octaveDisplay.removeChild(octaveDisplay.childNodes[0]);
+   var textnode =document.createTextNode(text) ;  
+   octaveDisplay.appendChild(textnode); 
+  
+}
+
+function changeOctaveTones(){
+  var firstFreq;
+  
+  if(octaveIndex==0) firstFreq=66;
+  else if(octaveIndex==1) firstFreq=131;
+  else if(octaveIndex==2) firstFreq=262;
+  else if(octaveIndex==3) firstFreq=523;
+  else if(octaveIndex==4) firstFreq=1046;
+  else if(octaveIndex==5) firstFreq=2093;
+  
+  for(var i=0;i<tones.length;i++) {
+        tones[i] = Math.round(firstFreq*Math.pow(2,1/12)**i);
+        
+        }
 }
