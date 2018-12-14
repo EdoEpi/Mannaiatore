@@ -2,7 +2,6 @@ var cMaster;
 var analyser1, analyser2, analyser3;
 var o1Array = [], o2Array = [], o3Array = [];
 var lfo1Array = [], lfo2Array=[], lfo3Array=[];
-var lfo1Gain=[], lfo2Gain=[], lfo3Gain=[];
 var tones = [] //note
 var steps = [] //tasti
 var mouseSteps = []; //tasti cliccati col mouse
@@ -26,7 +25,8 @@ var arpEventsArray=[];
 var arpOrderedArray=[];
 var notesNamesArray=[];
 var improArray=[];
-
+var arpMidiEventsArray=[];
+var arpMidiOrderedArray=[];
 
 var Maj7 = [];
 var Seven = [];
@@ -123,8 +123,8 @@ gainMaster.connect(analyserF);
 analyserF.connect(cMaster.destination);
 
 
-
-
+setInterval(arpPlay, 200)
+setInterval(improPlay, 200)
 
 
 initializeVariables();
@@ -972,12 +972,24 @@ function toggleStep(step){
 function chordRecognitionTriad(){
   var third=0, fifth=0;
   
-  var primo = keys.indexOf(arpOrderedArray[0].key);
-  var secondo = keys.indexOf(arpOrderedArray[1].key);
-  var terzo = keys.indexOf(arpOrderedArray[2].key);
+  if(!midiFlag){
+     var primo = keys.indexOf(arpOrderedArray[0].key);
+    var secondo = keys.indexOf(arpOrderedArray[1].key);
+    var terzo = keys.indexOf(arpOrderedArray[2].key);
   
-  third = keys.indexOf(arpOrderedArray[1].key) - keys.indexOf(arpOrderedArray[0].key);
-  fifth = keys.indexOf(arpOrderedArray[2].key) - keys.indexOf(arpOrderedArray[1].key);
+    third = keys.indexOf(arpOrderedArray[1].key) - keys.indexOf(arpOrderedArray[0].key);
+    fifth = keys.indexOf(arpOrderedArray[2].key) - keys.indexOf(arpOrderedArray[1].key);
+  }
+  
+  else if(midiFlag){
+    var primo = keys.indexOf(arpOrderedArray[0].key);
+    var secondo = keys.indexOf(arpOrderedArray[1].key);
+    var terzo = keys.indexOf(arpOrderedArray[2].key);
+  
+    third = keys.indexOf(arpOrderedArray[1].key) - keys.indexOf(arpOrderedArray[0].key);
+    fifth = keys.indexOf(arpOrderedArray[2].key) - keys.indexOf(arpOrderedArray[1].key);
+  }
+ 
   
   if(third == 4 && fifth == 3){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] +"+")
@@ -1062,10 +1074,20 @@ function chordRecognitionTertian(){
   
    var third=0, fifth=0, seventh=0;
   
-  var primo = keys.indexOf(arpOrderedArray[0].key);
-  var secondo = keys.indexOf(arpOrderedArray[1].key);
-  var terzo = keys.indexOf(arpOrderedArray[2].key);
-  var quarto = keys.indexOf(arpOrderedArray[3].key);
+    if(!midiFlag){
+        var primo = keys.indexOf(arpOrderedArray[0].key);
+        var secondo = keys.indexOf(arpOrderedArray[1].key);
+        var terzo = keys.indexOf(arpOrderedArray[2].key);
+        var quarto = keys.indexOf(arpOrderedArray[3].key);
+    }   
+    
+    if(midiFlag){
+        var primo = keys.indexOf(arpMidiOrderedArray[0].key);
+        var secondo = keys.indexOf(arpMidiOrderedArray[1].key);
+        var terzo = keys.indexOf(arpMidiOrderedArray[2].key);
+        var quarto = keys.indexOf(arpMidiOrderedArray[3].key);
+    }   
+  
  
   
   third = secondo - primo;
@@ -1391,23 +1413,28 @@ function changeDisplayChord(nameChord){
 
 function arpPlay(){
    
-  
-  
-  numNotes=arpOrderedArray.length;
-  
-  
+  var numNotes;
   
   
   if(arpFlag){
+    
+    if(!midiFlag)
+    numNotes=arpOrderedArray.length;
+  
+  else if(midiFlag)
+     numNotes=arpMidiOrderedArray.length;
+    
+    
     if(numNotes==4 && !chordFlag){
-    chordRecognitionTertian();
+    //chordRecognitionTertian();
     
   }
   
   if(numNotes==3 && !chordFlag){
-    chordRecognitionTriad();
+    //chordRecognitionTriad();
     
   }
+    
     arpeggiatorPlay(numNotes);  
   }
   
@@ -1602,17 +1629,27 @@ function improPlay(){
 
 function arpeggiatorPlay(numNotes){
   
-  if(arpOrderedArray.length>0){
-    //console.log(arpOrderedArray[arpIndex]);
-    attackFunction(arpOrderedArray[arpIndex]);
-    releaseFunction(arpOrderedArray[arpIndex]);
+  if(!midiFlag){
+    
+      if(arpOrderedArray.length>0){
+        attackFunction(arpOrderedArray[arpIndex]);
+        releaseFunction(arpOrderedArray[arpIndex]);
+      }
+  }
+  
+  if(midiFlag){
+    if(arpMidiOrderedArray.length>0){
+      
+        attackMidi(arpMidiOrderedArray[arpIndex].data);
+        releaseMidi(arpMidiOrderedArray[arpIndex].data); 
+      }
+  }
+      
+    
     arpIndex = (arpIndex+1)%numNotes;
   
-}
-}
 
-setInterval(arpPlay, 200)
-setInterval(improPlay, 200)
+}
 
 document.onkeydown = function(e) {
   
@@ -1646,21 +1683,45 @@ function insertNotes(){
   
   //console.log(arpEventsArray);
   
-  
-  for(i=0;i<arpEventsArray.length;i++){
-    if(arpEventsArray[i]!=-1){
-      arpOrderedArray[count]=arpEventsArray[i];
-      count++;
-    }
+  if(!midiFlag){
+    for(i=0;i<arpEventsArray.length;i++){
+        if(arpEventsArray[i]!=-1){
+            arpOrderedArray[count]=arpEventsArray[i];
+            count++;
+        }
     
+    }
   }
+  
+  
+  
+    
+    if(midiFlag){
+        
+     for(i=0;i<arpMidiEventsArray.length;i++){
+        if(arpMidiEventsArray[i]!=-1){
+            arpMidiOrderedArray[count]=arpMidiEventsArray[i];
+            count++;
+            }
+    
+        }   
+    }
+  
+    
   arpIndex=0;   //everytime we add a note, the arp starts from the beginning
   chordFlag=false;
 }
 
 function cleanOrdered(){
-  arpOrderedArray = arpOrderedArray.splice(0,0)
-  improArray = improArray.splice(0,0)
+    if(!midiFlag){
+        arpOrderedArray = arpOrderedArray.splice(0,0)
+        improArray = improArray.splice(0,0)
+  }
+    
+    
+    if(midiFlag){
+        arpMidiOrderedArray = arpOrderedArray.splice(0,0);   
+    }
 }
 
 
@@ -1692,12 +1753,25 @@ document.onkeyup = function(e) {
 }
 
 function deleteNotes(e){
-  for(i=0;i<arpOrderedArray.length;i++){
-    if(arpOrderedArray[i].key==e.key){
-      arpOrderedArray.splice(i,1);
+    console.log(e);
+    if(!midiFlag){
+        for(i=0;i<arpOrderedArray.length;i++){
+            if(arpOrderedArray[i].key==e.key){
+                arpOrderedArray.splice(i,1);
       
+            }
+        }
     }
-  }
+    
+    else if(midiFlag){
+        for(i=0;i<arpMidiOrderedArray.length;i++){
+            if(arpMidiOrderedArray[i].data[1]==e.data[1]){
+                arpMidiOrderedArray.splice(i,1);
+      
+            }
+        }
+    }
+  
   
   
   
@@ -2191,6 +2265,7 @@ function initializeVariables(){
   for(i=0;i<88;i++){
     midiArray[i]=21+i;
     midiArrayFreq[i] = Math.round(27.5*Math.pow(2,1/12)**i);
+    arpMidiEventsArray[i]=-1;
   }
   
   for(i=0; i<tones.length;i++){
@@ -2267,12 +2342,51 @@ function onMIDISuccess(midiAccess) {
 function getMIDIMessage(midiMessage) {
 
     if(midiFlag){
-    //console.log(midiMessage);
-     if(midiMessage.data[0]==144)
-    attackMidi(midiMessage.data);
+    
+     if(midiMessage.data[0]==144){
+       if(!arpFlag && !improFlag){
+         attackMidi(midiMessage.data);
+       }
+       
+       else if(arpFlag){
+          k = midiArray.indexOf(midiMessage.data[1])
+            arpMidiEventsArray[k] = midiMessage;
+         //console.log(arpMidiEventsArray);
+         
+            //clickOnKeyBoard(steps[k])
+            //changeDisplayChord("-");
+            insertNotes();
+         //console.log(arpMidiOrderedArray)
+         
+       }
+        
+     }
+   
   
-    if(midiMessage.data[0]==128)
-      releaseMidi(midiMessage.data);}
+    if(midiMessage.data[0]==128){
+      if(!arpFlag && !improFlag){
+        releaseMidi(midiMessage.data);
+      }
+      
+      else if(arpFlag){
+        
+        //clickOnKeyBoard(steps[k])
+            k = midiArray.indexOf(midiMessage.data[1])
+            arpMidiEventsArray[k] = -1;
+            //console.log(arpEventsArray);
+            deleteNotes(midiMessage);
+            changeDisplayChord("-");
+            arpIndex=0;   //everytime we delete a note, the arp starts from the beginning
+            //improIndex=0;
+        console.log(arpMidiOrderedArray);
+      }
+        
+    }
+      
+    
+    
+      
+    }
       
   
 }
@@ -2288,7 +2402,9 @@ function attackMidi(data){
     
     
     k=data[1];
+  
     freqM = midiArrayFreq[midiArray.indexOf(k)];
+  
     if(turnOn1 && !turnOn2 && !turnOn3){
       
         attack1(freqM, selectedGain[f1], attackArray[atk1])
@@ -2338,6 +2454,7 @@ function attackMidi(data){
 }
 
 function releaseMidi(data){
+
   k=data[1];
   freqM=midiArrayFreq[midiArray.indexOf(k)];
   index = midiArrayFreq.indexOf(freqM);
