@@ -2,6 +2,7 @@ var cMaster;
 var analyser1, analyser2, analyser3;
 var o1Array = [], o2Array = [], o3Array = [];
 var lfo1Array = [], lfo2Array=[], lfo3Array=[];
+var lfo1Gain=[], lfo2Gain=[], lfo3Gain=[];
 var tones = [] //note
 var steps = [] //tasti
 var mouseSteps = []; //tasti cliccati col mouse
@@ -340,6 +341,7 @@ function lfoCreate1(g, freq, nOsc, selGain, atkTime){
       lfoGain.connect(g.gain);
       lfoGain.gain.value=0;
       lfo1Gain[freq]=lfoGain;
+  
       now = cMaster.currentTime;
       lfo1Gain[freq].gain.linearRampToValueAtTime(selGain,now+atkTime);
       if (selLfo1.options.selectedIndex=="0") {lfo.type='sine'}
