@@ -27,6 +27,7 @@ var notesNamesArray=[];
 var improArray=[];
 var arpMidiEventsArray=[];
 var arpMidiOrderedArray=[];
+var improMidiArray=[];
 
 var Maj7 = [];
 var Seven = [];
@@ -982,12 +983,12 @@ function chordRecognitionTriad(){
   }
   
   else if(midiFlag){
-    var primo = keys.indexOf(arpOrderedArray[0].key);
-    var secondo = keys.indexOf(arpOrderedArray[1].key);
-    var terzo = keys.indexOf(arpOrderedArray[2].key);
+    var primo = midiArray.indexOf(arpMidiOrderedArray[0].data[1]);
+        var secondo = midiArray.indexOf(arpMidiOrderedArray[1].data[1]);
+        var terzo = midiArray.indexOf(arpMidiOrderedArray[2].data[1]);
   
-    third = keys.indexOf(arpOrderedArray[1].key) - keys.indexOf(arpOrderedArray[0].key);
-    fifth = keys.indexOf(arpOrderedArray[2].key) - keys.indexOf(arpOrderedArray[1].key);
+    third = secondo-primo
+    fifth = terzo-secondo;
   }
  
   
@@ -1082,10 +1083,10 @@ function chordRecognitionTertian(){
     }   
     
     if(midiFlag){
-        var primo = keys.indexOf(arpMidiOrderedArray[0].key);
-        var secondo = keys.indexOf(arpMidiOrderedArray[1].key);
-        var terzo = keys.indexOf(arpMidiOrderedArray[2].key);
-        var quarto = keys.indexOf(arpMidiOrderedArray[3].key);
+        var primo = midiArray.indexOf(arpMidiOrderedArray[0].data[1]);
+        var secondo = midiArray.indexOf(arpMidiOrderedArray[1].data[1]);
+        var terzo = midiArray.indexOf(arpMidiOrderedArray[2].data[1]);
+        var quarto = midiArray.indexOf(arpMidiOrderedArray[3].data[1]);
     }   
   
  
@@ -1097,74 +1098,88 @@ function chordRecognitionTertian(){
   
   if (third==4 && fifth==3 && seventh==4){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Maj7");
-    tonica=arpOrderedArray[0];
+    if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Maj7";
     
   }
   
+
+  
   else if (third==4 && fifth==3 && seventh==3){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Seven";
   }
   
   else if (third==3 && fifth==4 && seventh==4){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Delta7";
   }
   
   else if (third==3 && fifth==4 && seventh==3){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7-");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="SevenMin";
   }
   
   else if (third==4 && fifth==4 && seventh==3){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Maj7 aug");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Maj7Aug";
   }
   
   else if (third==4 && fifth==4 && seventh==2){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7 aug");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="SevenAug";
   }
   
   else if (third==3 && fifth==5 && seventh==3){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7 aug");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Delta7Aug";
   }
   
   else if (third==3 && fifth==5 && seventh==2){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7- aug");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="SevenMinAug";
   }
   
   else if (third==4 && fifth==2 && seventh==5){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Maj7 (5b)");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Maj7Bem";
   }
   
   else if (third==4 && fifth==2 && seventh==4){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " 7 (5b)" + "/" + notesNamesArray[terzo%notesNamesArray.length] + " 7 (5b) 2nd  inversion");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="SevenBem";
   }
   
   else if (third==3 && fifth==3 && seventh==5){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7 (5b)");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Delta7Bem";
   }
   
   else if (third==3 && fifth==3 && seventh==4){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " ø");
-    tonica=arpOrderedArray[0];
+     if(!midiFlag) tonica=arpOrderedArray[0];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Semidim";
   }
   
@@ -1173,73 +1188,85 @@ function chordRecognitionTertian(){
   
   if (third==3 && fifth==4 && seventh==1){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Maj7 1st inversion");
-    tonica=arpOrderedArray[3];
+     if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Maj7";
   }
   
   else if (third==3 && fifth==3 && seventh==2){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Seven";
   }
   
   else if (third==4 && fifth==4 && seventh==1){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Delta7";
   }
   
   else if (third==4 && fifth==3 && seventh==2){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7- 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="SevenMin";
   }
   
   else if (third==4 && fifth==3 && seventh==1){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Maj7 aug 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Maj7Aug";
   }
   
   else if (third==4 && fifth==2 && seventh==2){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7 aug 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="SevenAug";
   }
   
   else if (third==5 && fifth==3 && seventh==1){
     changeDisplayChordchangeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 aug 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Delta7Aug";
   }
   
   else if (third==5 && fifth==2 && seventh==2){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7- aug 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="SevenMinAug";
   }
   
   else if (third==2 && fifth==5 && seventh==1){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Maj7 (5b) 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Maj7Bem";
   }
   
   else if (third==2 && fifth==4 && seventh==2){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " 7 (5b) 1st inversion" + "/" + notesNamesArray[secondo%notesNamesArray.length] + " 7 (5b) 3rd inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="SevenBem";
   }
   
   else if (third==3 && fifth==5 && seventh==1){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 (5b) 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Delta7Bem";
   }
   
   else if (third==3 && fifth==4 && seventh==2){
     changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " ø 1st inversion");
-    tonica=arpOrderedArray[3];
+    if(!midiFlag) tonica=arpOrderedArray[3];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Semidim";
   }
   
@@ -1250,55 +1277,64 @@ function chordRecognitionTertian(){
   
   if (third==4 && fifth==1 && seventh==4){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Maj7 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Maj7";
   }
   
   else if (third==3 && fifth==2 && seventh==4){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Seven";
   }
   
   else if (third==4 && fifth==1 && seventh==3){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Delta7";
   }
   
   else if (third==3 && fifth==2 && seventh==3){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7- 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="SevenMin";
   }
   
   else if (third==3 && fifth==1 && seventh==4){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Maj7 aug 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Maj7Aug";
   }
   
   else if (third==2 && fifth==2 && seventh==4){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7 aug 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="SevenAug";
   }
   
   else if (third==3 && fifth==1 && seventh==3){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 aug 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Delta7Aug";
   }
   
   else if (third==2 && fifth==2 && seventh==3){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " 7- aug 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="SevenMinAug";
   }
   
   else if (third==5 && fifth==1 && seventh==4){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Maj7 (5b) 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Maj7Bem";
   }
   
@@ -1308,13 +1344,15 @@ function chordRecognitionTertian(){
   
   else if (third==5 && fifth==1 && seventh==3){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 (5b) 2nd  inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Delta7Bem";
   }
   
   else if (third==4 && fifth==2 && seventh==3){
     changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " ø 2nd inversion");
-    tonica=arpOrderedArray[2];
+    if(!midiFlag) tonica=arpOrderedArray[2];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Semidim";
   }
   
@@ -1324,55 +1362,64 @@ function chordRecognitionTertian(){
   
   if (third==1 && fifth==4 && seventh==3){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Maj7 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Maj7";
   }
   
   else if (third==2 && fifth==4 && seventh==3){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Seven";
   }
   
   else if (third==1 && fifth==3 && seventh==4){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Delta7";
   }
   
   else if (third==2 && fifth==3 && seventh==4){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7- 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="SevenMin";
   }
   
   else if (third==1 && fifth==4 && seventh==4){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Maj7 aug 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Maj7Aug";
   }
   
   else if (third==2 && fifth==4 && seventh==4){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7 aug 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="SevenAug";
   }
   
   else if (third==1 && fifth==3 && seventh==5){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 aug 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Delta7Aug";
   }
   
   else if (third==2 && fifth==3 && seventh==5){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " 7- aug 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="SevenMinAug";
   }
   
   else if (third==1 && fifth==4 && seventh==2){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Maj7 dim 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Maj7Bem";
   }
   
@@ -1382,24 +1429,27 @@ function chordRecognitionTertian(){
   
   else if (third==1 && fifth==3 && seventh==3){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 dim 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Delta7Bem";
   }
   
   else if (third==2 && fifth==3 && seventh==3){
     changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " ø 3rd inversion");
-    tonica=arpOrderedArray[1];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Semidim";
   }
   
    else if (third==3 && fifth==3 && seventh==3){
     changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " °");
-     tonica=arpOrderedArray[0];
+    if(!midiFlag) tonica=arpOrderedArray[1];
+    else if(midiFlag)  tonica=arpMidiOrderedArray[1];
       modo="Dim";
   }
   
   chordFlag=true;
-  
+
 }
 
 function changeDisplayChord(nameChord){
@@ -1426,12 +1476,12 @@ function arpPlay(){
     
     
     if(numNotes==4 && !chordFlag){
-    //chordRecognitionTertian();
+    chordRecognitionTertian();
     
   }
   
   if(numNotes==3 && !chordFlag){
-    //chordRecognitionTriad();
+    chordRecognitionTriad();
     
   }
     
@@ -1456,19 +1506,34 @@ function improSetting(numNotes){
     insertImproArray();
   }
   
+  if(numNotes!=4){
+    changeDisplayNote("-");
+  }
+  
   
   
 }
 
 function insertImproArray(){
-  var a =0;
-  var index = keys.indexOf(tonica.key);
+  var a =0, index;
+  
+  if(!midiFlag)
+      index = keys.indexOf(tonica.key);
+  else if(midiFlag)
+      index = midiArray.indexOf(tonica.data[1]);
+  
   if(modo=="Maj7"){
     improArray[0]=tonica;
     
     for(i=1;i<7;i++){
       a += Maj7[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
+        
       
     }   
   }
@@ -1478,7 +1543,12 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += Seven[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[(index + a)%(keys.length)]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1488,7 +1558,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += Delta7[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1498,7 +1574,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += SevenMin[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1508,7 +1590,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += Maj7Aug[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1518,7 +1606,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += SevenAug[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1528,7 +1622,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += Delta7Aug[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1538,7 +1638,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += SevenMinAug[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1548,7 +1654,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += Maj7Bem[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1558,7 +1670,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += SevenBem[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+       
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1568,7 +1686,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += Delta7Bem[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1578,7 +1702,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += Semidim[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1588,7 +1718,13 @@ function insertImproArray(){
     
     for(i=1;i<7;i++){
       a += Dim[i-1];
-      improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      if(!midiFlag)   
+        improArray[i] = new KeyboardEvent("keydown",{key: keys[index + a]})
+      
+      else if(midiFlag){
+        
+        improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[index+a],64])});
+      }
       
     }   
   }
@@ -1602,26 +1738,50 @@ function insertImproArray(){
 
 function improSound(){
   
-  attackFunction(improArray[improIndex]);
+  if(!midiFlag){
+    attackFunction(improArray[improIndex]);
+    changeDisplayNote(improArray[improIndex]);
+    releaseFunction(improArray[improIndex]);
+    
+  }
   
-  changeDisplayNote(improArray[improIndex]);
+  else if(midiFlag){
+    attackMidi(improArray[improIndex].data);
+    changeDisplayNote(improArray[improIndex]);
+    releaseMidi(improArray[improIndex].data);
+    
+  }
   
-  
-  releaseFunction(improArray[improIndex]);
   improIndex = improvvisator();
 }
 
 function changeDisplayNote(event){
-  var note = (keys.indexOf(event.key))%notesNamesArray.length;
+  var note;
+  if(event!="-"){
+    if(!midiFlag) note = (keys.indexOf(event.key))%notesNamesArray.length;
+  if(midiFlag) note = (midiArray.indexOf(event.data[1]))%notesNamesArray.length;
   noteDisplay.removeChild(noteDisplay.childNodes[0]);
    var textnode =document.createTextNode(String(notesNamesArrayBis[note])) ;         
    noteDisplay.appendChild(textnode);
+  }
+  else{
+    noteDisplay.removeChild(noteDisplay.childNodes[0]);
+   var textnode =document.createTextNode("-") ;         
+   noteDisplay.appendChild(textnode);
+  }
+  
   
 }
 
 function improPlay(){
-  if(improFlag){
+  if(improFlag && !midiFlag){
     numNotes=arpOrderedArray.length;
+    improSetting(numNotes);
+  }
+  
+  if(improFlag && midiFlag){
+    numNotes=arpMidiOrderedArray.length;
+    
     improSetting(numNotes);
   }
   
@@ -1735,7 +1895,7 @@ document.onkeyup = function(e) {
   if(arpFlag || improFlag){
     clickOnKeyBoard(steps[k])
   arpEventsArray[k] = -1;
-    //console.log(arpEventsArray);
+   
   deleteNotes(e);
     changeDisplayChord("-");
   arpIndex=0;   //everytime we delete a note, the arp starts from the beginning
@@ -1753,7 +1913,7 @@ document.onkeyup = function(e) {
 }
 
 function deleteNotes(e){
-    console.log(e);
+   
     if(!midiFlag){
         for(i=0;i<arpOrderedArray.length;i++){
             if(arpOrderedArray[i].key==e.key){
@@ -2263,8 +2423,8 @@ function initializeVariables(){
   
   
   for(i=0;i<88;i++){
-    midiArray[i]=21+i;
-    midiArrayFreq[i] = Math.round(27.5*Math.pow(2,1/12)**i);
+    midiArray[i]=24+i;
+    midiArrayFreq[i] = Math.round(32.7*Math.pow(2,1/12)**i);
     arpMidiEventsArray[i]=-1;
   }
   
@@ -2344,19 +2504,21 @@ function getMIDIMessage(midiMessage) {
     if(midiFlag){
     
      if(midiMessage.data[0]==144){
+       k = midiArray.indexOf(midiMessage.data[1])
        if(!arpFlag && !improFlag){
          attackMidi(midiMessage.data);
+         clickOnKeyBoard(steps[k%24])
        }
        
-       else if(arpFlag){
-          k = midiArray.indexOf(midiMessage.data[1])
+       else if(arpFlag || improFlag){
+          
             arpMidiEventsArray[k] = midiMessage;
-         //console.log(arpMidiEventsArray);
          
-            //clickOnKeyBoard(steps[k])
-            //changeDisplayChord("-");
+         
+            clickOnKeyBoard(steps[k%24])
+            changeDisplayChord("-");
             insertNotes();
-         //console.log(arpMidiOrderedArray)
+         
          
        }
         
@@ -2364,21 +2526,24 @@ function getMIDIMessage(midiMessage) {
    
   
     if(midiMessage.data[0]==128){
+       k = midiArray.indexOf(midiMessage.data[1])
       if(!arpFlag && !improFlag){
         releaseMidi(midiMessage.data);
+        clickOnKeyBoard(steps[k%24])
       }
       
-      else if(arpFlag){
+      else if(arpFlag || improFlag){
         
-        //clickOnKeyBoard(steps[k])
-            k = midiArray.indexOf(midiMessage.data[1])
+        
+            
+            clickOnKeyBoard(steps[k%24])
             arpMidiEventsArray[k] = -1;
-            //console.log(arpEventsArray);
+            
             deleteNotes(midiMessage);
             changeDisplayChord("-");
             arpIndex=0;   //everytime we delete a note, the arp starts from the beginning
-            //improIndex=0;
-        console.log(arpMidiOrderedArray);
+            improIndex=0;
+       
       }
         
     }
