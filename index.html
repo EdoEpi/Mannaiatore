@@ -15,6 +15,7 @@
 <body>
 
   
+
   <div class="synthMain">
   <div class="bar">
   <div class="white-steps">
@@ -371,6 +372,19 @@
         <div class="distortionFeatureContainer">
           <div id="distDriveLabel" class="distortionLabel">DRIVE</div>
           <div id="distDriveKnob"  class="knob" >
+            <div class="knobLabel"></div>  
+          </div>
+        </div>
+      </div>
+      
+      <div class="reverbRow">
+        <div class=reverbFeatureContainer>
+            <div id="reverbOnOff" class="onOffReverb"></div>
+            <button id="reverb" onclick="activateReverb()" class="reverbButton">REVERB</button>
+        </div>
+        <div class="reverbFeatureContainer">
+          <div id="revDWLabel" class="reverbLabel">DRY/WET</div>
+          <div id="reverbDWKnob"  class="knob" >
             <div class="knobLabel"></div>  
           </div>
         </div>
