@@ -856,3 +856,30 @@ canvas{
   text-align:center;
   
 }
+
+.octaveContainer{
+  position:absolute;
+  width:150px;
+  height:50px;
+  background-color:green;
+  
+  top:544px;
+  left:100px;
+  display:inline-flex;
+}
+
+.octaveButton{
+  width:30px;
+  height:50px;
+  margin-right:2px;
+  text-align:center;
+}
+
+.octaveDisplay{
+  width:50px;
+  height:50px;
+  background-color:black;
+  text-align:center;
+  color:white;
+}
+
