@@ -127,6 +127,7 @@ var dryGain=cMaster.createGain();
 var reverb = cMaster.createConvolver();
 var dry = cMaster.createGain();
 var wet = cMaster.createGain();
+var gainRev= cMaster.createGain();
 var analyserF = cMaster.createAnalyser();
 dryGain.connect(gainMaster);
 gainMaster.connect(analyserF);
@@ -152,6 +153,8 @@ function insertEffect(){
   }
   
   if (effectDelay && !effectFilter && !effectDistortion && !effectReverb){
+    delay.delayTime.value=delayTimeArray[dTime];
+      
     dryGain.connect(gainMaster);
     dryGain.connect(delay);
     delayGain.connect(delay);
@@ -176,41 +179,49 @@ function insertEffect(){
     dryGain.connect(reverb);
     dryGain.connect(dry);
     reverb.connect(wet);
-    dry.connect(gainMaster);
-    wet.connect(gainMaster);  
+    dry.connect(gainRev);
+    wet.connect(gainRev);
+    gainRev.connect(gainMaster);
     flagEffect='0001';
   }
   
   if (effectDelay && effectFilter && !effectDistortion && !effectReverb){
+    delay.delayTime.value=delayTimeArray[dTime];
+      
     dryGain.connect(filter);
-    dryGain.connect(delay);
+    filter.connect(delay);
     delayGain.connect(delay);
     delay.connect(delayGain);
-    delay.connect(filter);
     filter.connect(gainMaster);
+    delay.connect(gainMaster);
     flagEffect='1100';
   }
   
   if (effectDelay && !effectFilter && effectDistortion && !effectReverb){
+    delay.delayTime.value=delayTimeArray[dTime];
+      
     dryGain.connect(distortion);
-    dryGain.connect(delay);
+    distortion.connect(delay);
     delayGain.connect(delay);
     delay.connect(delayGain);
-    delay.connect(distortion);
     distortion.connect(gainMaster);
+    delay.connect(gainMaster);
     flagEffect='1010';
   }
   
   if (effectDelay && !effectFilter && !effectDistortion && effectReverb){
+    delay.delayTime.value=delayTimeArray[dTime];
+      
     dryGain.connect(reverb);
-    dryGain.connect(delay);
-    delayGain.connect(delay);
-    delay.connect(delayGain);
-    delay.connect(reverb);
     dryGain.connect(dry);
     reverb.connect(wet);
-    dry.connect(gainMaster);
-    wet.connect(gainMaster); 
+    dry.connect(gainRev);
+    wet.connect(gainRev);
+    gainRev.connect(delay);
+    delayGain.connect(delay);
+    delay.connect(delayGain);
+    gainRev.connect(gainMaster);
+    delay.connect(gainMaster);
     flagEffect='1001';
   }
     
@@ -226,8 +237,9 @@ function insertEffect(){
     filter.connect(reverb);
     filter.connect(dry);
     reverb.connect(wet);
-    dry.connect(gainMaster);
-    wet.connect(gainMaster); 
+    dry.connect(gainRev);
+    wet.connect(gainRev);
+    gainRev.connect(gainMaster);
     flagEffect='0101';
   }
   
@@ -236,47 +248,56 @@ function insertEffect(){
     distortion.connect(reverb);
     distortion.connect(dry);
     reverb.connect(wet);
-    dry.connect(gainMaster);
-    wet.connect(gainMaster); 
+    dry.connect(gainRev);
+    wet.connect(gainRev);
+    gainRev.connect(gainMaster);
     flagEffect='0011';
   }
     
   if (effectDelay && effectFilter && effectDistortion && !effectReverb){
+    delay.delayTime.value=delayTimeArray[dTime];
+      
     dryGain.connect(filter);
-    dryGain.connect(delay);
+    filter.connect(distortion);
+    distortion.connect(delay);
     delayGain.connect(delay);
     delay.connect(delayGain);
-    delay.connect(filter);
-    filter.connect(distortion);
-    distortion.connect(gainMaster);
+    filter.connect(gainMaster);
+    delay.connect(gainMaster);
     flagEffect='1110';
   }
     
   if (effectDelay && effectFilter && !effectDistortion && effectReverb){
+    delay.delayTime.value=delayTimeArray[dTime];
+      
     dryGain.connect(filter);
-    dryGain.connect(delay);
-    delayGain.connect(delay);
-    delay.connect(delayGain);
-    delay.connect(filter);
     filter.connect(reverb);
     filter.connect(dry);
     reverb.connect(wet);
-    dry.connect(gainMaster);
-    wet.connect(gainMaster);
+    dry.connect(gainRev);
+    wet.connect(gainRev);
+    gainRev.connect(delay);
+    delayGain.connect(delay);
+    delay.connect(delayGain);
+    gainRev.connect(gainMaster);
+    delay.connect(gainMaster);
     flagEffect='1101';
   }
     
   if (effectDelay && !effectFilter && effectDistortion && effectReverb){
+    delay.delayTime.value=delayTimeArray[dTime];
+      
     dryGain.connect(distortion);
-    dryGain.connect(delay);
-    delayGain.connect(delay);
-    delay.connect(delayGain);
-    delay.connect(distortion);
     distortion.connect(reverb);
     distortion.connect(dry);
     reverb.connect(wet);
-    dry.connect(gainMaster);
-    wet.connect(gainMaster); 
+    dry.connect(gainRev);
+    wet.connect(gainRev);
+    gainRev.connect(delay);
+    delayGain.connect(delay);
+    delay.connect(delayGain);
+    gainRev.connect(gainMaster);
+    delay.connect(gainMaster);
     flagEffect='1011';
   }
     
@@ -286,9 +307,28 @@ function insertEffect(){
     distortion.connect(reverb);
     distortion.connect(dry);
     reverb.connect(wet);
-    dry.connect(gainMaster);
-    wet.connect(gainMaster); 
+    dry.connect(gainRev);
+    wet.connect(gainRev);
+    gainRev.connect(gainMaster);
     flagEffect='0111';
+  }
+  
+  if (effectDelay && effectFilter && effectDistortion && effectReverb){
+    delay.delayTime.value=delayTimeArray[dTime];
+      
+    dryGain.connect(filter);
+    filter.connect(distortion);
+    distortion.connect(reverb);
+    distortion.connect(dry);
+    reverb.connect(wet);
+    dry.connect(gainRev);
+    wet.connect(gainRev);
+    gainRev.connect(delay);
+    delayGain.connect(delay);
+    delay.connect(delayGain);
+    gainRev.connect(gainMaster);
+    delay.connect(gainMaster);
+    flagEffect='1111';
   }
   
 }
@@ -307,7 +347,8 @@ function disconnectEffect(){
     delayGain.disconnect(delay);
     delay.disconnect(delayGain);
     delay.disconnect(gainMaster);
-    
+      
+    delay=cMaster.createDelay(4);
     
   }
   
@@ -328,42 +369,48 @@ function disconnectEffect(){
     dryGain.disconnect(reverb);
     dryGain.disconnect(dry);
     reverb.disconnect(wet);
-    dry.disconnect(gainMaster);
-    wet.disconnect(gainMaster);  
+    dry.disconnect(gainRev);
+    wet.disconnect(gainRev);
+    gainRev.disconnect(gainMaster); 
     
   }
   
   if (flagEffect=='1100'){
     dryGain.disconnect(filter);
-    dryGain.disconnect(delay);
+    filter.disconnect(delay);
     delayGain.disconnect(delay);
     delay.disconnect(delayGain);
-    delay.disconnect(filter);
     filter.disconnect(gainMaster);
-    
+    delay.disconnect(gainMaster);
+      
+    delay=cMaster.createDelay(4);
   }
  
   
   if (flagEffect=='1010'){
     dryGain.disconnect(distortion);
-    dryGain.disconnect(delay);
+    distortion.disconnect(delay);
     delayGain.disconnect(delay);
     delay.disconnect(delayGain);
-    delay.disconnect(distortion);
     distortion.disconnect(gainMaster);
+    delay.disconnect(gainMaster);
+      
+    delay=cMaster.createDelay(4);
   }
   
   if (flagEffect=='1001'){
     dryGain.disconnect(reverb);
-    dryGain.disconnect(delay);
-    delayGain.disconnect(delay);
-    delay.disconnect(delayGain);
-    delay.disconnect(reverb);
     dryGain.disconnect(dry);
     reverb.disconnect(wet);
-    dry.disconnect(gainMaster);
-    wet.disconnect(gainMaster); 
-    
+    dry.disconnect(gainRev);
+    wet.disconnect(gainRev);
+    gainRev.disconnect(delay);
+    delayGain.disconnect(delay);
+    delay.disconnect(delayGain);
+    gainRev.disconnect(gainMaster);
+    delay.disconnect(gainMaster);
+      
+    delay=cMaster.createDelay(4);
   }
     
   if (flagEffect=='0110'){
@@ -377,8 +424,9 @@ function disconnectEffect(){
     filter.disconnect(reverb);
     filter.disconnect(dry);
     reverb.disconnect(wet);
-    dry.disconnect(gainMaster);
-    wet.disconnect(gainMaster);
+    dry.disconnect(gainRev);
+    wet.disconnect(gainRev);
+    gainRev.disconnect(gainMaster);
   }
     
   if (flagEffect=='0011'){
@@ -386,44 +434,53 @@ function disconnectEffect(){
     distortion.disconnect(reverb);
     distortion.disconnect(dry);
     reverb.disconnect(wet);
-    dry.disconnect(gainMaster);
-    wet.disconnect(gainMaster); 
+    dry.disconnect(gainRev);
+    wet.disconnect(gainRev);
+    gainRev.disconnect(gainMaster);
   }
   
   if (flagEffect=='1110'){
     dryGain.disconnect(filter);
-    dryGain.disconnect(delay);
+    filter.disconnect(distortion);
+    distortion.disconnect(delay);
     delayGain.disconnect(delay);
     delay.disconnect(delayGain);
-    delay.disconnect(filter);
-    filter.disconnect(distortion);
-    distortion.disconnect(gainMaster);
+    filter.disconnect(gainMaster);
+    delay.disconnect(gainMaster);
+      
+    delay=cMaster.createDelay(4);
   }
     
   if (flagEffect=='1101'){
     dryGain.disconnect(filter);
-    dryGain.disconnect(delay);
-    delayGain.disconnect(delay);
-    delay.disconnect(delayGain);
-    delay.disconnect(filter);
     filter.disconnect(reverb);
     filter.disconnect(dry);
     reverb.disconnect(wet);
-    dry.disconnect(gainMaster);
-    wet.disconnect(gainMaster);
+    dry.disconnect(gainRev);
+    wet.disconnect(gainRev);
+    gainRev.disconnect(delay);
+    delayGain.disconnect(delay);
+    delay.disconnect(delayGain);
+    gainRev.disconnect(gainMaster);
+    delay.disconnect(gainMaster);
+      
+    delay=cMaster.createDelay(4);
   }
     
   if (flagEffect=='1011'){
     dryGain.disconnect(distortion);
-    dryGain.disconnect(delay);
-    delayGain.disconnect(delay);
-    delay.disconnect(delayGain);
-    delay.disconnect(distortion);
     distortion.disconnect(reverb);
     distortion.disconnect(dry);
     reverb.disconnect(wet);
-    dry.disconnect(gainMaster);
-    wet.disconnect(gainMaster); 
+    dry.disconnect(gainRev);
+    wet.disconnect(gainRev);
+    gainRev.disconnect(delay);
+    delayGain.disconnect(delay);
+    delay.disconnect(delayGain);
+    gainRev.disconnect(gainMaster);
+    delay.disconnect(gainMaster);
+      
+    delay=cMaster.createDelay(4);
   }
     
   if (flagEffect=='0111'){
@@ -432,10 +489,27 @@ function disconnectEffect(){
     distortion.disconnect(reverb);
     distortion.disconnect(dry);
     reverb.disconnect(wet);
-    dry.disconnect(gainMaster);
-    wet.disconnect(gainMaster); 
+    dry.disconnect(gainRev);
+    wet.disconnect(gainRev);
+    gainRev.disconnect(gainMaster);
   }
     
+  if (flagEffect=='1111'){
+    dryGain.disconnect(filter);
+    filter.disconnect(distortion);
+    distortion.disconnect(reverb);
+    distortion.disconnect(dry);
+    reverb.disconnect(wet);
+    dry.disconnect(gainRev);
+    wet.disconnect(gainRev);
+    gainRev.disconnect(delay);
+    delayGain.disconnect(delay);
+    delay.disconnect(delayGain);
+    gainRev.disconnect(gainMaster);
+    delay.disconnect(gainMaster);
+      
+    delay=cMaster.createDelay(4);
+  }
 }
 
 
