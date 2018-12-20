@@ -115,7 +115,8 @@ var selLfo1 = document.getElementById("selLfo1");
 var selLfo2 = document.getElementById("selLfo2");
 var selLfo3 = document.getElementById("selLfo3");
 var dispLfo1=document.getElementById("dispLfo1");
-var muteButton=document.getElementById("muteBut");
+var muteButton1=document.getElementById("muteBut1");
+var muteButton2=document.getElementById("muteBut2");
 var midiButton=document.getElementById("midiButt");
 var arpButton=document.getElementById("arpButton");
 var chordDisplay=document.getElementById("chordDisp");
@@ -136,6 +137,7 @@ var effectFilter=false;
 var effectDistortion=false;
 var effectReverb=false;
 var muteFlag=false;
+var muteFlag1=false;
 var midiFlag=false;
 var arpFlag=false;
 var chordFlag=false;
@@ -159,6 +161,33 @@ var analyserF = cMaster.createAnalyser();
 dryGain.connect(gainMaster);
 gainMaster.connect(analyserF);
 analyserF.connect(cMaster.destination);
+
+var audioContext = null;
+var unlocked = false;
+var isPlaying = false;      // Are we currently playing?
+var startTime;              // The start time of the entire sequence.
+var current16thNote;        // What note is currently last scheduled?
+var tempo = 120.0;          // tempo (in beats per minute)
+var lookahead = 25.0;       // How frequently to call scheduling function 
+                            //(in milliseconds)
+var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
+                            // This is calculated from lookahead, and overlaps 
+                            // with next interval (in case the timer is late)
+var nextNoteTime = 0.0;     // when the next note is due.
+var noteResolution = 0;     // 0 == 16th, 1 == 8th, 2 == quarter note
+var noteLength = 0.05;      // length of "beep" (in seconds)
+var canvas,                 // the canvas element
+    canvasContext;          // canvasContext is the canvas' context 2D
+var last16thNoteDrawn = -1; // the last "box" we drew on the screen
+var notesInQueue = [];      // the notes that have been put into the web audio,
+                            // and may or may not have played yet. {note, time}
+var timerWorker = null;     // The Web Worker used to fire timer messages
+var metric=0;
+var noteResolution=0;
+var max=28;
+var dotClicked1 = document.getElementById("dotClick1");
+var dotClicked2 = document.getElementById("dotClick2");
+var dotClicked3 = document.getElementById("dotClick3");
 
 
 
@@ -1136,7 +1165,7 @@ function activateReverb(){
 function activateMute(){
   if(!(muteFlag && masterGainIndex==0)){
   muteFlag=!muteFlag;
-  changeColorMute();
+  changeColorMute(2);
   
   if(muteFlag){
     gainMaster.gain.value = 0;
@@ -1148,8 +1177,11 @@ function activateMute(){
   }
 }
 
-function changeColorMute(){
-  muteButton.classList.toggle("muteActive");
+
+function changeColorMute(x){
+    
+    if(x==1) muteButton1.classList.toggle("muteActive");
+    else if (x==2)  muteButton2.classList.toggle("muteActive");
 }
 
 
@@ -1386,6 +1418,8 @@ function chordRecognitionTertian(){
         var terzo = keys.indexOf(arpOrderedArray[2].key);
         var quarto = keys.indexOf(arpOrderedArray[3].key);
     }   
+    
+
     
     if(midiFlag){
         var primo = midiArray.indexOf(arpMidiOrderedArray[0].data[1]);
@@ -3836,6 +3870,220 @@ function resetLearnVariables(){
 }
 
 
+// First, let's shim the requestAnimationFrame API, with a setTimeout fallback
+window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function( callback ){
+        window.setTimeout(callback, 1000 / 60);
+    };
+})();
+
+function nextNote() {
+    // Advance current note and time by a 16th note...
+    var secondsPerBeat = 60.0 / tempo;    // Notice this picks up the CURRENT 
+                                          // tempo value to calculate beat length.
+    nextNoteTime += 0.25 * secondsPerBeat;    // Add beat length to last beat time
+
+    current16thNote++;    // Advance the beat number, wrap to zero
+    
+}
+
+
+/*function changeColorClickDot(x) {
+    if(x==1) 
+    else if(x==2) dotClicked2.classList.toggle("clicked");
+}*/
+
+
+function scheduleNote( beatNumber, time ) {
+    // push the note on the queue, even if we're not playing.
+    notesInQueue.push( { note: beatNumber, time: time } );
+    
+     if ( (noteResolution==1) && (beatNumber%2))
+        return; // we're not playing non-8th 16th notes
+    if ( (noteResolution==2) && (beatNumber%4))
+        return; // we're not playing non-quarter 8th notes
+
+    // create an oscillator
+    var osc = audioContext.createOscillator();
+    osc.connect( audioContext.destination );
+            
+    
+    if(metric==0){
+         osc.frequency.value = 880.0;
+         dotClicked1.classList.toggle("selected");
+         setTimeout(function() {dotClicked1.classList.toggle("selected")},70);
+    }
+    
+    if(metric==1){
+        max=4;
+        if (beatNumber % 4 === 0) {   // beat 0 == high pitch
+            osc.frequency.value = 880.0;
+            dotClicked1.classList.toggle("selected");
+            setTimeout(function() {dotClicked1.classList.toggle("selected")},70);
+        }
+        else {
+            osc.frequency.value = 220.0;
+            dotClicked3.classList.toggle("clicked");
+            setTimeout(function() {dotClicked3.classList.toggle("clicked")},70);
+        }
+    }
+    
+    if(metric==2){
+         max=8;
+        if (beatNumber ==0) {   // beat 0 == high pitch
+            osc.frequency.value = 880.0;
+            dotClicked1.classList.toggle("selected");
+            setTimeout(function() {dotClicked1.classList.toggle("selected")},70);
+        }
+    else if (beatNumber % 4 === 0 ){    // quarter notes = medium pitch
+            osc.frequency.value = 440.0;
+            dotClicked2.classList.toggle("selected1");
+            setTimeout(function() {dotClicked2.classList.toggle("selected1")},70);
+        }
+    else {                       // other 16th notes = low pitch
+        osc.frequency.value = 220.0;
+        dotClicked3.classList.toggle("clicked");
+        setTimeout(function() {dotClicked3.classList.toggle("clicked")},70);
+        }
+    }
+    
+    if(metric==3){
+        max=12;
+        if (beatNumber== 0){   // beat 0 == high pitch
+            osc.frequency.value = 880.0;
+            dotClicked1.classList.toggle("selected");
+            setTimeout(function() {dotClicked1.classList.toggle("selected")},70);
+        }
+    else if (beatNumber % 4 === 0 ) {    // quarter notes = medium pitch
+            osc.frequency.value = 440.0;
+            dotClicked2.classList.toggle("selected1");
+            setTimeout(function() {dotClicked2.classList.toggle("selected1")},70);
+        }
+    else{                       // other 16th notes = low pitch
+        osc.frequency.value = 220.0;
+        dotClicked3.classList.toggle("clicked");
+        setTimeout(function() {dotClicked3.classList.toggle("clicked")},70);
+        }
+        
+   }
+    if(metric==4){
+        max=16;
+        if (beatNumber== 0){   // beat 0 == high pitch
+            osc.frequency.value = 880.0;
+            dotClicked1.classList.toggle("selected");
+            setTimeout(function() {dotClicked1.classList.toggle("selected")},70);
+        }
+    else if (beatNumber % 4 === 0 ) {    // quarter notes = medium pitch
+            osc.frequency.value = 440.0;
+            dotClicked2.classList.toggle("selected1");
+            setTimeout(function() {dotClicked2.classList.toggle("selected1")},70);
+        }
+    else{                       // other 16th notes = low pitch
+        osc.frequency.value = 220.0;
+        dotClicked3.classList.toggle("clicked");
+        setTimeout(function() {dotClicked3.classList.toggle("clicked")},70);
+        }
+    }
+     if(metric==5){
+         max=20;
+         if (beatNumber== 0){   // beat 0 == high pitch
+            osc.frequency.value = 880.0;
+            dotClicked1.classList.toggle("selected");
+            setTimeout(function() {dotClicked1.classList.toggle("selected")},70);
+        }
+    else if (beatNumber % 4 === 0 ) {    // quarter notes = medium pitch
+            osc.frequency.value = 440.0;
+            dotClicked2.classList.toggle("selected1");
+            setTimeout(function() {dotClicked2.classList.toggle("selected1")},70);
+        }
+    else{                       // other 16th notes = low pitch
+        osc.frequency.value = 220.0;
+        dotClicked3.classList.toggle("clicked");
+        setTimeout(function() {dotClicked3.classList.toggle("clicked")},70);
+        }
+   }
+     if(metric==6){
+         max=28;
+         if (beatNumber== 0){   // beat 0 == high pitch
+            osc.frequency.value = 880.0;
+            dotClicked1.classList.toggle("selected");
+            setTimeout(function() {dotClicked1.classList.toggle("selected")},70);
+        }
+    else if (beatNumber % 4 === 0 ) {    // quarter notes = medium pitch
+            osc.frequency.value = 440.0;
+            dotClicked2.classList.toggle("selected1");
+            setTimeout(function() {dotClicked2.classList.toggle("selected1")},70);
+        }
+    else{                       // other 16th notes = low pitch
+        osc.frequency.value = 220.0;
+        dotClicked3.classList.toggle("clicked");
+        setTimeout(function() {dotClicked3.classList.toggle("clicked")},70);
+        }
+     }
+
+if(muteFlag1==false){
+    osc.start( time );
+    osc.stop( time + noteLength );}
+}
+
+
+
+function scheduler() {
+    // while there are notes that will need to play before the next interval, 
+    // schedule them and advance the pointer.
+    while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
+        scheduleNote(current16thNote%max, nextNoteTime );
+        nextNote();
+    }
+}
+
+function play() {
+    if (!unlocked) {
+      // play silent buffer to unlock the audio
+      var buffer = audioContext.createBuffer(1, 1, 22050);
+      var node = audioContext.createBufferSource();
+      node.buffer = buffer;
+      node.start(0);
+      unlocked = true;
+    }
+
+    isPlaying = !isPlaying;
+
+    if (isPlaying) { // start playing
+        current16thNote = 0;
+        nextNoteTime = audioContext.currentTime;
+        timerWorker.postMessage("start");
+        return "stop";
+    } else {
+        timerWorker.postMessage("stop");
+        return "play";
+    }
+}
+
+
+
+function init(){
+
+    audioContext = new AudioContext();
+
+    timerWorker = new Worker("js/metroworker.js");
+
+    timerWorker.onmessage = function(e) {
+        if (e.data == "tick") {
+            scheduler();
+        }
+        else
+            console.log("message: " + e.data);
+    };
+    timerWorker.postMessage({"interval":lookahead});
+}
+
+window.addEventListener("load", init );
 
 
 

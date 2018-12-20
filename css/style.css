@@ -185,6 +185,31 @@ canvas{
   border: 3px solid black;
 }
 
+.dotsContainer{
+    height: 20px;
+    width: 100px;
+    display: inline-flex;
+    
+}
+.dotClick{
+  position:relative;
+  //background-color:#004200;
+  background-color:ghostwhite;
+  border-radius:50px;
+  width:15px;
+  height:15px;
+  border: 3px solid black;
+
+}
+
+.selected{
+    background-color: red;
+}
+
+.selected1{
+    background-color: blue;
+}
+
 .dotOnOffContainer{
   width:50px;
   height:39px;
@@ -203,9 +228,15 @@ canvas{
 #dot2{}
 #dot3{}
 
+#dotClick1{}
+#dotClick2{}
+
+
 .clicked{
   background-color:#00FF00;
 }
+
+
 
 .knob{
   background-color:black;
@@ -311,7 +342,7 @@ canvas{
 
 #canvFreq{
   position: relative;
-  top:50px;
+  top:10px;
   left:700px;
 }
 
@@ -630,12 +661,12 @@ canvas{
   background-color:#00FF00;
 }
 .masterKnobsContainer{
+  background-color:black;
   position:relative;
-  width:490px;
+  width:455px;
   height:180px;
-  background-color:white;
-  left:210px;
-  top:230px;
+  left:220px;
+  top:80px;
   display:inline-flex;
   
 }
@@ -693,9 +724,9 @@ canvas{
 }
 
 .masterVolContainer{
-  background-color:white;
+  background-color:grey;
   position:relative;
-  //left:20px;
+  left:25px;
   width:130px;
   height:175px;
   margin-right:1px;
@@ -753,37 +784,29 @@ canvas{
   background-color:#00FF00;
 }
 
-.midiContainer{
-  background-color:white;
+
+
+.clickContainer{
+  background-color:grey;
   position:relative;
   border: solid black 1px;
-  width:50px;
-  height:175px;
-  margin-left:1px;
+  width:130px;
+  height:250px;
+  margin-left:8px;
   display:inline-block;
+    top: -40px;
   
 }
 
-
-.arpContainer{
-  background-color:white;
+.dispChordContainer{
+  background-color:grey;
   position:relative;
-  border: solid black 1px;
-  width:100px;
+  left: 12px;
+  width:150px;
   height:175px;
   margin-left:1px;
   display:inline-block;
-  
-}
-
-.bohContainer{
-  background-color:white;
-  position:relative;
-  
-  width:200px;
-  height:175px;
-  margin-left:1px;
-  display:inline-block;
+  top: 1px;
   
 }
 
@@ -811,7 +834,7 @@ canvas{
   width:120px;
   position:relative;
   top:30px;
-  left:45px;
+  left:17px;
   color:white;
   text-align:center;
   font-size:20px;
@@ -851,7 +874,7 @@ canvas{
   background-color:black;
   position:relative;
   top:40px;
-  left:80px;
+  left:53px;
   color:white;
   text-align:center;
   
@@ -886,3 +909,61 @@ canvas{
 .improLearnActive{
     background-color:#00FF00;
 }
+
+
+#controls {
+	font-family:arial;
+	font-size:10px;
+	font-weight:bold;
+
+}
+
+#controls * {
+	margin: 2px;
+	display:inline-block;
+	
+}
+
+.play {
+	-moz-box-shadow:inset 0px 20px 26px 0px #b6cde3;
+	-webkit-box-shadow:inset 0px 20px 26px 0px #b6cde3;
+	box-shadow:inset 0px 20px 26px 0px #b6cde3;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+	background-color:#79bbff;
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+	border-radius:20px;
+	color:#ffffff;
+	padding:8px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 6px #000000;
+	width: 40px;
+	text-align: center;
+}
+
+.play:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+	background-color:#378de5;
+}
+
+.play:active {
+	position:relative;
+	top:1px; left: 1px;
+}
+
+#showTempo { 
+	display: inline-block;
+	width: 45px; 
+}
+
+#showSwing { 
+	display: inline-block;
+	width: 40px; 
+}
+
+* {
+    -webkit-user-select: none;
+}
+

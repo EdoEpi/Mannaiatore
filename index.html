@@ -55,7 +55,7 @@
     <div class="osc" id="osc1">
       <div class = "oscZone" id="oscZone1">
         <div class="buttonOscContainer" >
-          <span id="dot1"class="onOffOsc"></span>
+            <span id="dot1"class="onOffOsc"></span>
           <button id="butt1" onclick="activateAudio(1)">OSC1</button>
           <div class="selectOscContainer">
             <select id="select_box1" class="select_box" >
@@ -398,21 +398,30 @@
     
   
   
-  <canvas id="canvFreq"  width="480px" height= "280px" style="border: solid white 1px">
+  <canvas id="canvFreq"  width="480px" height= "250px" style="border: solid white 1px">
   </canvas>
   
   <div class="masterKnobsContainer">
+
     
-    <div class="midiContainer">
-      
+    <div class="clickContainer">
+       <div class="masterLabel">CLICK</div>
+       <div id="controls">
+      <div><a class="play" onclick="this.innerText = play();">play</a></div>
+           <div class="dotsContainer">
+               <span id="dotClick1" class="dotClick"></span>
+               <span id="dotClick2" class="dotClick"></span>
+               <span id="dotClick3" class="dotClick"></span>
+               
+           </div>
+      <div id="tempoBox">BPM: <span id="showTempo">120</span><input id="tempo" type="range" min="10.0" max="500.0" step="1" value="120" style="height: 20px; width: 200px" onInput="tempo = event.target.value; document.getElementById('showTempo').innerText=tempo;"></div>
+        <div>Resolution:<select onchange="noteResolution = this.selectedIndex;"><option>16th notes<option>8th notes<option>Quarter notes</select></div>
+        <div>Metric:<select onchange="metric = this.selectedIndex; current16thNote=0"><option>1/1<option>1/4<option>1/2<option>3/4<option>4/4<option>5/4<option>7/4</select></div>
+    </div>
+                   <button id="muteBut1" class="muteButton" onclick="muteFlag1=!muteFlag1; changeColorMute(1);">MUTE</button>
     </div>
     
-    <div class="arpContainer">
-      
-      
-    </div>
-    
-    <div class="bohContainer">
+    <div class="dispChordContainer">
       
       <div id="chordDisp" class="chordDisplay">-</div>
       <div id="noteDisp" class="noteDisplay">-</div>
@@ -425,11 +434,11 @@
         <div class="knobLabel"></div> 
       </div>
       
-      <button id="muteBut" class="muteButton" onclick="activateMute()">MUTE</button>
+      <button id="muteBut2" class="muteButton" onclick="activateMute()">MUTE</button>
       
     </div>
     
-    
+   
     
   </div>
   
