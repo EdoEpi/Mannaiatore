@@ -108,6 +108,7 @@ var lastNote;
 var learnIndex;
 var learnInterval;
 var capsLock;
+var secondsPerBeat = 60.0 / 120; 
 
 var sel1= document.getElementById("select_box1");
 var sel2= document.getElementById("select_box2");
@@ -2226,12 +2227,17 @@ document.onkeydown = function(e) {
         
           learnAlgorithm(e);
           
+          
       }
    
   }
   
   
 }
+
+var counterLearnedNotes=0;
+var prevTime, actTime;
+
 
 function capsLockFunction(e){
     
@@ -2257,16 +2263,20 @@ function learnAlgorithm(e){
         
         if(totNotes==0){
             prevNote = ((triggeredKey)%12)+1;
+            prevTime = cMaster.currentTime;
         
         }
     
         else{
         
             actNote = ((triggeredKey)%12)+1;
+            actTime= cMaster.currentTime;
             
             setLearnedInterval(prevNote,actNote);
+            setLearnedTimeInterval(prevNote,actNote,prevTime, actTime);
             
             prevNote = actNote;
+            prevTime = actTime;
         }
         
         totNotes++;
@@ -2278,6 +2288,53 @@ function learnAlgorithm(e){
     
     
         
+}
+
+
+function setLearnedTimeInterval(prevNote, actNote, prevTime, actTime){
+    
+    var i;
+    var diff=actTime-prevTime;
+    
+    i=approximateTime(diff);
+    
+    
+}
+
+function approximateTime(diff){
+    var min;
+    var i;
+    
+    var quarterNote = secondsPerBeat;
+    var eighthNote = secondsPerBeat/2;
+    var sixteenthNote = secondsPerBeat/4;
+    
+    
+    var quarter = Math.abs(diff-quarterNote);
+    var eighth = Math.abs(diff-eighthNote);
+    var sixteenth = Math.abs(diff-sixteenthNote);
+    
+    
+    min = Math.min(quarter,eighth,sixteenth);
+    console.log(min);
+    
+    if(min==quarter){
+        i=0;
+        console.log("SEMIMIN")
+    }                    
+    else if(min==eighth){
+        i=1;
+        console.log("CROMA")
+    }    
+    else if(min==sixteenth){
+        i=2;
+        console.log("SEMICROMA")
+    } 
+    
+    return i;
+    
+            
+    
 }
 
 function counterScaleDegrees(keyIndex){
@@ -3926,7 +3983,7 @@ window.requestAnimFrame = (function(){
 
 function nextNote() {
     // Advance current note and time by a 16th note...
-    var secondsPerBeat = 60.0 / tempo;    // Notice this picks up the CURRENT 
+    secondsPerBeat = 60.0 / tempo;    // Notice this picks up the CURRENT 
                                           // tempo value to calculate beat length.
     nextNoteTime += 0.25 * secondsPerBeat;    // Add beat length to last beat time
 
@@ -4126,4 +4183,9 @@ function init(){
 }
 
 window.addEventListener("load", init );
+
+
+
+
+
 

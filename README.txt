@@ -1,6 +1,0 @@
-
-A Pen created at CodePen.io. You can find this one at https://codepen.io/EdoEpi/pen/YdwKGL.
-
-A Pen created at CodePen.io. You can find this one at https://codepen.io/Karwelox/pen/oJboZm.
-
- 
