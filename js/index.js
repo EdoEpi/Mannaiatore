@@ -107,6 +107,7 @@ var p71, p72, p73, p74, p75, p76, p77;
 var lastNote;
 var learnIndex=0;
 var learnInterval;
+var capsLock;
 
 var sel1= document.getElementById("select_box1");
 var sel2= document.getElementById("select_box2");
@@ -163,7 +164,7 @@ analyserF.connect(cMaster.destination);
 
 
 setInterval(arpPlay, 200)
-setInterval(improPlay, 500)
+setInterval(improPlay, 200)
 
 
 initializeVariables();
@@ -2127,7 +2128,17 @@ function arpeggiatorPlay(numNotes){
 
 document.onkeydown = function(e) {
   
+    var capsLock = e.getModifierState("CapsLock");
+        
+    
+    if(e.key=="CapsLock")
+      capsLockFunction(e);
+        
+    
   if(!e.repeat){
+      
+      
+        
       
   if(!midiFlag &&!arpFlag &&!improFlag && !improLearnFlag){
     attackFunction(e);
@@ -2171,6 +2182,17 @@ document.onkeydown = function(e) {
   
 }
 
+function capsLockFunction(e){
+    
+    if(e.type=="keydown"){
+        keys="Q2W3ER5T6Y7UZSXDCVGBHNJM,"
+        
+    }
+        
+    if(e.type=="keyup"){
+        keys="q2w3er5t6y7uzsxdcvgbhnjm,"
+    }
+}
 
 function learnAlgorithm(e){
     
@@ -2371,7 +2393,10 @@ function cleanOrdered(){
 
 
 document.onkeyup = function(e) {
-   
+    
+  if(e.key=="CapsLock")
+      capsLockFunction(e);
+      
   chordFlag = false;
   
   k=keys.indexOf(e.key);
