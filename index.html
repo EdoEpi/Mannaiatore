@@ -6,13 +6,13 @@
   <title>midi 3</title>
   
   
-  
       <link rel="stylesheet" href="css/style.css">
 
   
 </head>
 
 <body>
+
 
   
 
@@ -316,6 +316,16 @@
     
     <div class="effectsContainer">
       
+        <div class="presetRow">  
+            <div class="presetContainer">
+            <select id="presetListID" onclick="addItemstoList()" ><option value="">Default Preset</option></select>
+            <button id="preset" onclick="loadSelectedPreset()"class="presetButton">Load</button>
+            <button id="preset" onclick="DeleteSelectedPreset()"class="presetButton">Delete</button>
+            <button id="preset" onclick="checkBeforeSaving()"class="presetButton">Create New Preset</button>
+            </div>
+        </div>
+                
+        
       <div class="delayRow">
           
           <div class=delayFeatureContainer>
@@ -389,7 +399,7 @@
           </div>
         </div>
       </div>
-      
+        
     </div>
     
     </div>
@@ -465,11 +475,17 @@
   <div id="octaveDisp" class="octaveDisplay">2</div>
 </div>
   
+        <script src='https://www.gstatic.com/firebasejs/5.5.7/firebase.js'></script>
   
 
-    <script  src="js/index.js"></script>
-    <script  src="js/impulse.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/impulse.js"></script>
+    <script src="js/databaze.js"></script>
+    
 
+
+
+    
 
 
 
