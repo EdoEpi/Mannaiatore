@@ -201,7 +201,6 @@ setInterval(improPlay, 200)
 initializeVariables();
 
 
-
 function insertEffect(){
   
   disconnectEffect();
@@ -392,7 +391,6 @@ function insertEffect(){
   
 }
 
-
 function disconnectEffect(){
   
   if (flagEffect=='0000'){
@@ -571,10 +569,6 @@ function disconnectEffect(){
   }
 }
 
-
-
-
-
 function makeDistortionCurve(amount) {
   var k = typeof amount === 'number' ? amount : 50,
     n_samples = 44100,
@@ -747,7 +741,6 @@ function lfoCreate3(g, freq, nOsc, selGain, atkTime){
 
 
 
-
 function attack1(freq ,selGain, atkTime) {
   var o1;
   o1 = cMaster.createOscillator();
@@ -792,7 +785,6 @@ function attack1(freq ,selGain, atkTime) {
    
 }
 
-
 function release1(freq, i, relTime) { 
   
      gates1[freq].gain.linearRampToValueAtTime(0,cMaster.currentTime+relTime);
@@ -814,7 +806,6 @@ function release1(freq, i, relTime) {
   }
      
 }
-
 
 
 function attack2(freq ,selGain, atkTime) {
@@ -955,7 +946,6 @@ function deleteAudio(){
   } 
  
 }
-
 
 function activateAudio(x){
   
