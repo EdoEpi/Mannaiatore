@@ -32,6 +32,7 @@ var arpMidiOrderedArray=[];
 var improMidiArray=[];
 var triggeredScale=[];
 var eventKeys=[];
+var metronomeGain=[];
 
 var Maj7 = [];
 var Seven = [];
@@ -88,6 +89,8 @@ var octaveIndex=2;
 var timeInterval;
 var totNotes=0;
 var noteToReleaseCount=0;
+var metronomeVolStep=10;
+var metronomeActVal;
 var v11, v12, v13, v14, v15, v16, v17;              //number of time we cover this interval of notes 
 var v21, v22, v23, v24, v25, v26, v27;
 var v31, v32, v33, v34, v35, v36, v37;
@@ -112,6 +115,7 @@ var secondsPerBeat = 60.0 / 120;
 var learnTimeIndex=0;
 var prevLearnIndex;
 var time=0;
+var thisTime;
 
 var t11=[], t12=[], t13=[], t14=[], t15=[], t16=[], t17=[];
 var t21=[], t22=[], t23=[], t24=[], t25=[], t26=[], t27=[];
@@ -149,6 +153,8 @@ var improviserButton=document.getElementById("improviserButton");
 var improLearnButton=document.getElementById("improLearn");
 var noteDisplay = document.getElementById("noteDisp");
 var octaveDisplay = document.getElementById("octaveDisp");
+var metronomeVol = document.getElementById("metronomeVol");
+var timerDisplay;
 
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
@@ -216,6 +222,10 @@ var max=28;
 var dotClicked1 = document.getElementById("dotClick1");
 var dotClicked2 = document.getElementById("dotClick2");
 var dotClicked3 = document.getElementById("dotClick3");
+
+
+
+
 
 
 
@@ -2757,6 +2767,8 @@ function attackFunction(e){
        flagsTriggered[k] ='111';
     }
     
+    
+    
 }
 
 function releaseFunction(e){
@@ -3000,6 +3012,11 @@ function calculateDeg(deg,name){
     DW=reverbDWArray[reverbDWIndex];
     mixDW(DW);
   }
+    
+    if(name=='metronomeVol'){
+        metronomeVolStep = gradi.indexOf(deg);
+        metronomeActValue = metronomeGain[metronomeVolStep];
+    }
 }
 
 
@@ -3154,13 +3171,20 @@ function initializeVariables(){
      }
      
      numGain=1/gradi.length;
+     metGain=1/(gradi.length*2);
      j = 0;
+     jk=0;
      for(i=0;i<=20;i++){
        selectedGain[i] = j;
        j+=numGain;
      }
+    
+    for(i=0;i<gradi.length;i++){
+        metronomeGain[i] = jk;
+        jk+=metGain;
+    }
      
-     
+     metronomeActValue = metronomeGain[metronomeVolStep];
      
      
      for(i=0; i<gradi.length; i++){
@@ -3275,6 +3299,7 @@ function initializeVariables(){
   moveKnob('distDriveKnob');
   moveKnob('reverbDWKnob');
   moveKnob('mKnob');
+  moveKnob("metronomeVol");
     
 }
 
@@ -3736,10 +3761,12 @@ function activateClock(){
     
 }
 
+
+
 function timeFunction(){
     thisTime=60-time;
     if(time<=10){
-        console.log(thisTime);
+        changeDisplayTimer();
         time++;
     }
     
@@ -3759,6 +3786,16 @@ function timeFunction(){
         cleanOrdered();     //cancella l'improArray;
     }
         
+}
+
+function changeDisplayTimer(){
+    timerDisplay= document.getElementById("timerDisplay");
+    
+   timerDisplay.removeChild(timerDisplay.childNodes[0]);
+   var textnode = document.createTextNode(String(thisTime)) ;         
+   timerDisplay.appendChild(textnode);
+  
+    
 }
 
 function calculateProbabilities(){
@@ -5066,7 +5103,7 @@ function scheduleNote( beatNumber, time ) {
     var metronomeGain = audioContext.createGain();
     osc.connect( metronomeGain );
     metronomeGain.connect(audioContext.destination);
-    metronomeGain.gain.value=0.1;
+    metronomeGain.gain.value=metronomeActValue;
     
     
     
@@ -5184,7 +5221,6 @@ function scheduleNote( beatNumber, time ) {
      }
 
     if(muteFlag1==false && !improFlag){
-        console.log("ciao");
         osc.start( time );
         osc.stop( time + noteLength );
     }

@@ -980,3 +980,35 @@ canvas{
   border: solid black 2px;
   text-align:center;
 }
+
+.timerContainer{
+    position:absolute;
+    width:100px;
+    height:80px;
+    background-color:grey;
+    top:515px;
+    left:900px;
+    display:inline-block;
+    
+}
+
+.timerLabel{
+    position:relative;
+    width:100px;
+    height:10px;
+    color:white;
+    text-align:center;
+    
+}
+
+.timerDisplay{
+    
+    position:relative;
+    top:20px;
+    left:25px;
+    width:50px;
+    height:40px;
+    background-color:black;
+    color:white;
+    text-align:center;
+}

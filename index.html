@@ -429,6 +429,10 @@
         <div>Metric:<select onchange="metric = this.selectedIndex; current16thNote=0"><option>1/1<option>1/4<option>1/2<option>3/4<option>4/4<option>5/4<option>7/4</select></div>
     </div>
                    <button id="muteBut1" class="muteButton" onclick="muteFlag1=!muteFlag1; changeColorMute(1);">MUTE</button>
+        
+        <div id="metronomeVol"  class="knob" >
+            <div class="knobLabel"></div>  
+          </div>
     </div>
     
     <div class="dispChordContainer">
@@ -488,6 +492,11 @@
     <script src="js/databaze.js"></script>
 
 
+<div class="timerContainer">
+    <div class="timerLabel">TIMER</div>
+    <div id="timerDisplay" class="timerDisplay">-</div>
+    </div>    
+    
 </body>
 
 </html>
