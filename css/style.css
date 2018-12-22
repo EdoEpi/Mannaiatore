@@ -841,16 +841,6 @@ canvas{
   font-size:20px;
 }
 
-.improButton{
-  background-color:white;
-  width:84px;
-  height:40px;
-  top:7px;
-  position:relative;
-  left:150px;
-  border: solid black 2px;
-  text-align:center;
-}
 
 .specialContainer{
   width:450px;
@@ -968,3 +958,25 @@ canvas{
     -webkit-user-select: none;
 }
 
+.improLearn{
+  //background-color:white;
+  width:84px;
+  height:40px;
+  top:7px;
+  position:relative;
+  left:90px;
+  border: solid black 2px;
+  text-align:center;
+    
+}
+
+.improButton{
+  //background-color:white;
+  width:84px;
+  height:40px;
+  top:7px;
+  position:relative;
+  left:100px;
+  border: solid black 2px;
+  text-align:center;
+}

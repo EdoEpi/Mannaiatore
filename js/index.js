@@ -111,6 +111,7 @@ var capsLock;
 var secondsPerBeat = 60.0 / 120;
 var learnTimeIndex=0;
 var prevLearnIndex;
+var time=0;
 
 var t11=[], t12=[], t13=[], t14=[], t15=[], t16=[], t17=[];
 var t21=[], t22=[], t23=[], t24=[], t25=[], t26=[], t27=[];
@@ -219,7 +220,7 @@ var dotClicked3 = document.getElementById("dotClick3");
 
 
 setInterval(arpPlay, 200)
-setInterval(improPlay, 100)         //ogni 100ms vede riaggiorna l' accordo che si sta suonando e la relativa scala;
+//setInterval(improPlay, 100)         //ogni 100ms vede riaggiorna l' accordo che si sta suonando e la relativa scala;
 
 
 initializeVariables();
@@ -1873,6 +1874,8 @@ function improSetting(numNotes){
 }
 
 function insertImproArray(){
+    
+    
   var a =0, index;
   
   if(!midiFlag)
@@ -2110,7 +2113,7 @@ function improSound(){
   if (!fLI){
       findFirstLearnIndex();
       fLI=!fLI;
-      console.log(fLI,learnIndex);
+      //console.log(fLI,learnIndex);
   }
     
     prevLearnIndex = learnIndex;
@@ -2137,7 +2140,7 @@ function improSound(){
     learnIndex = improvvisatorLearn()
     learnTimeIndex = improvvisatorLearnTime(prevLearnIndex, learnIndex);
     
-    console.log(learnTimeIndex);
+    //console.log(learnTimeIndex);
 }
 
 function changeDisplayNote(event){
@@ -2203,6 +2206,7 @@ function arpeggiatorPlay(numNotes){
 
 document.onkeydown = function(e) {
   
+    
     var capsLock = e.getModifierState("CapsLock");
         
     
@@ -2215,12 +2219,12 @@ document.onkeydown = function(e) {
       
         
       
-  if(!midiFlag &&!arpFlag &&!improFlag && !improLearnFlag){
+      if(!midiFlag &&!arpFlag &&!improFlag && !improLearnFlag){
     attackFunction(e);
       
   }
   
-  else if((arpFlag || improFlag) && !improLearnFlag){
+      else if(arpFlag && !improLearnFlag){
     k=keys.indexOf(e.key);
     arpEventsArray[k] = e;
     clickOnKeyBoard(steps[k])
@@ -2248,6 +2252,30 @@ document.onkeydown = function(e) {
       else if(improLearnFlag && startLearn){
           attackFunction(e);
           learnAlgorithm(e);
+              
+      }
+    
+      
+      else if(improFlag){
+          
+          
+          
+          k=keys.indexOf(e.key);
+          arpEventsArray[k]=e; 
+          insertNotes();
+          improLearnChord();
+          if(improArray.length==7 && !isPlaying){
+              console.log("we"); 
+              play();
+              changeImproChordFlag=false;
+              
+              
+          }
+          
+          if(isPlaying) {
+              attackFunction(e);
+              releaseFunction(e);
+          }
           
           
       }
@@ -2256,6 +2284,8 @@ document.onkeydown = function(e) {
   
   
 }
+
+var changeImproChordFlag=true;
 
 var counterLearnedNotes=0;
 var prevTime, actTime;
@@ -2320,7 +2350,6 @@ function setLearnedTimeInterval(prevNote, actNote, prevTime, actTime){
     
     i=approximateTime(diff);
     
-    console.log("i=" +i);
     
     if      (prevNote==1 && actNote==1)   t11[i]++;
     else if (prevNote==1 && actNote==2)   t12[i]++;
@@ -2400,28 +2429,28 @@ function approximateTime(diff){
     
     
     min = Math.min(whole,half,quarter,eighth,sixteenth);
-    console.log(min);
     
-    if(min==whole){
+    
+    if(min==whole){     //semibreve
         i=0;
-        console.log("SEMIBREVE")  
+        
     }
-    else if(min==half){
+    else if(min==half){     //minima
         i=1;
-        console.log("MINIMA");
+        
     }
     
-    else if(min==quarter){
+    else if(min==quarter){      //semiminima
         i=2;
-        console.log("SEMIMIN")
+        
     }                    
-    else if(min==eighth){
+    else if(min==eighth){       //croma
         i=3;
-        console.log("CROMA")
+        
     }    
-    else if(min==sixteenth){
+    else if(min==sixteenth){        //semicroma
         i=4;
-        console.log("SEMICROMA")
+        
     } 
     
     return i;
@@ -2440,7 +2469,7 @@ function counterScaleDegrees(keyIndex){
     else if(keyIndex==5) d6++;
     else if(keyIndex==6) d7++;
     
-    console.log(d4);
+    
         
     
 }
@@ -2523,11 +2552,17 @@ function setLearnedInterval(prev, act){
 
 function improLearnChord(){
     
-    if(arpOrderedArray.length==4 && improLearnFlag && !triggerChord){
+    if(arpOrderedArray.length==4 && improLearnFlag && !triggerChord){       //start learn
         chordRecognitionTertian();   //triggero l' accordo appena raggiungo 4 note
         insertImproArray();         //triggero la scala su cui far riferimento
         triggerChordFunction();
   }
+    
+    else if(arpOrderedArray.length==4 && improFlag){
+        chordRecognitionTertian();   
+        insertImproArray();
+        changeImproChordFlag=false;
+    }
     
 }
 
@@ -2582,7 +2617,7 @@ function insertNotes(){
 function cleanOrdered(){
     if(!midiFlag){
         arpOrderedArray = arpOrderedArray.splice(0,0)
-        improArray = improArray.splice(0,0)
+        //improArray = improArray.splice(0,0)
   }
     
     
@@ -2602,7 +2637,7 @@ document.onkeyup = function(e) {
   
   k=keys.indexOf(e.key);
   
-  if((arpFlag || improFlag) && !improLearnFlag){
+    if(arpFlag && !improLearnFlag){
     clickOnKeyBoard(steps[k])
     arpEventsArray[k] = -1;
    
@@ -2612,7 +2647,7 @@ document.onkeyup = function(e) {
     improIndex=0;
   }
   
-  else if(!arpFlag && !improFlag && !improLearnFlag){
+    else if(!arpFlag && !improFlag && !improLearnFlag){
     releaseFunction(e);
       
      
@@ -2627,6 +2662,17 @@ document.onkeyup = function(e) {
     
     else if(improLearnFlag && noteToReleaseCount==0){
         releaseFunction(e);
+    }
+    
+    else if(improFlag){
+        
+        arpEventsArray[k] = -1;
+        
+        deleteNotes(e);
+        changeDisplayChord("-");
+        
+         
+        
     }
   
   
@@ -3431,9 +3477,14 @@ function changeColorArp(){
 }
 
 function activateImpro(){
-  improFlag=!improFlag;
+    if(improFlag && isPlaying)   play();    //se è acceso spengo pure il metronomo
+    
+    improFlag=!improFlag;
+    
+   
+    
   if(improFlag && arpFlag){
-    activateArp();
+    activateArp();          //se è accesso l' impro, è spento l' arpeggiatore
   }
   
   changeColorImpro();
@@ -3666,7 +3717,7 @@ function changeOctaveTones(){
 }
 
 function activateImproLearn(){
-   improLearnFlag = !improLearnFlag; 
+    improLearnFlag = !improLearnFlag; 
     changeColorImproLearn();
 
 }
@@ -3676,7 +3727,7 @@ function changeColorImproLearn(){
     
 }
 
-var time=0;
+
 function activateClock(){
     startLearn=true;
     time=0
@@ -3700,9 +3751,12 @@ function timeFunction(){
         
         calculateProbabilities();
         
+        activateImproLearn()
         //learnInterval = setInterval(improLearnPlay,200);
         
-    
+        changeDisplayChord("-");
+        
+        cleanOrdered();     //cancella l'improArray;
     }
         
 }
@@ -4172,7 +4226,7 @@ function improvvisatorLearnTime(prev, act){
     if      (prev==0 && act ==0){
         randomTime = Math.floor(Math.random() * pt11[4]); 
         
-        if      (randomTime>0       && randomTime<=pt11[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt11[0])     return 16;
         else if (randomTime>pt11[0] && randomTime<=pt11[1])     return 8;
         else if (randomTime>pt11[1] && randomTime<=pt11[2])     return 4;
         else if (randomTime>pt11[2] && randomTime<=pt11[3])     return 2;
@@ -4183,7 +4237,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==0 && act ==1){
         randomTime = Math.floor(Math.random() * pt12[4]); 
         
-        if      (randomTime>0       && randomTime<=pt12[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt12[0])     return 16;
         else if (randomTime>pt12[0] && randomTime<=pt12[1])     return 8;
         else if (randomTime>pt12[1] && randomTime<=pt12[2])     return 4;
         else if (randomTime>pt12[2] && randomTime<=pt12[3])     return 2;
@@ -4194,7 +4248,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==0 && act ==2){
         randomTime = Math.floor(Math.random() * pt13[4]); 
         
-        if      (randomTime>0       && randomTime<=pt13[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt13[0])     return 16;
         else if (randomTime>pt13[0] && randomTime<=pt13[1])     return 8;
         else if (randomTime>pt13[1] && randomTime<=pt13[2])     return 4;
         else if (randomTime>pt13[2] && randomTime<=pt13[3])     return 2;
@@ -4205,7 +4259,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==0 && act ==3){
         randomTime = Math.floor(Math.random() * pt14[4]); 
         
-        if      (randomTime>0       && randomTime<=pt14[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt14[0])     return 16;
         else if (randomTime>pt14[0] && randomTime<=pt14[1])     return 8;
         else if (randomTime>pt14[1] && randomTime<=pt14[2])     return 4;
         else if (randomTime>pt14[2] && randomTime<=pt14[3])     return 2;
@@ -4216,7 +4270,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==0 && act ==4){
         randomTime = Math.floor(Math.random() * pt15[4]); 
         
-        if      (randomTime>0       && randomTime<=pt15[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt15[0])     return 16;
         else if (randomTime>pt15[0] && randomTime<=pt15[1])     return 8;
         else if (randomTime>pt15[1] && randomTime<=pt15[2])     return 4;
         else if (randomTime>pt15[2] && randomTime<=pt15[3])     return 2;
@@ -4227,7 +4281,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==0 && act ==5){
         randomTime = Math.floor(Math.random() * pt16[4]); 
         
-        if      (randomTime>0       && randomTime<=pt16[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt16[0])     return 16;
         else if (randomTime>pt16[0] && randomTime<=pt16[1])     return 8;
         else if (randomTime>pt16[1] && randomTime<=pt16[2])     return 4;
         else if (randomTime>pt16[2] && randomTime<=pt16[3])     return 2;
@@ -4238,7 +4292,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==0 && act ==6){
         randomTime = Math.floor(Math.random() * pt17[4]); 
         
-        if      (randomTime>0       && randomTime<=pt17[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt17[0])     return 16;
         else if (randomTime>pt17[0] && randomTime<=pt17[1])     return 8;
         else if (randomTime>pt17[1] && randomTime<=pt17[2])     return 4;
         else if (randomTime>pt17[2] && randomTime<=pt17[3])     return 2;
@@ -4253,7 +4307,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==1 && act ==0){
         randomTime = Math.floor(Math.random() * pt21[4]); 
         
-        if      (randomTime>0       && randomTime<=pt21[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt21[0])     return 16;
         else if (randomTime>pt21[0] && randomTime<=pt21[1])     return 8;
         else if (randomTime>pt21[1] && randomTime<=pt21[2])     return 4;
         else if (randomTime>pt21[2] && randomTime<=pt21[3])     return 2;
@@ -4264,7 +4318,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==1 && act ==1){
         randomTime = Math.floor(Math.random() * pt22[4]); 
         
-        if      (randomTime>0       && randomTime<=pt22[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt22[0])     return 16;
         else if (randomTime>pt22[0] && randomTime<=pt22[1])     return 8;
         else if (randomTime>pt22[1] && randomTime<=pt22[2])     return 4;
         else if (randomTime>pt22[2] && randomTime<=pt22[3])     return 2;
@@ -4275,7 +4329,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==1 && act ==2){
         randomTime = Math.floor(Math.random() * pt23[4]); 
         
-        if      (randomTime>0       && randomTime<=pt23[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt23[0])     return 16;
         else if (randomTime>pt23[0] && randomTime<=pt23[1])     return 8;
         else if (randomTime>pt23[1] && randomTime<=pt23[2])     return 4;
         else if (randomTime>pt23[2] && randomTime<=pt23[3])     return 2;
@@ -4286,7 +4340,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==1 && act ==3){
         randomTime = Math.floor(Math.random() * pt24[4]); 
         
-        if      (randomTime>0       && randomTime<=pt24[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt24[0])     return 16;
         else if (randomTime>pt24[0] && randomTime<=pt24[1])     return 8;
         else if (randomTime>pt24[1] && randomTime<=pt24[2])     return 4;
         else if (randomTime>pt24[2] && randomTime<=pt24[3])     return 2;
@@ -4297,7 +4351,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==1 && act ==4){
         randomTime = Math.floor(Math.random() * pt25[4]); 
         
-        if      (randomTime>0       && randomTime<=pt25[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt25[0])     return 16;
         else if (randomTime>pt25[0] && randomTime<=pt25[1])     return 8;
         else if (randomTime>pt25[1] && randomTime<=pt25[2])     return 4;
         else if (randomTime>pt25[2] && randomTime<=pt25[3])     return 2;
@@ -4308,7 +4362,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==1 && act ==5){
         randomTime = Math.floor(Math.random() * pt26[4]); 
         
-        if      (randomTime>0       && randomTime<=pt26[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt26[0])     return 16;
         else if (randomTime>pt26[0] && randomTime<=pt26[1])     return 8;
         else if (randomTime>pt26[1] && randomTime<=pt26[2])     return 4;
         else if (randomTime>pt26[2] && randomTime<=pt26[3])     return 2;
@@ -4319,7 +4373,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==1 && act ==6){
         randomTime = Math.floor(Math.random() * pt27[4]); 
         
-        if      (randomTime>0       && randomTime<=pt27[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt27[0])     return 16;
         else if (randomTime>pt27[0] && randomTime<=pt27[1])     return 8;
         else if (randomTime>pt27[1] && randomTime<=pt27[2])     return 4;
         else if (randomTime>pt27[2] && randomTime<=pt27[3])     return 2;
@@ -4332,7 +4386,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==2 && act ==0){
         randomTime = Math.floor(Math.random() * pt31[4]); 
         
-        if      (randomTime>0       && randomTime<=pt31[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt31[0])     return 16;
         else if (randomTime>pt31[0] && randomTime<=pt31[1])     return 8;
         else if (randomTime>pt31[1] && randomTime<=pt31[2])     return 4;
         else if (randomTime>pt31[2] && randomTime<=pt31[3])     return 2;
@@ -4343,7 +4397,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==2 && act ==1){
         randomTime = Math.floor(Math.random() * pt32[4]); 
         
-        if      (randomTime>0       && randomTime<=pt32[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt32[0])     return 16;
         else if (randomTime>pt32[0] && randomTime<=pt32[1])     return 8;
         else if (randomTime>pt32[1] && randomTime<=pt32[2])     return 4;
         else if (randomTime>pt32[2] && randomTime<=pt32[3])     return 2;
@@ -4354,7 +4408,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==2 && act ==2){
         randomTime = Math.floor(Math.random() * pt33[4]); 
         
-        if      (randomTime>0       && randomTime<=pt33[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt33[0])     return 16;
         else if (randomTime>pt33[0] && randomTime<=pt33[1])     return 8;
         else if (randomTime>pt33[1] && randomTime<=pt33[2])     return 4;
         else if (randomTime>pt33[2] && randomTime<=pt33[3])     return 2;
@@ -4365,7 +4419,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==2 && act ==3){
         randomTime = Math.floor(Math.random() * pt34[4]); 
         
-        if      (randomTime>0       && randomTime<=pt34[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt34[0])     return 16;
         else if (randomTime>pt34[0] && randomTime<=pt34[1])     return 8;
         else if (randomTime>pt34[1] && randomTime<=pt34[2])     return 4;
         else if (randomTime>pt34[2] && randomTime<=pt34[3])     return 2;
@@ -4376,7 +4430,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==2 && act ==4){
         randomTime = Math.floor(Math.random() * pt35[4]); 
         
-        if      (randomTime>0       && randomTime<=pt35[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt35[0])     return 16;
         else if (randomTime>pt35[0] && randomTime<=pt35[1])     return 8;
         else if (randomTime>pt35[1] && randomTime<=pt35[2])     return 4;
         else if (randomTime>pt35[2] && randomTime<=pt35[3])     return 2;
@@ -4387,7 +4441,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==2 && act ==5){
         randomTime = Math.floor(Math.random() * pt36[4]); 
         
-        if      (randomTime>0       && randomTime<=pt36[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt36[0])     return 16;
         else if (randomTime>pt36[0] && randomTime<=pt36[1])     return 8;
         else if (randomTime>pt36[1] && randomTime<=pt36[2])     return 4;
         else if (randomTime>pt36[2] && randomTime<=pt36[3])     return 2;
@@ -4398,7 +4452,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==2 && act ==6){
         randomTime = Math.floor(Math.random() * pt37[4]); 
         
-        if      (randomTime>0       && randomTime<=pt37[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt37[0])     return 16;
         else if (randomTime>pt37[0] && randomTime<=pt37[1])     return 8;
         else if (randomTime>pt37[1] && randomTime<=pt37[2])     return 4;
         else if (randomTime>pt37[2] && randomTime<=pt37[3])     return 2;
@@ -4412,7 +4466,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==3 && act ==0){
         randomTime = Math.floor(Math.random() * pt41[4]); 
         
-        if      (randomTime>0       && randomTime<=pt41[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt41[0])     return 16;
         else if (randomTime>pt41[0] && randomTime<=pt41[1])     return 8;
         else if (randomTime>pt41[1] && randomTime<=pt41[2])     return 4;
         else if (randomTime>pt41[2] && randomTime<=pt41[3])     return 2;
@@ -4423,7 +4477,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==3 && act ==1){
         randomTime = Math.floor(Math.random() * pt42[4]); 
         
-        if      (randomTime>0       && randomTime<=pt42[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt42[0])     return 16;
         else if (randomTime>pt42[0] && randomTime<=pt42[1])     return 8;
         else if (randomTime>pt42[1] && randomTime<=pt42[2])     return 4;
         else if (randomTime>pt42[2] && randomTime<=pt42[3])     return 2;
@@ -4434,7 +4488,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==3 && act ==2){
         randomTime = Math.floor(Math.random() * pt43[4]); 
         
-        if      (randomTime>0       && randomTime<=pt43[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt43[0])     return 16;
         else if (randomTime>pt43[0] && randomTime<=pt43[1])     return 8;
         else if (randomTime>pt43[1] && randomTime<=pt43[2])     return 4;
         else if (randomTime>pt43[2] && randomTime<=pt43[3])     return 2;
@@ -4445,7 +4499,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==3 && act ==3){
         randomTime = Math.floor(Math.random() * pt44[4]); 
         
-        if      (randomTime>0       && randomTime<=pt44[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt44[0])     return 16;
         else if (randomTime>pt44[0] && randomTime<=pt44[1])     return 8;
         else if (randomTime>pt44[1] && randomTime<=pt44[2])     return 4;
         else if (randomTime>pt44[2] && randomTime<=pt44[3])     return 2;
@@ -4456,7 +4510,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==3 && act ==4){
         randomTime = Math.floor(Math.random() * pt45[4]); 
         
-        if      (randomTime>0       && randomTime<=pt45[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt45[0])     return 16;
         else if (randomTime>pt45[0] && randomTime<=pt45[1])     return 8;
         else if (randomTime>pt45[1] && randomTime<=pt45[2])     return 4;
         else if (randomTime>pt45[2] && randomTime<=pt45[3])     return 2;
@@ -4467,7 +4521,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==3 && act ==5){
         randomTime = Math.floor(Math.random() * pt46[4]); 
         
-        if      (randomTime>0       && randomTime<=pt46[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt46[0])     return 16;
         else if (randomTime>pt46[0] && randomTime<=pt46[1])     return 8;
         else if (randomTime>pt46[1] && randomTime<=pt46[2])     return 4;
         else if (randomTime>pt46[2] && randomTime<=pt46[3])     return 2;
@@ -4478,7 +4532,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==3 && act ==6){
         randomTime = Math.floor(Math.random() * pt47[4]); 
         
-        if      (randomTime>0       && randomTime<=pt47[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt47[0])     return 16;
         else if (randomTime>pt47[0] && randomTime<=pt47[1])     return 8;
         else if (randomTime>pt47[1] && randomTime<=pt47[2])     return 4;
         else if (randomTime>pt47[2] && randomTime<=pt47[3])     return 2;
@@ -4490,7 +4544,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==4 && act ==0){
         randomTime = Math.floor(Math.random() * pt51[4]); 
         
-        if      (randomTime>0       && randomTime<=pt51[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt51[0])     return 16;
         else if (randomTime>pt51[0] && randomTime<=pt51[1])     return 8;
         else if (randomTime>pt51[1] && randomTime<=pt51[2])     return 4;
         else if (randomTime>pt51[2] && randomTime<=pt51[3])     return 2;
@@ -4501,7 +4555,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==4 && act ==1){
         randomTime = Math.floor(Math.random() * pt52[4]); 
         
-        if      (randomTime>0       && randomTime<=pt52[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt52[0])     return 16;
         else if (randomTime>pt52[0] && randomTime<=pt52[1])     return 8;
         else if (randomTime>pt52[1] && randomTime<=pt52[2])     return 4;
         else if (randomTime>pt52[2] && randomTime<=pt52[3])     return 2;
@@ -4512,7 +4566,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==4 && act ==2){
         randomTime = Math.floor(Math.random() * pt53[4]); 
         
-        if      (randomTime>0       && randomTime<=pt53[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt53[0])     return 16;
         else if (randomTime>pt53[0] && randomTime<=pt53[1])     return 8;
         else if (randomTime>pt53[1] && randomTime<=pt53[2])     return 4;
         else if (randomTime>pt53[2] && randomTime<=pt53[3])     return 2;
@@ -4523,7 +4577,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==4 && act ==3){
         randomTime = Math.floor(Math.random() * pt54[4]); 
         
-        if      (randomTime>0       && randomTime<=pt54[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt54[0])     return 16;
         else if (randomTime>pt54[0] && randomTime<=pt54[1])     return 8;
         else if (randomTime>pt54[1] && randomTime<=pt54[2])     return 4;
         else if (randomTime>pt54[2] && randomTime<=pt54[3])     return 2;
@@ -4534,7 +4588,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==4 && act ==4){
         randomTime = Math.floor(Math.random() * pt55[4]); 
         
-        if      (randomTime>0       && randomTime<=pt55[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt55[0])     return 16;
         else if (randomTime>pt55[0] && randomTime<=pt55[1])     return 8;
         else if (randomTime>pt55[1] && randomTime<=pt55[2])     return 4;
         else if (randomTime>pt55[2] && randomTime<=pt55[3])     return 2;
@@ -4545,7 +4599,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==4 && act ==5){
         randomTime = Math.floor(Math.random() * pt56[4]); 
         
-        if      (randomTime>0       && randomTime<=pt56[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt56[0])     return 16;
         else if (randomTime>pt56[0] && randomTime<=pt56[1])     return 8;
         else if (randomTime>pt56[1] && randomTime<=pt56[2])     return 4;
         else if (randomTime>pt56[2] && randomTime<=pt56[3])     return 2;
@@ -4556,7 +4610,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==4 && act ==6){
         randomTime = Math.floor(Math.random() * pt57[4]); 
         
-        if      (randomTime>0       && randomTime<=pt57[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt57[0])     return 16;
         else if (randomTime>pt57[0] && randomTime<=pt57[1])     return 8;
         else if (randomTime>pt57[1] && randomTime<=pt57[2])     return 4;
         else if (randomTime>pt57[2] && randomTime<=pt57[3])     return 2;
@@ -4569,7 +4623,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==5 && act ==0){
         randomTime = Math.floor(Math.random() * pt61[4]); 
         
-        if      (randomTime>0       && randomTime<=pt61[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt61[0])     return 16;
         else if (randomTime>pt61[0] && randomTime<=pt61[1])     return 8;
         else if (randomTime>pt61[1] && randomTime<=pt61[2])     return 4;
         else if (randomTime>pt61[2] && randomTime<=pt61[3])     return 2;
@@ -4580,7 +4634,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==5 && act ==1){
         randomTime = Math.floor(Math.random() * pt62[4]); 
         
-        if      (randomTime>0       && randomTime<=pt62[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt62[0])     return 16;
         else if (randomTime>pt62[0] && randomTime<=pt62[1])     return 8;
         else if (randomTime>pt62[1] && randomTime<=pt62[2])     return 4;
         else if (randomTime>pt62[2] && randomTime<=pt62[3])     return 2;
@@ -4591,7 +4645,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==5 && act ==2){
         randomTime = Math.floor(Math.random() * pt63[4]); 
         
-        if      (randomTime>0       && randomTime<=pt63[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt63[0])     return 16;
         else if (randomTime>pt63[0] && randomTime<=pt63[1])     return 8;
         else if (randomTime>pt63[1] && randomTime<=pt63[2])     return 4;
         else if (randomTime>pt63[2] && randomTime<=pt63[3])     return 2;
@@ -4602,7 +4656,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==5 && act ==3){
         randomTime = Math.floor(Math.random() * pt64[4]); 
         
-        if      (randomTime>0       && randomTime<=pt64[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt64[0])     return 16;
         else if (randomTime>pt64[0] && randomTime<=pt64[1])     return 8;
         else if (randomTime>pt64[1] && randomTime<=pt64[2])     return 4;
         else if (randomTime>pt64[2] && randomTime<=pt64[3])     return 2;
@@ -4613,7 +4667,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==5 && act ==4){
         randomTime = Math.floor(Math.random() * pt65[4]); 
         
-        if      (randomTime>0       && randomTime<=pt65[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt65[0])     return 16;
         else if (randomTime>pt65[0] && randomTime<=pt65[1])     return 8;
         else if (randomTime>pt65[1] && randomTime<=pt65[2])     return 4;
         else if (randomTime>pt65[2] && randomTime<=pt65[3])     return 2;
@@ -4624,7 +4678,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==5 && act ==5){
         randomTime = Math.floor(Math.random() * pt66[4]); 
         
-        if      (randomTime>0       && randomTime<=pt66[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt66[0])     return 16;
         else if (randomTime>pt66[0] && randomTime<=pt66[1])     return 8;
         else if (randomTime>pt66[1] && randomTime<=pt66[2])     return 4;
         else if (randomTime>pt66[2] && randomTime<=pt66[3])     return 2;
@@ -4635,7 +4689,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==5 && act ==6){
         randomTime = Math.floor(Math.random() * pt67[4]); 
         
-        if      (randomTime>0       && randomTime<=pt67[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt67[0])     return 16;
         else if (randomTime>pt67[0] && randomTime<=pt67[1])     return 8;
         else if (randomTime>pt67[1] && randomTime<=pt67[2])     return 4;
         else if (randomTime>pt67[2] && randomTime<=pt67[3])     return 2;
@@ -4648,7 +4702,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==6 && act ==0){
         randomTime = Math.floor(Math.random() * pt71[4]); 
         
-        if      (randomTime>0       && randomTime<=pt71[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt71[0])     return 16;
         else if (randomTime>pt71[0] && randomTime<=pt71[1])     return 8;
         else if (randomTime>pt71[1] && randomTime<=pt71[2])     return 4;
         else if (randomTime>pt71[2] && randomTime<=pt71[3])     return 2;
@@ -4659,7 +4713,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==6 && act ==1){
         randomTime = Math.floor(Math.random() * pt72[4]); 
         
-        if      (randomTime>0       && randomTime<=pt72[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt72[0])     return 16;
         else if (randomTime>pt72[0] && randomTime<=pt72[1])     return 8;
         else if (randomTime>pt72[1] && randomTime<=pt72[2])     return 4;
         else if (randomTime>pt72[2] && randomTime<=pt72[3])     return 2;
@@ -4670,7 +4724,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==6 && act ==2){
         randomTime = Math.floor(Math.random() * pt73[4]); 
         
-        if      (randomTime>0       && randomTime<=pt73[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt73[0])     return 16;
         else if (randomTime>pt73[0] && randomTime<=pt73[1])     return 8;
         else if (randomTime>pt73[1] && randomTime<=pt73[2])     return 4;
         else if (randomTime>pt73[2] && randomTime<=pt73[3])     return 2;
@@ -4681,7 +4735,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==6 && act ==3){
         randomTime = Math.floor(Math.random() * pt74[4]); 
         
-        if      (randomTime>0       && randomTime<=pt74[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt74[0])     return 16;
         else if (randomTime>pt74[0] && randomTime<=pt74[1])     return 8;
         else if (randomTime>pt74[1] && randomTime<=pt74[2])     return 4;
         else if (randomTime>pt74[2] && randomTime<=pt74[3])     return 2;
@@ -4692,7 +4746,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==6 && act ==4){
         randomTime = Math.floor(Math.random() * pt75[4]); 
         
-        if      (randomTime>0       && randomTime<=pt75[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt75[0])     return 16;
         else if (randomTime>pt75[0] && randomTime<=pt75[1])     return 8;
         else if (randomTime>pt75[1] && randomTime<=pt75[2])     return 4;
         else if (randomTime>pt75[2] && randomTime<=pt75[3])     return 2;
@@ -4703,7 +4757,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==6 && act ==5){
         randomTime = Math.floor(Math.random() * pt76[4]); 
         
-        if      (randomTime>0       && randomTime<=pt76[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt76[0])     return 16;
         else if (randomTime>pt76[0] && randomTime<=pt76[1])     return 8;
         else if (randomTime>pt76[1] && randomTime<=pt76[2])     return 4;
         else if (randomTime>pt76[2] && randomTime<=pt76[3])     return 2;
@@ -4714,7 +4768,7 @@ function improvvisatorLearnTime(prev, act){
     else if (prev==6 && act ==6){
         randomTime = Math.floor(Math.random() * pt77[4]); 
         
-        if      (randomTime>0       && randomTime<=pt77[0])     return 16;
+        if      (randomTime>=0       && randomTime<=pt77[0])     return 16;
         else if (randomTime>pt77[0] && randomTime<=pt77[1])     return 8;
         else if (randomTime>pt77[1] && randomTime<=pt77[2])     return 4;
         else if (randomTime>pt77[2] && randomTime<=pt77[3])     return 2;
@@ -4730,8 +4784,7 @@ function improvvisatorLearnTime(prev, act){
 
 function improvvisatorLearn(){
     
-    //console.log(learnIndex);
-    
+
     
     if(learnIndex==0){    
       random=Math.floor(Math.random() * p17); 
@@ -4998,6 +5051,7 @@ function nextNote() {
 }*/
 
 
+
 function scheduleNote( beatNumber, time ) {
     // push the note on the queue, even if we're not playing.
     notesInQueue.push( { note: beatNumber, time: time } );
@@ -5009,7 +5063,10 @@ function scheduleNote( beatNumber, time ) {
 
     // create an oscillator
     var osc = audioContext.createOscillator();
-    osc.connect( audioContext.destination );
+    var metronomeGain = audioContext.createGain();
+    osc.connect( metronomeGain );
+    metronomeGain.connect(audioContext.destination);
+    metronomeGain.gain.value=0.1;
     
     
     
@@ -5126,22 +5183,24 @@ function scheduleNote( beatNumber, time ) {
         }
      }
 
-    if(muteFlag1==false){
-        //osc.start( time );
-        //osc.stop( time + noteLength );
+    if(muteFlag1==false && !improFlag){
+        console.log("ciao");
+        osc.start( time );
+        osc.stop( time + noteLength );
     }
     
     
+    if(improFlag && improArray.length>0){      
+        if(learnTimeIndex == 0) learnFlag=true;
     
-    if(learnTimeIndex == 0) learnFlag=true;
+        if(learnFlag && learnTimeIndex==0){
+            improSound();
+            learnFlag=false;
+        }
     
-    if(learnFlag && learnTimeIndex==0){
-        console.log("we");
-        improSound();
-        learnFlag=false;
+        learnTimeIndex--;
     }
     
-    learnTimeIndex--;
         
 }
 
@@ -5191,8 +5250,9 @@ function init(){
         if (e.data == "tick") {
             scheduler();
         }
-        else
-            console.log("message: " + e.data);
+        else{
+        //console.log("message: " + e.data);
+        }
     };
     timerWorker.postMessage({"interval":lookahead});
 }
