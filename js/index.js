@@ -88,7 +88,7 @@ var octaveIndex=2;
 var timeInterval;
 var totNotes=0;
 var noteToReleaseCount=0;
-var v11, v12, v13, v14, v15, v16, v17;
+var v11, v12, v13, v14, v15, v16, v17;              //number of time we cover this interval of notes 
 var v21, v22, v23, v24, v25, v26, v27;
 var v31, v32, v33, v34, v35, v36, v37;
 var v41, v42, v43, v44, v45, v46, v47;
@@ -96,7 +96,7 @@ var v51, v52, v53, v54, v55, v56, v57;
 var v61, v62, v63, v64, v65, v66, v67;
 var v71, v72, v73, v74, v75, v76, v77;
 var prevNote, actNote;
-var d1, d2, d3, d4, d5, d6, d7;
+var d1, d2, d3, d4, d5, d6, d7;     //how many times is played one notes during learning period
 var p11, p12, p13, p14, p15, p16, p17;
 var p21, p22, p23, p24, p25, p26, p27;
 var p31, p32, p33, p34, p35, p36, p37;
@@ -108,7 +108,29 @@ var lastNote;
 var learnIndex;
 var learnInterval;
 var capsLock;
-var secondsPerBeat = 60.0 / 120; 
+var secondsPerBeat = 60.0 / 120;
+var learnTimeIndex=0;
+var prevLearnIndex;
+
+var t11=[], t12=[], t13=[], t14=[], t15=[], t16=[], t17=[];
+var t21=[], t22=[], t23=[], t24=[], t25=[], t26=[], t27=[];
+var t31=[], t32=[], t33=[], t34=[], t35=[], t36=[], t37=[];
+var t41=[], t42=[], t43=[], t44=[], t45=[], t46=[], t47=[];
+var t51=[], t52=[], t53=[], t54=[], t55=[], t56=[], t57=[];
+var t61=[], t62=[], t63=[], t64=[], t65=[], t66=[], t67=[];
+var t71=[], t72=[], t73=[], t74=[], t75=[], t76=[], t77=[];
+
+
+var pt11=[], pt12=[], pt13=[], pt14=[], pt15=[], pt16=[], pt17=[];
+var pt21=[], pt22=[], pt23=[], pt24=[], pt25=[], pt26=[], pt27=[];
+var pt31=[], pt32=[], pt33=[], pt34=[], pt35=[], pt36=[], pt37=[];
+var pt41=[], pt42=[], pt43=[], pt44=[], pt45=[], pt46=[], pt47=[];
+var pt51=[], pt52=[], pt53=[], pt54=[], pt55=[], pt56=[], pt57=[];
+var pt61=[], pt62=[], pt63=[], pt64=[], pt65=[], pt66=[], pt67=[];
+var pt71=[], pt72=[], pt73=[], pt74=[], pt75=[], pt76=[], pt77=[];
+
+
+
 
 var sel1= document.getElementById("select_box1");
 var sel2= document.getElementById("select_box2");
@@ -148,6 +170,8 @@ var improLearnFlag=false;
 var triggerChord = false;
 var startLearn=false;
 var fLI=false;
+var learnFlag=true;
+
 
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
@@ -195,7 +219,7 @@ var dotClicked3 = document.getElementById("dotClick3");
 
 
 setInterval(arpPlay, 200)
-setInterval(improPlay, 200)
+setInterval(improPlay, 100)         //ogni 100ms vede riaggiorna l' accordo che si sta suonando e la relativa scala;
 
 
 initializeVariables();
@@ -2076,8 +2100,8 @@ function insertImproArray(){
   
   
     
-  if (!(improLearnFlag && !startLearn))
-      improSound();
+  //if (!(improLearnFlag && !startLearn))
+  //    improSound();
   
   
 }
@@ -2099,6 +2123,8 @@ function improSound(){
       console.log(fLI,learnIndex);
   }
     
+    prevLearnIndex = learnIndex;
+    
   if(!midiFlag){
     attackFunction(improArray[learnIndex]);
     changeDisplayNote(improArray[learnIndex]);
@@ -2113,8 +2139,15 @@ function improSound(){
     
   }
     
-  //improIndex = improvvisator();
+    
+    
+    
+    
+    
     learnIndex = improvvisatorLearn()
+    learnTimeIndex = improvvisatorLearnTime(prevLearnIndex, learnIndex);
+    
+    console.log(learnTimeIndex);
 }
 
 function changeDisplayNote(event){
@@ -2224,7 +2257,6 @@ document.onkeydown = function(e) {
       
       else if(improLearnFlag && startLearn){
           attackFunction(e);
-        
           learnAlgorithm(e);
           
           
@@ -2298,36 +2330,107 @@ function setLearnedTimeInterval(prevNote, actNote, prevTime, actTime){
     
     i=approximateTime(diff);
     
+    console.log("i=" +i);
+    
+    if      (prevNote==1 && actNote==1)   t11[i]++;
+    else if (prevNote==1 && actNote==2)   t12[i]++;
+    else if (prevNote==1 && actNote==3)   t13[i]++;
+    else if (prevNote==1 && actNote==4)   t14[i]++;
+    else if (prevNote==1 && actNote==5)   t15[i]++;
+    else if (prevNote==1 && actNote==6)   t16[i]++;
+    else if (prevNote==1 && actNote==7)   t17[i]++;
+    
+    else if (prevNote==2 && actNote==1)   t21[i]++;
+    else if (prevNote==2 && actNote==2)   t22[i]++;
+    else if (prevNote==2 && actNote==3)   t23[i]++;
+    else if (prevNote==2 && actNote==4)   t24[i]++;
+    else if (prevNote==2 && actNote==5)   t25[i]++;
+    else if (prevNote==2 && actNote==6)   t26[i]++;
+    else if (prevNote==2 && actNote==7)   t27[i]++;
+    
+    else if (prevNote==3 && actNote==1)   t31[i]++;
+    else if (prevNote==3 && actNote==2)   t32[i]++;
+    else if (prevNote==3 && actNote==3)   t33[i]++;
+    else if (prevNote==3 && actNote==4)   t34[i]++;
+    else if (prevNote==3 && actNote==5)   t35[i]++;
+    else if (prevNote==3 && actNote==6)   t36[i]++;
+    else if (prevNote==3 && actNote==7)   t37[i]++;
+    
+    else if (prevNote==4 && actNote==1)   t41[i]++;
+    else if (prevNote==4 && actNote==2)   t42[i]++;
+    else if (prevNote==4 && actNote==3)   t43[i]++;
+    else if (prevNote==4 && actNote==4)   t44[i]++;
+    else if (prevNote==4 && actNote==5)   t45[i]++;
+    else if (prevNote==4 && actNote==6)   t46[i]++;
+    else if (prevNote==4 && actNote==7)   t47[i]++;
+    
+    else if (prevNote==5 && actNote==1)   t51[i]++;
+    else if (prevNote==5 && actNote==2)   t52[i]++;
+    else if (prevNote==5 && actNote==3)   t53[i]++;
+    else if (prevNote==5 && actNote==4)   t54[i]++;
+    else if (prevNote==5 && actNote==5)   t55[i]++;
+    else if (prevNote==5 && actNote==6)   t56[i]++;
+    else if (prevNote==5 && actNote==7)   t57[i]++;
+    
+    else if (prevNote==6 && actNote==1)   t61[i]++;
+    else if (prevNote==6 && actNote==2)   t62[i]++;
+    else if (prevNote==6 && actNote==3)   t63[i]++;
+    else if (prevNote==6 && actNote==4)   t64[i]++;
+    else if (prevNote==6 && actNote==5)   t65[i]++;
+    else if (prevNote==6 && actNote==6)   t66[i]++;
+    else if (prevNote==6 && actNote==7)   t67[i]++;
+    
+    else if (prevNote==7 && actNote==1)   t71[i]++;
+    else if (prevNote==7 && actNote==2)   t72[i]++;
+    else if (prevNote==7 && actNote==3)   t73[i]++;
+    else if (prevNote==7 && actNote==4)   t74[i]++;
+    else if (prevNote==7 && actNote==5)   t75[i]++;
+    else if (prevNote==7 && actNote==6)   t76[i]++;
+    else if (prevNote==7 && actNote==7)   t77[i]++;
+    
     
 }
+
 
 function approximateTime(diff){
     var min;
     var i;
     
+    var wholeNote = secondsPerBeat*4;
+    var halfNote = secondsPerBeat*2;
     var quarterNote = secondsPerBeat;
     var eighthNote = secondsPerBeat/2;
     var sixteenthNote = secondsPerBeat/4;
     
-    
+    var whole = Math.abs(diff-wholeNote);
+    var half = Math.abs(diff-halfNote);
     var quarter = Math.abs(diff-quarterNote);
     var eighth = Math.abs(diff-eighthNote);
     var sixteenth = Math.abs(diff-sixteenthNote);
     
     
-    min = Math.min(quarter,eighth,sixteenth);
+    min = Math.min(whole,half,quarter,eighth,sixteenth);
     console.log(min);
     
-    if(min==quarter){
+    if(min==whole){
         i=0;
+        console.log("SEMIBREVE")  
+    }
+    else if(min==half){
+        i=1;
+        console.log("MINIMA");
+    }
+    
+    else if(min==quarter){
+        i=2;
         console.log("SEMIMIN")
     }                    
     else if(min==eighth){
-        i=1;
+        i=3;
         console.log("CROMA")
     }    
     else if(min==sixteenth){
-        i=2;
+        i=4;
         console.log("SEMICROMA")
     } 
     
@@ -3726,23 +3829,910 @@ function calculateProbabilities(){
     } 
     
     
-        
+     calculateTimeProbabilities()   
    
     
     
 }
 
+function calculateTimeProbabilities(){
+    
+    for(i=0;i<5;i++){
+        if(v11>0)   pt11[i]=Math.round((t11[i]/v11) *100);
+        
+        if(i>0)     pt11[i]=pt11[i-1]+pt11[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v12>0)   pt12[i]=Math.round((t12[i]/v12) *100);
+        
+        if(i>0)     pt12[i]=pt12[i-1]+pt12[i];    
+    }   
+    for(i=0;i<5;i++){
+        
+        if(v13>0)   pt13[i]=Math.round((t13[i]/v13) *100);
+        
+        if(i>0)     pt13[i]=pt13[i-1]+pt13[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v14>0)   pt14[i]=Math.round((t14[i]/v14) *100);
+        
+        if(i>0)     pt14[i]=pt14[i-1]+pt14[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v15>0)   pt15[i]=Math.round((t15[i]/v15) *100);
+        
+        if(i>0)     pt15[i]=pt15[i-1]+pt15[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v16>0)   pt16[i]=Math.round((t16[i]/v16) *100);
+        
+        if(i>0)     pt16[i]=pt16[i-1]+pt16[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v17>0)   pt17[i]=Math.round((t17[i]/v17) *100);
+        
+        if(i>0)     pt17[i]=pt17[i-1]+pt17[i];    
+    }
+    
+    
+    for(i=0;i<5;i++){
+        
+        if(v21>0)   pt21[i]=Math.round((t21[i]/v21) *100);
+        
+        if(i>0)     pt21[i]=pt21[i-1]+pt21[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v22>0)   pt22[i]=Math.round((t22[i]/v22) *100);
+            
+        if(i>0)     pt22[i]=pt22[i-1]+pt22[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v23>0)   pt23[i]=Math.round((t23[i]/v23) *100);
+        
+        if(i>0)     pt23[i]=pt23[i-1]+pt23[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v24>0)   pt24[i]=Math.round((t24[i]/v24) *100);
+        
+        if(i>0)     pt24[i]=pt24[i-1]+pt24[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v25>0)   pt25[i]=Math.round((t25[i]/v25) *100);
+        
+        if(i>0)     pt25[i]=pt25[i-1]+pt25[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v26>0)   pt26[i]=Math.round((t26[i]/v26) *100);
+        
+        if(i>0)     pt26[i]=pt26[i-1]+pt26[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v27>0)   pt27[i]=Math.round((t27[i]/v27) *100);
+        
+        if(i>0)     pt27[i]=pt27[i-1]+pt27[i];    
+    }
+    
+    
+    for(i=0;i<5;i++){
+        
+        if(v31>0)   pt31[i]=Math.round((t31[i]/v31) *100);
+        
+        if(i>0)     pt31[i]=pt31[i-1]+pt31[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v32>0)   pt32[i]=Math.round((t32[i]/v32) *100);
+        
+        if(i>0)     pt32[i]=pt32[i-1]+pt32[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v33>0)   pt33[i]=Math.round((t33[i]/v33) *100);
+        
+        if(i>0) pt33[i]=pt33[i-1]+pt33[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v34>0)   pt34[i]=Math.round((t34[i]/v34) *100);
+        
+        if(i>0) pt34[i]=pt34[i-1]+pt34[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v35>0)   pt35[i]=Math.round((t35[i]/v35) *100);
+        
+        if(i>0) pt35[i]=pt35[i-1]+pt35[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v36>0)   pt36[i]=Math.round((t36[i]/v36) *100);
+        
+        if(i>0)     pt36[i]=pt36[i-1]+pt36[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v37>0)   pt37[i]=Math.round((t37[i]/v37) *100);
+        
+        if(i>0)     pt37[i]=pt37[i-1]+pt37[i];    
+    }
+    
+    
+    
+    for(i=0;i<5;i++){
+        
+        if(v41>0)   pt41[i]=Math.round((t41[i]/v41) *100);
+        
+        if(i>0)     pt41[i]=pt41[i-1]+pt41[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v42>0)   pt42[i]=Math.round((t42[i]/v42) *100);
+        
+        if(i>0)     pt42[i]=pt42[i-1]+pt42[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v43>0)   pt43[i]=Math.round((t43[i]/v43) *100);
+        
+        if(i>0)     pt43[i]=pt43[i-1]+pt43[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v44>0)   pt44[i]=Math.round((t44[i]/v44) *100);
+        
+        if(i>0)     pt44[i]=pt44[i-1]+pt44[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v45>0)   pt45[i]=Math.round((t45[i]/v45) *100);
+        
+        if(i>0)     pt45[i]=pt45[i-1]+pt45[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v46>0)   pt46[i]=Math.round((t46[i]/v46) *100);
+        
+        if(i>0)     pt46[i]=pt46[i-1]+pt46[i]
+    }
+    for(i=0;i<5;i++){
+        
+        if(v47>0)   pt47[i]=Math.round((t47[i]/v47) *100);
+        
+        if(i>0)     pt47[i]=pt47[i-1]+pt47[i];    
+    }
+    
+
+    
+    
+    for(i=0;i<5;i++){
+        
+        if(v51>0)   pt51[i]=Math.round((t51[i]/v51) *100);
+        
+        if(i>0)     pt51[i]=pt51[i-1]+pt51[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v52>0)   pt52[i]=Math.round((t52[i]/v52) *100);
+        
+        if(i>0)     pt52[i]=pt52[i-1]+pt52[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v53>0)   pt53[i]=Math.round((t53[i]/v53) *100);
+        
+        if(i>0)     pt53[i]=pt53[i-1]+pt53[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v54>0)   pt54[i]=Math.round((t54[i]/v54) *100);
+        
+        if(i>0)     pt54[i]=pt54[i-1]+pt54[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v55>0)   pt55[i]=Math.round((t55[i]/v55) *100);
+        
+        if(i>0)     pt55[i]=pt55[i-1]+pt55[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v56>0)   pt56[i]=Math.round((t56[i]/v56) *100);
+        
+        if(i>0)     pt56[i]=pt56[i-1]+pt56[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v57>0)   pt57[i]=Math.round((t57[i]/v57) *100);
+        
+        if(i>0)     pt57[i]=pt57[i-1]+pt57[i];    
+    }
+    
+    
+    
+    for(i=0;i<5;i++){
+        
+        if(v61>0)   pt61[i]=Math.round((t61[i]/v61) *100);
+        
+        if(i>0)     pt61[i]=pt61[i-1]+pt61[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v62>0)   pt62[i]=Math.round((t62[i]/v62) *100);
+        
+        if(i>0) pt62[i]=pt62[i-1]+pt62[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v63>0)   pt63[i]=Math.round((t63[i]/v63) *100);
+        
+        if(i>0) pt63[i]=pt63[i-1]+pt63[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v64>0)   pt64[i]=Math.round((t64[i]/v64) *100);
+        
+        if(i>0)     pt64[i]=pt64[i-1]+pt64[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v65>0)   pt65[i]=Math.round((t65[i]/v65) *100);
+        
+        if(i>0)     pt65[i]=pt65[i-1]+pt65[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v66>0)   pt66[i]=Math.round((t66[i]/v66) *100);
+        
+        if(i>0) pt66[i]=pt66[i-1]+pt66[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v67>0)   pt67[i]=Math.round((t67[i]/v67) *100);
+        
+        if(i>0) pt67[i]=pt67[i-1]+pt67[i];    
+    }
+    
+    
+    for(i=0;i<5;i++){
+        
+        if(v71>0)   pt71[i]=Math.round((t71[i]/v71) *100);
+        
+        if(i>0) pt71[i]=pt71[i-1]+pt71[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v72>0)   pt72[i]=Math.round((t72[i]/v72) *100);
+        
+        if(i>0) pt72[i]=pt72[i-1]+pt72[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v73>0)   pt73[i]=Math.round((t73[i]/v73) *100);
+        
+        if(i>0)     pt73[i]=pt73[i-1]+pt73[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v74>0)   pt74[i]=Math.round((t74[i]/v74) *100);
+        
+        if(i>0)     pt74[i]=pt74[i-1]+pt74[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v75>0)   pt75[i]=Math.round((t75[i]/v75) *100);
+        
+        if(i>0)     pt75[i]=pt75[i-1]+pt75[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v76>0)   pt76[i]=Math.round((t76[i]/v76) *100);
+        
+        if(i>0)     pt76[i]=pt76[i-1]+pt76[i];    
+    }
+    for(i=0;i<5;i++){
+        
+        if(v77>0)   pt77[i]=Math.round((t77[i]/v77) *100);
+        
+        if(i>0) pt77[i]=pt77[i-1]+pt77[i];    
+    }
+    
+    
+    
+    
+    
+    
+    
+}
+
+
 
 function improLearnPlay(){
     
+    //prevLearnIndex = learnIndex;
     
-    attackFunction(improArray[learnIndex]);
-    changeDisplayNote(improArray[learnIndex]);
-    releaseFunction(improArray[learnIndex]);
+    //attackFunction(improArray[learnIndex]);
+    //changeDisplayNote(improArray[learnIndex]);
+    //releaseFunction(improArray[learnIndex]);
    
   
-  
-    learnIndex = improvvisatorLearn()
+    
+    
+    //learnIndex = improvvisatorLearn()
+    
+    //learnTimeIndex = improvvisatorLearnTime(prevLearnIndex, learnIndex);
+    
+    //console.log(learnTimeIndex);
+}
+
+
+function improvvisatorLearnTime(prev, act){
+    var randomTime;
+    
+    if      (prev==0 && act ==0){
+        randomTime = Math.floor(Math.random() * pt11[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt11[0])     return 16;
+        else if (randomTime>pt11[0] && randomTime<=pt11[1])     return 8;
+        else if (randomTime>pt11[1] && randomTime<=pt11[2])     return 4;
+        else if (randomTime>pt11[2] && randomTime<=pt11[3])     return 2;
+        else if (randomTime>pt11[3] && randomTime<=pt11[4])     return 1;
+        
+    }
+    
+    else if (prev==0 && act ==1){
+        randomTime = Math.floor(Math.random() * pt12[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt12[0])     return 16;
+        else if (randomTime>pt12[0] && randomTime<=pt12[1])     return 8;
+        else if (randomTime>pt12[1] && randomTime<=pt12[2])     return 4;
+        else if (randomTime>pt12[2] && randomTime<=pt12[3])     return 2;
+        else if (randomTime>pt12[3] && randomTime<=pt12[4])     return 1;
+        
+    }
+    
+    else if (prev==0 && act ==2){
+        randomTime = Math.floor(Math.random() * pt13[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt13[0])     return 16;
+        else if (randomTime>pt13[0] && randomTime<=pt13[1])     return 8;
+        else if (randomTime>pt13[1] && randomTime<=pt13[2])     return 4;
+        else if (randomTime>pt13[2] && randomTime<=pt13[3])     return 2;
+        else if (randomTime>pt13[3] && randomTime<=pt13[4])     return 1;
+        
+    }
+    
+    else if (prev==0 && act ==3){
+        randomTime = Math.floor(Math.random() * pt14[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt14[0])     return 16;
+        else if (randomTime>pt14[0] && randomTime<=pt14[1])     return 8;
+        else if (randomTime>pt14[1] && randomTime<=pt14[2])     return 4;
+        else if (randomTime>pt14[2] && randomTime<=pt14[3])     return 2;
+        else if (randomTime>pt14[3] && randomTime<=pt14[4])     return 1;
+        
+    }
+    
+    else if (prev==0 && act ==4){
+        randomTime = Math.floor(Math.random() * pt15[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt15[0])     return 16;
+        else if (randomTime>pt15[0] && randomTime<=pt15[1])     return 8;
+        else if (randomTime>pt15[1] && randomTime<=pt15[2])     return 4;
+        else if (randomTime>pt15[2] && randomTime<=pt15[3])     return 2;
+        else if (randomTime>pt15[3] && randomTime<=pt15[4])     return 1;
+        
+    }
+    
+    else if (prev==0 && act ==5){
+        randomTime = Math.floor(Math.random() * pt16[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt16[0])     return 16;
+        else if (randomTime>pt16[0] && randomTime<=pt16[1])     return 8;
+        else if (randomTime>pt16[1] && randomTime<=pt16[2])     return 4;
+        else if (randomTime>pt16[2] && randomTime<=pt16[3])     return 2;
+        else if (randomTime>pt16[3] && randomTime<=pt16[4])     return 1;
+        
+    }
+    
+    else if (prev==0 && act ==6){
+        randomTime = Math.floor(Math.random() * pt17[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt17[0])     return 16;
+        else if (randomTime>pt17[0] && randomTime<=pt17[1])     return 8;
+        else if (randomTime>pt17[1] && randomTime<=pt17[2])     return 4;
+        else if (randomTime>pt17[2] && randomTime<=pt17[3])     return 2;
+        else if (randomTime>pt17[3] && randomTime<=pt17[4])     return 1;
+        
+    }
+    
+    
+    
+    
+    
+    else if (prev==1 && act ==0){
+        randomTime = Math.floor(Math.random() * pt21[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt21[0])     return 16;
+        else if (randomTime>pt21[0] && randomTime<=pt21[1])     return 8;
+        else if (randomTime>pt21[1] && randomTime<=pt21[2])     return 4;
+        else if (randomTime>pt21[2] && randomTime<=pt21[3])     return 2;
+        else if (randomTime>pt21[3] && randomTime<=pt21[4])     return 1;
+        
+    }
+    
+    else if (prev==1 && act ==1){
+        randomTime = Math.floor(Math.random() * pt22[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt22[0])     return 16;
+        else if (randomTime>pt22[0] && randomTime<=pt22[1])     return 8;
+        else if (randomTime>pt22[1] && randomTime<=pt22[2])     return 4;
+        else if (randomTime>pt22[2] && randomTime<=pt22[3])     return 2;
+        else if (randomTime>pt22[3] && randomTime<=pt22[4])     return 1;
+        
+    }
+    
+    else if (prev==1 && act ==2){
+        randomTime = Math.floor(Math.random() * pt23[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt23[0])     return 16;
+        else if (randomTime>pt23[0] && randomTime<=pt23[1])     return 8;
+        else if (randomTime>pt23[1] && randomTime<=pt23[2])     return 4;
+        else if (randomTime>pt23[2] && randomTime<=pt23[3])     return 2;
+        else if (randomTime>pt23[3] && randomTime<=pt23[4])     return 1;
+        
+    }
+    
+    else if (prev==1 && act ==3){
+        randomTime = Math.floor(Math.random() * pt24[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt24[0])     return 16;
+        else if (randomTime>pt24[0] && randomTime<=pt24[1])     return 8;
+        else if (randomTime>pt24[1] && randomTime<=pt24[2])     return 4;
+        else if (randomTime>pt24[2] && randomTime<=pt24[3])     return 2;
+        else if (randomTime>pt24[3] && randomTime<=pt24[4])     return 1;
+        
+    }
+    
+    else if (prev==1 && act ==4){
+        randomTime = Math.floor(Math.random() * pt25[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt25[0])     return 16;
+        else if (randomTime>pt25[0] && randomTime<=pt25[1])     return 8;
+        else if (randomTime>pt25[1] && randomTime<=pt25[2])     return 4;
+        else if (randomTime>pt25[2] && randomTime<=pt25[3])     return 2;
+        else if (randomTime>pt25[3] && randomTime<=pt25[4])     return 1;
+        
+    }
+    
+    else if (prev==1 && act ==5){
+        randomTime = Math.floor(Math.random() * pt26[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt26[0])     return 16;
+        else if (randomTime>pt26[0] && randomTime<=pt26[1])     return 8;
+        else if (randomTime>pt26[1] && randomTime<=pt26[2])     return 4;
+        else if (randomTime>pt26[2] && randomTime<=pt26[3])     return 2;
+        else if (randomTime>pt26[3] && randomTime<=pt26[4])     return 1;
+        
+    }
+    
+    else if (prev==1 && act ==6){
+        randomTime = Math.floor(Math.random() * pt27[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt27[0])     return 16;
+        else if (randomTime>pt27[0] && randomTime<=pt27[1])     return 8;
+        else if (randomTime>pt27[1] && randomTime<=pt27[2])     return 4;
+        else if (randomTime>pt27[2] && randomTime<=pt27[3])     return 2;
+        else if (randomTime>pt27[3] && randomTime<=pt27[4])     return 1;
+        
+    }
+    
+    
+    
+    else if (prev==2 && act ==0){
+        randomTime = Math.floor(Math.random() * pt31[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt31[0])     return 16;
+        else if (randomTime>pt31[0] && randomTime<=pt31[1])     return 8;
+        else if (randomTime>pt31[1] && randomTime<=pt31[2])     return 4;
+        else if (randomTime>pt31[2] && randomTime<=pt31[3])     return 2;
+        else if (randomTime>pt31[3] && randomTime<=pt31[4])     return 1;
+        
+    }
+    
+    else if (prev==2 && act ==1){
+        randomTime = Math.floor(Math.random() * pt32[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt32[0])     return 16;
+        else if (randomTime>pt32[0] && randomTime<=pt32[1])     return 8;
+        else if (randomTime>pt32[1] && randomTime<=pt32[2])     return 4;
+        else if (randomTime>pt32[2] && randomTime<=pt32[3])     return 2;
+        else if (randomTime>pt32[3] && randomTime<=pt32[4])     return 1;
+        
+    }
+    
+    else if (prev==2 && act ==2){
+        randomTime = Math.floor(Math.random() * pt33[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt33[0])     return 16;
+        else if (randomTime>pt33[0] && randomTime<=pt33[1])     return 8;
+        else if (randomTime>pt33[1] && randomTime<=pt33[2])     return 4;
+        else if (randomTime>pt33[2] && randomTime<=pt33[3])     return 2;
+        else if (randomTime>pt33[3] && randomTime<=pt33[4])     return 1;
+        
+    }
+    
+    else if (prev==2 && act ==3){
+        randomTime = Math.floor(Math.random() * pt34[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt34[0])     return 16;
+        else if (randomTime>pt34[0] && randomTime<=pt34[1])     return 8;
+        else if (randomTime>pt34[1] && randomTime<=pt34[2])     return 4;
+        else if (randomTime>pt34[2] && randomTime<=pt34[3])     return 2;
+        else if (randomTime>pt34[3] && randomTime<=pt34[4])     return 1;
+        
+    }
+    
+    else if (prev==2 && act ==4){
+        randomTime = Math.floor(Math.random() * pt35[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt35[0])     return 16;
+        else if (randomTime>pt35[0] && randomTime<=pt35[1])     return 8;
+        else if (randomTime>pt35[1] && randomTime<=pt35[2])     return 4;
+        else if (randomTime>pt35[2] && randomTime<=pt35[3])     return 2;
+        else if (randomTime>pt35[3] && randomTime<=pt35[4])     return 1;
+        
+    }
+    
+    else if (prev==2 && act ==5){
+        randomTime = Math.floor(Math.random() * pt36[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt36[0])     return 16;
+        else if (randomTime>pt36[0] && randomTime<=pt36[1])     return 8;
+        else if (randomTime>pt36[1] && randomTime<=pt36[2])     return 4;
+        else if (randomTime>pt36[2] && randomTime<=pt36[3])     return 2;
+        else if (randomTime>pt36[3] && randomTime<=pt36[4])     return 1;
+        
+    }
+    
+    else if (prev==2 && act ==6){
+        randomTime = Math.floor(Math.random() * pt37[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt37[0])     return 16;
+        else if (randomTime>pt37[0] && randomTime<=pt37[1])     return 8;
+        else if (randomTime>pt37[1] && randomTime<=pt37[2])     return 4;
+        else if (randomTime>pt37[2] && randomTime<=pt37[3])     return 2;
+        else if (randomTime>pt37[3] && randomTime<=pt37[4])     return 1;
+        
+    }
+    
+    
+    
+    
+    else if (prev==3 && act ==0){
+        randomTime = Math.floor(Math.random() * pt41[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt41[0])     return 16;
+        else if (randomTime>pt41[0] && randomTime<=pt41[1])     return 8;
+        else if (randomTime>pt41[1] && randomTime<=pt41[2])     return 4;
+        else if (randomTime>pt41[2] && randomTime<=pt41[3])     return 2;
+        else if (randomTime>pt41[3] && randomTime<=pt41[4])     return 1;
+        
+    }
+    
+    else if (prev==3 && act ==1){
+        randomTime = Math.floor(Math.random() * pt42[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt42[0])     return 16;
+        else if (randomTime>pt42[0] && randomTime<=pt42[1])     return 8;
+        else if (randomTime>pt42[1] && randomTime<=pt42[2])     return 4;
+        else if (randomTime>pt42[2] && randomTime<=pt42[3])     return 2;
+        else if (randomTime>pt42[3] && randomTime<=pt42[4])     return 1;
+        
+    }
+    
+    else if (prev==3 && act ==2){
+        randomTime = Math.floor(Math.random() * pt43[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt43[0])     return 16;
+        else if (randomTime>pt43[0] && randomTime<=pt43[1])     return 8;
+        else if (randomTime>pt43[1] && randomTime<=pt43[2])     return 4;
+        else if (randomTime>pt43[2] && randomTime<=pt43[3])     return 2;
+        else if (randomTime>pt43[3] && randomTime<=pt43[4])     return 1;
+        
+    }
+    
+    else if (prev==3 && act ==3){
+        randomTime = Math.floor(Math.random() * pt44[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt44[0])     return 16;
+        else if (randomTime>pt44[0] && randomTime<=pt44[1])     return 8;
+        else if (randomTime>pt44[1] && randomTime<=pt44[2])     return 4;
+        else if (randomTime>pt44[2] && randomTime<=pt44[3])     return 2;
+        else if (randomTime>pt44[3] && randomTime<=pt44[4])     return 1;
+        
+    }
+    
+    else if (prev==3 && act ==4){
+        randomTime = Math.floor(Math.random() * pt45[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt45[0])     return 16;
+        else if (randomTime>pt45[0] && randomTime<=pt45[1])     return 8;
+        else if (randomTime>pt45[1] && randomTime<=pt45[2])     return 4;
+        else if (randomTime>pt45[2] && randomTime<=pt45[3])     return 2;
+        else if (randomTime>pt45[3] && randomTime<=pt45[4])     return 1;
+        
+    }
+    
+    else if (prev==3 && act ==5){
+        randomTime = Math.floor(Math.random() * pt46[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt46[0])     return 16;
+        else if (randomTime>pt46[0] && randomTime<=pt46[1])     return 8;
+        else if (randomTime>pt46[1] && randomTime<=pt46[2])     return 4;
+        else if (randomTime>pt46[2] && randomTime<=pt46[3])     return 2;
+        else if (randomTime>pt46[3] && randomTime<=pt46[4])     return 1;
+        
+    }
+    
+    else if (prev==3 && act ==6){
+        randomTime = Math.floor(Math.random() * pt47[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt47[0])     return 16;
+        else if (randomTime>pt47[0] && randomTime<=pt47[1])     return 8;
+        else if (randomTime>pt47[1] && randomTime<=pt47[2])     return 4;
+        else if (randomTime>pt47[2] && randomTime<=pt47[3])     return 2;
+        else if (randomTime>pt47[3] && randomTime<=pt47[4])     return 1;
+        
+    }
+    
+    
+    else if (prev==4 && act ==0){
+        randomTime = Math.floor(Math.random() * pt51[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt51[0])     return 16;
+        else if (randomTime>pt51[0] && randomTime<=pt51[1])     return 8;
+        else if (randomTime>pt51[1] && randomTime<=pt51[2])     return 4;
+        else if (randomTime>pt51[2] && randomTime<=pt51[3])     return 2;
+        else if (randomTime>pt51[3] && randomTime<=pt51[4])     return 1;
+        
+    }
+    
+    else if (prev==4 && act ==1){
+        randomTime = Math.floor(Math.random() * pt52[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt52[0])     return 16;
+        else if (randomTime>pt52[0] && randomTime<=pt52[1])     return 8;
+        else if (randomTime>pt52[1] && randomTime<=pt52[2])     return 4;
+        else if (randomTime>pt52[2] && randomTime<=pt52[3])     return 2;
+        else if (randomTime>pt52[3] && randomTime<=pt52[4])     return 1;
+        
+    }
+    
+    else if (prev==4 && act ==2){
+        randomTime = Math.floor(Math.random() * pt53[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt53[0])     return 16;
+        else if (randomTime>pt53[0] && randomTime<=pt53[1])     return 8;
+        else if (randomTime>pt53[1] && randomTime<=pt53[2])     return 4;
+        else if (randomTime>pt53[2] && randomTime<=pt53[3])     return 2;
+        else if (randomTime>pt53[3] && randomTime<=pt53[4])     return 1;
+        
+    }
+    
+    else if (prev==4 && act ==3){
+        randomTime = Math.floor(Math.random() * pt54[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt54[0])     return 16;
+        else if (randomTime>pt54[0] && randomTime<=pt54[1])     return 8;
+        else if (randomTime>pt54[1] && randomTime<=pt54[2])     return 4;
+        else if (randomTime>pt54[2] && randomTime<=pt54[3])     return 2;
+        else if (randomTime>pt54[3] && randomTime<=pt54[4])     return 1;
+        
+    }
+    
+    else if (prev==4 && act ==4){
+        randomTime = Math.floor(Math.random() * pt55[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt55[0])     return 16;
+        else if (randomTime>pt55[0] && randomTime<=pt55[1])     return 8;
+        else if (randomTime>pt55[1] && randomTime<=pt55[2])     return 4;
+        else if (randomTime>pt55[2] && randomTime<=pt55[3])     return 2;
+        else if (randomTime>pt55[3] && randomTime<=pt55[4])     return 1;
+        
+    }
+    
+    else if (prev==4 && act ==5){
+        randomTime = Math.floor(Math.random() * pt56[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt56[0])     return 16;
+        else if (randomTime>pt56[0] && randomTime<=pt56[1])     return 8;
+        else if (randomTime>pt56[1] && randomTime<=pt56[2])     return 4;
+        else if (randomTime>pt56[2] && randomTime<=pt56[3])     return 2;
+        else if (randomTime>pt56[3] && randomTime<=pt56[4])     return 1;
+        
+    }
+    
+    else if (prev==4 && act ==6){
+        randomTime = Math.floor(Math.random() * pt57[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt57[0])     return 16;
+        else if (randomTime>pt57[0] && randomTime<=pt57[1])     return 8;
+        else if (randomTime>pt57[1] && randomTime<=pt57[2])     return 4;
+        else if (randomTime>pt57[2] && randomTime<=pt57[3])     return 2;
+        else if (randomTime>pt57[3] && randomTime<=pt57[4])     return 1;
+        
+    }
+    
+    
+    
+    else if (prev==5 && act ==0){
+        randomTime = Math.floor(Math.random() * pt61[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt61[0])     return 16;
+        else if (randomTime>pt61[0] && randomTime<=pt61[1])     return 8;
+        else if (randomTime>pt61[1] && randomTime<=pt61[2])     return 4;
+        else if (randomTime>pt61[2] && randomTime<=pt61[3])     return 2;
+        else if (randomTime>pt61[3] && randomTime<=pt61[4])     return 1;
+        
+    }
+    
+    else if (prev==5 && act ==1){
+        randomTime = Math.floor(Math.random() * pt62[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt62[0])     return 16;
+        else if (randomTime>pt62[0] && randomTime<=pt62[1])     return 8;
+        else if (randomTime>pt62[1] && randomTime<=pt62[2])     return 4;
+        else if (randomTime>pt62[2] && randomTime<=pt62[3])     return 2;
+        else if (randomTime>pt62[3] && randomTime<=pt62[4])     return 1;
+        
+    }
+    
+    else if (prev==5 && act ==2){
+        randomTime = Math.floor(Math.random() * pt63[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt63[0])     return 16;
+        else if (randomTime>pt63[0] && randomTime<=pt63[1])     return 8;
+        else if (randomTime>pt63[1] && randomTime<=pt63[2])     return 4;
+        else if (randomTime>pt63[2] && randomTime<=pt63[3])     return 2;
+        else if (randomTime>pt63[3] && randomTime<=pt63[4])     return 1;
+        
+    }
+    
+    else if (prev==5 && act ==3){
+        randomTime = Math.floor(Math.random() * pt64[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt64[0])     return 16;
+        else if (randomTime>pt64[0] && randomTime<=pt64[1])     return 8;
+        else if (randomTime>pt64[1] && randomTime<=pt64[2])     return 4;
+        else if (randomTime>pt64[2] && randomTime<=pt64[3])     return 2;
+        else if (randomTime>pt64[3] && randomTime<=pt64[4])     return 1;
+        
+    }
+    
+    else if (prev==5 && act ==4){
+        randomTime = Math.floor(Math.random() * pt65[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt65[0])     return 16;
+        else if (randomTime>pt65[0] && randomTime<=pt65[1])     return 8;
+        else if (randomTime>pt65[1] && randomTime<=pt65[2])     return 4;
+        else if (randomTime>pt65[2] && randomTime<=pt65[3])     return 2;
+        else if (randomTime>pt65[3] && randomTime<=pt65[4])     return 1;
+        
+    }
+    
+    else if (prev==5 && act ==5){
+        randomTime = Math.floor(Math.random() * pt66[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt66[0])     return 16;
+        else if (randomTime>pt66[0] && randomTime<=pt66[1])     return 8;
+        else if (randomTime>pt66[1] && randomTime<=pt66[2])     return 4;
+        else if (randomTime>pt66[2] && randomTime<=pt66[3])     return 2;
+        else if (randomTime>pt66[3] && randomTime<=pt66[4])     return 1;
+        
+    }
+    
+    else if (prev==5 && act ==6){
+        randomTime = Math.floor(Math.random() * pt67[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt67[0])     return 16;
+        else if (randomTime>pt67[0] && randomTime<=pt67[1])     return 8;
+        else if (randomTime>pt67[1] && randomTime<=pt67[2])     return 4;
+        else if (randomTime>pt67[2] && randomTime<=pt67[3])     return 2;
+        else if (randomTime>pt67[3] && randomTime<=pt67[4])     return 1;
+        
+    }
+    
+    
+    
+    else if (prev==6 && act ==0){
+        randomTime = Math.floor(Math.random() * pt71[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt71[0])     return 16;
+        else if (randomTime>pt71[0] && randomTime<=pt71[1])     return 8;
+        else if (randomTime>pt71[1] && randomTime<=pt71[2])     return 4;
+        else if (randomTime>pt71[2] && randomTime<=pt71[3])     return 2;
+        else if (randomTime>pt71[3] && randomTime<=pt71[4])     return 1;
+        
+    }
+    
+    else if (prev==6 && act ==1){
+        randomTime = Math.floor(Math.random() * pt72[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt72[0])     return 16;
+        else if (randomTime>pt72[0] && randomTime<=pt72[1])     return 8;
+        else if (randomTime>pt72[1] && randomTime<=pt72[2])     return 4;
+        else if (randomTime>pt72[2] && randomTime<=pt72[3])     return 2;
+        else if (randomTime>pt72[3] && randomTime<=pt72[4])     return 1;
+        
+    }
+    
+    else if (prev==6 && act ==2){
+        randomTime = Math.floor(Math.random() * pt73[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt73[0])     return 16;
+        else if (randomTime>pt73[0] && randomTime<=pt73[1])     return 8;
+        else if (randomTime>pt73[1] && randomTime<=pt73[2])     return 4;
+        else if (randomTime>pt73[2] && randomTime<=pt73[3])     return 2;
+        else if (randomTime>pt73[3] && randomTime<=pt73[4])     return 1;
+        
+    }
+    
+    else if (prev==6 && act ==3){
+        randomTime = Math.floor(Math.random() * pt74[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt74[0])     return 16;
+        else if (randomTime>pt74[0] && randomTime<=pt74[1])     return 8;
+        else if (randomTime>pt74[1] && randomTime<=pt74[2])     return 4;
+        else if (randomTime>pt74[2] && randomTime<=pt74[3])     return 2;
+        else if (randomTime>pt74[3] && randomTime<=pt74[4])     return 1;
+        
+    }
+    
+    else if (prev==6 && act ==4){
+        randomTime = Math.floor(Math.random() * pt75[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt75[0])     return 16;
+        else if (randomTime>pt75[0] && randomTime<=pt75[1])     return 8;
+        else if (randomTime>pt75[1] && randomTime<=pt75[2])     return 4;
+        else if (randomTime>pt75[2] && randomTime<=pt75[3])     return 2;
+        else if (randomTime>pt75[3] && randomTime<=pt75[4])     return 1;
+        
+    }
+    
+    else if (prev==6 && act ==5){
+        randomTime = Math.floor(Math.random() * pt76[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt76[0])     return 16;
+        else if (randomTime>pt76[0] && randomTime<=pt76[1])     return 8;
+        else if (randomTime>pt76[1] && randomTime<=pt76[2])     return 4;
+        else if (randomTime>pt76[2] && randomTime<=pt76[3])     return 2;
+        else if (randomTime>pt76[3] && randomTime<=pt76[4])     return 1;
+        
+    }
+    
+    else if (prev==6 && act ==6){
+        randomTime = Math.floor(Math.random() * pt77[4]); 
+        
+        if      (randomTime>0       && randomTime<=pt77[0])     return 16;
+        else if (randomTime>pt77[0] && randomTime<=pt77[1])     return 8;
+        else if (randomTime>pt77[1] && randomTime<=pt77[2])     return 4;
+        else if (randomTime>pt77[2] && randomTime<=pt77[3])     return 2;
+        else if (randomTime>pt77[3] && randomTime<=pt77[4])     return 1;
+        
+    }
+    
+    
     
 }
 
@@ -3750,7 +4740,7 @@ function improLearnPlay(){
 
 function improvvisatorLearn(){
     
-    console.log(learnIndex);
+    //console.log(learnIndex);
     
     
     if(learnIndex==0){    
@@ -3966,6 +4956,26 @@ function resetLearnVariables(){
     p61=0, p62=0, p63=0, p64=0, p65=0, p66=0, p67=0;
     p71=0, p72=0, p73=0, p74=0, p75=0, p76=0, p77=0;
     
+    
+    
+    t11=[0,0,0,0,0], t12=[0,0,0,0,0], t13=[0,0,0,0,0], t14=[0,0,0,0,0], t15=[0,0,0,0,0], t16=[0,0,0,0,0], t17=[0,0,0,0,0];
+    t21=[0,0,0,0,0], t22=[0,0,0,0,0], t23=[0,0,0,0,0], t24=[0,0,0,0,0], t25=[0,0,0,0,0], t26=[0,0,0,0,0], t27=[0,0,0,0,0];
+    t31=[0,0,0,0,0], t32=[0,0,0,0,0], t33=[0,0,0,0,0], t34=[0,0,0,0,0], t35=[0,0,0,0,0], t36=[0,0,0,0,0], t37=[0,0,0,0,0];
+    t41=[0,0,0,0,0], t42=[0,0,0,0,0], t43=[0,0,0,0,0], t44=[0,0,0,0,0], t45=[0,0,0,0,0], t46=[0,0,0,0,0], t47=[0,0,0,0,0];
+    t51=[0,0,0,0,0], t52=[0,0,0,0,0], t53=[0,0,0,0,0], t54=[0,0,0,0,0], t55=[0,0,0,0,0], t56=[0,0,0,0,0], t57=[0,0,0,0,0];
+    t61=[0,0,0,0,0], t62=[0,0,0,0,0], t63=[0,0,0,0,0], t64=[0,0,0,0,0], t65=[0,0,0,0,0], t66=[0,0,0,0,0], t67=[0,0,0,0,0];
+    t71=[0,0,0,0,0], t72=[0,0,0,0,0], t73=[0,0,0,0,0], t74=[0,0,0,0,0], t75=[0,0,0,0,0], t76=[0,0,0,0,0], t77=[0,0,0,0,0];
+    
+    pt11=[0,0,0,0,0], pt12=[0,0,0,0,0], pt13=[0,0,0,0,0], pt14=[0,0,0,0,0], pt15=[0,0,0,0,0], pt16=[0,0,0,0,0], pt17=[0,0,0,0,0];
+    pt21=[0,0,0,0,0], pt22=[0,0,0,0,0], pt23=[0,0,0,0,0], pt24=[0,0,0,0,0], pt25=[0,0,0,0,0], pt26=[0,0,0,0,0], pt27=[0,0,0,0,0];
+    pt31=[0,0,0,0,0], pt32=[0,0,0,0,0], pt33=[0,0,0,0,0], pt34=[0,0,0,0,0], pt35=[0,0,0,0,0], pt36=[0,0,0,0,0], pt37=[0,0,0,0,0];
+    pt41=[0,0,0,0,0], pt42=[0,0,0,0,0], pt43=[0,0,0,0,0], pt44=[0,0,0,0,0], pt45=[0,0,0,0,0], pt46=[0,0,0,0,0], pt47=[0,0,0,0,0];
+    pt51=[0,0,0,0,0], pt52=[0,0,0,0,0], pt53=[0,0,0,0,0], pt54=[0,0,0,0,0], pt55=[0,0,0,0,0], pt56=[0,0,0,0,0], pt57=[0,0,0,0,0];
+    pt61=[0,0,0,0,0], pt62=[0,0,0,0,0], pt63=[0,0,0,0,0], pt64=[0,0,0,0,0], pt65=[0,0,0,0,0], pt66=[0,0,0,0,0], pt67=[0,0,0,0,0];
+    pt71=[0,0,0,0,0], pt72=[0,0,0,0,0], pt73=[0,0,0,0,0], pt74=[0,0,0,0,0], pt75=[0,0,0,0,0], pt76=[0,0,0,0,0], pt77=[0,0,0,0,0];
+    
+    
+    
 }
 
 
@@ -4010,9 +5020,10 @@ function scheduleNote( beatNumber, time ) {
     // create an oscillator
     var osc = audioContext.createOscillator();
     osc.connect( audioContext.destination );
-            
     
-    if(metric==0){
+    
+    
+    if(metric==0){          
          osc.frequency.value = 880.0;
          dotClicked1.classList.toggle("selected");
          setTimeout(function() {dotClicked1.classList.toggle("selected")},70);
@@ -4070,7 +5081,7 @@ function scheduleNote( beatNumber, time ) {
         }
         
    }
-    if(metric==4){
+    if(metric==4){                      //4/4 QUI DEVO CREARE LA FUNZIONE CHE PLAYA
         max=16;
         if (beatNumber== 0){   // beat 0 == high pitch
             osc.frequency.value = 880.0;
@@ -4125,9 +5136,23 @@ function scheduleNote( beatNumber, time ) {
         }
      }
 
-if(muteFlag1==false){
-    osc.start( time );
-    osc.stop( time + noteLength );}
+    if(muteFlag1==false){
+        //osc.start( time );
+        //osc.stop( time + noteLength );
+    }
+    
+    
+    
+    if(learnTimeIndex == 0) learnFlag=true;
+    
+    if(learnFlag && learnTimeIndex==0){
+        console.log("we");
+        improSound();
+        learnFlag=false;
+    }
+    
+    learnTimeIndex--;
+        
 }
 
 
