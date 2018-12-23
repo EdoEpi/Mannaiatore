@@ -2136,9 +2136,9 @@ function improSound(){
   }
   
   else if(midiFlag){
-    attackMidi(improArray[improIndex].data);
-    changeDisplayNote(improArray[improIndex]);
-    releaseMidi(improArray[improIndex].data);
+    attackMidi(improArray[learnIndex].data);
+    changeDisplayNote(improArray[learnIndex]);
+    releaseMidi(improArray[learnIndex].data);
     
   }
     
@@ -2150,7 +2150,7 @@ function improSound(){
     learnIndex = improvvisatorLearn()
     learnTimeIndex = improvvisatorLearnTime(prevLearnIndex, learnIndex);
     
-    //console.log(learnTimeIndex);
+    //console.log(learnIndex);
 }
 
 function changeDisplayNote(event){
@@ -2315,11 +2315,12 @@ function capsLockFunction(e){
 
 function learnAlgorithm(e){
     
-    
+    var triggeredKey;
     
     if(keyFound(e)==true){
         
-        var triggeredKey = triggeredScale.indexOf(e.key);
+        if(!midiFlag)  triggeredKey = triggeredScale.indexOf(e.key);
+        else         triggeredKey = triggeredScale.indexOf(e.data[1])
         
         lastNote=triggeredKey;
         
@@ -2486,12 +2487,29 @@ function counterScaleDegrees(keyIndex){
 
 function keyFound(e){
     
-    for(i=0;i<triggeredScale.length;i++){
-        if(e.key==triggeredScale[i])
-            return true;
+    if(!midiFlag)
+        {
+            for(i=0;i<triggeredScale.length;i++){
+                if(e.key==triggeredScale[i])
+                    return true;
+            }
+    
+            return false;
+        }
+    
+    else{
+        
+            for(i=0;i<triggeredScale.length;i++){
+                if(e.data[1]==triggeredScale[i])
+                    return true;
+            }
+    
+            return false;
+        
+        
+        
     }
     
-    return false;
     
     
 }
@@ -2562,19 +2580,43 @@ function setLearnedInterval(prev, act){
 
 function improLearnChord(){
     
-    if(arpOrderedArray.length==4 && improLearnFlag && !triggerChord){       //start learn
+    
+    if(!midiFlag){
+        
+        if(arpOrderedArray.length==4 && improLearnFlag && !triggerChord){       //start learn
         chordRecognitionTertian();   //triggero l' accordo appena raggiungo 4 note
         insertImproArray();         //triggero la scala su cui far riferimento
         triggerChordFunction();
-  }
+        }
     
-    else if(arpOrderedArray.length==4 && improFlag){
-        chordRecognitionTertian();   
-        insertImproArray();
-        changeImproChordFlag=false;
-    }
+        else if(arpOrderedArray.length==4 && improFlag){
+            chordRecognitionTertian();   
+            insertImproArray();
+            changeImproChordFlag=false;
+            }
+        }
     
+    
+    else{
+        
+        if(arpMidiOrderedArray.length==4 && improLearnFlag && !triggerChord){       //start learn
+        chordRecognitionTertian();   //triggero l' accordo appena raggiungo 4 note
+        insertImproArray();         //triggero la scala su cui far riferimento
+        triggerChordFunction();
+        }
+        
+        else if(arpMidiOrderedArray.length==4 && improFlag){
+            chordRecognitionTertian();   
+            insertImproArray();
+            changeImproChordFlag=false;
+            }
+        }
+    
+        
 }
+    
+    
+
 
 function triggerChordFunction(){
     triggerChord=true;
@@ -2583,7 +2625,9 @@ function triggerChordFunction(){
     
     
     for(i=0;i<improArray.length;i++){
-        triggeredScale[i]=improArray[i].key;
+        if(midiFlag)    triggeredScale[i]=improArray[i].data[1];
+        else            triggeredScale[i]=improArray[i].key;
+        
     }
     
     
@@ -3315,13 +3359,15 @@ function getMIDIMessage(midiMessage) {
     if(midiFlag){
     
      if(midiMessage.data[0]==144){
+         
        k = midiArray.indexOf(midiMessage.data[1])
-       if(!arpFlag && !improFlag){
+       if(!arpFlag && !improFlag && !improLearnFlag){
+           
          attackMidi(midiMessage.data);
          clickOnKeyBoard(steps[k%24])
        }
        
-       else if(arpFlag || improFlag){
+       else if(arpFlag && !improLearnFlag){
           
             arpMidiEventsArray[k] = midiMessage;
          
@@ -3332,18 +3378,60 @@ function getMIDIMessage(midiMessage) {
          
          
        }
+         
+         
+         
+         
+         else if(improLearnFlag && !startLearn){
+          
+          noteToReleaseCount++;
+             
+          if(!triggerChord){
+            k=midiArray.indexOf(midiMessage.data[1])
+            
+            arpMidiEventsArray[k] = midiMessage;
+            insertNotes();
+              
+            improLearnChord();
+            
+          }
+        
+      }
+      
+        else if(improLearnFlag && startLearn){
+            attackMidi(midiMessage.data);
+            learnAlgorithm(midiMessage);
+                
+        }
+         
+         else if(improFlag){
+             k=midiArray.indexOf(midiMessage.data[1])
+             arpMidiEventsArray[k]= midiMessage;
+             insertNotes();
+             improLearnChord();
+             if(improArray.length==7 && !isPlaying){
+                 play();
+                 changeImproChordFlag=false;
+             }
+             if(isPlaying){
+                 attackMidi(midiMessage.data);
+                 releaseMidi(midiMessage.data);
+             }
+             
+         } 
+         
         
      }
    
   
     if(midiMessage.data[0]==128){
        k = midiArray.indexOf(midiMessage.data[1])
-      if(!arpFlag && !improFlag){
+      if(!arpFlag && !improFlag && !improLearnFlag){
         releaseMidi(midiMessage.data);
         clickOnKeyBoard(steps[k%24])
       }
       
-      else if(arpFlag || improFlag){
+      else if(arpFlag && !improLearnFlag){
         
         
             
@@ -3356,6 +3444,24 @@ function getMIDIMessage(midiMessage) {
             improIndex=0;
        
       }
+        
+        else if(improLearnFlag && noteToReleaseCount>0){
+            noteToReleaseCount--;
+            arpMidiEventsArray[k] = -1;
+            deleteNotes(midiMessage);
+              
+      }
+    
+    else if(improLearnFlag && noteToReleaseCount==0){
+        releaseMidi(midiMessage.data);
+        }
+        
+        else if(improFlag){
+            
+            arpMidiEventsArray[k]=-1;
+            deleteNotes(midiMessage);
+            changeDisplayChord("-");
+        }
         
     }
       
