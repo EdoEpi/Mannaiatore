@@ -814,14 +814,8 @@ canvas{
 }
 
 #muteBut1{
-  background-color:white;
-  position:relative;
-  width:70px;
-  height:30px;
-  text-align:center;
   top:3px;
   left:40px;
-  border: solid black 2px;
   
 }
 
