@@ -3343,7 +3343,7 @@ function initializeVariables(){
   moveKnob('distDriveKnob');
   moveKnob('reverbDWKnob');
   moveKnob('mKnob');
-  moveKnob("metronomeVol");
+  moveKnob("clickVol");
     
 }
 

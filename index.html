@@ -415,9 +415,13 @@
 
     
     <div class="clickContainer">
-       <div class="masterLabel">CLICK</div>
+       <div class="clickLabel">CLICK</div>
        <div id="controls">
-      <div><a class="play" onclick="this.innerText = play();">play</a></div>
+            <div><a class="play" onclick="this.innerText = play();">play</a></div>
+            <div class="volClickLabel">VOL</div>
+          <div id="clickVol"  class="knob" >
+            <div class="levelPointerClick"></div>  
+          </div>
            <div class="dotsContainer">
                <span id="dotClick1" class="dotClick"></span>
                <span id="dotClick2" class="dotClick"></span>
@@ -429,10 +433,6 @@
         <div>Metric:<select onchange="metric = this.selectedIndex; current16thNote=0"><option>1/1<option>1/4<option>1/2<option>3/4<option>4/4<option>5/4<option>7/4</select></div>
     </div>
                    <button id="muteBut1" class="muteButton" onclick="muteFlag1=!muteFlag1; changeColorMute(1);">MUTE</button>
-        
-        <div id="metronomeVol"  class="knob" >
-            <div class="knobLabel"></div>  
-          </div>
     </div>
     
     <div class="dispChordContainer">

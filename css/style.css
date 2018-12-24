@@ -186,9 +186,12 @@ canvas{
 }
 
 .dotsContainer{
+    position: relative;
     height: 20px;
     width: 100px;
     display: inline-flex;
+    top: 10px;
+    transform: translate(-35px);
     
 }
 .dotClick{
@@ -294,8 +297,47 @@ canvas{
   transform:translateY(-50%) rotate(0deg);
 }
 
+#clickVol{
+  background-color:black;
+  width:30px;
+  height:30px;
+  border-radius:50px;
+  position:relative;
+  left:105px;
+  transform:translateY(-50%);
+    top: -10px;
+  
+}
 
+.levelPointerClick{
+  width:4px;
+  height:12px;
+  background-color:red;
+  position:relative;
+  transform:translateX(-40%);
+  left:44%; 
+  top:-2px;
+}
 
+.volClickLabel{
+  position:relative;
+  top:-8px;
+  text-align:center;
+  font-size:12px;
+  font-family: "Arial";
+  color:white;
+  left: 10px;
+}
+
+.clickLabel{
+  position: relative;
+  width:60px;
+  height:30px;
+  text-align:center;
+  background-color:grey;
+  color: white;
+  left: 45px;
+}
 
 .knobLabel{
   width:4px;
@@ -320,15 +362,19 @@ canvas{
   background-color:#4F4F4F;
   display:inline-block;
 }
-
 .knobVolContainer{
   display:inline-block;
   width:58px;
   height:60px;
-  margin-left:19px;
-  
-  
+  margin-left:19px; 
 }
+
+/*.clickVolContainer{
+  display:inline-block;
+  width:60px;
+  height:50px;
+  left:100px; 
+}*/
 
 #vol1{}
 #vol2{}
@@ -767,6 +813,18 @@ canvas{
   
 }
 
+#muteBut1{
+  background-color:white;
+  position:relative;
+  width:70px;
+  height:30px;
+  text-align:center;
+  top:3px;
+  left:40px;
+  border: solid black 2px;
+  
+}
+
 .muteActive{
   background-color:#00FF00;
 }
@@ -791,7 +849,7 @@ canvas{
   background-color:grey;
   position:relative;
   border: solid black 1px;
-  width:130px;
+  width:150px;
   height:250px;
   margin-left:8px;
   display:inline-block;
@@ -906,10 +964,12 @@ canvas{
 	font-family:arial;
 	font-size:10px;
 	font-weight:bold;
+    background-color: darkgrey;
 
 }
 
 #controls * {
+
 	margin: 2px;
 	display:inline-block;
 	
