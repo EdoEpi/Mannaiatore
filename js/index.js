@@ -116,6 +116,8 @@ var learnTimeIndex=0;
 var prevLearnIndex;
 var time=0;
 var thisTime;
+var indexTonica;
+var actualScale;
 
 var t11=[], t12=[], t13=[], t14=[], t15=[], t16=[], t17=[];
 var t21=[], t22=[], t23=[], t24=[], t25=[], t26=[], t27=[];
@@ -1883,6 +1885,9 @@ function improSetting(numNotes){
   
 }
 
+
+
+
 function insertImproArray(){
     
     
@@ -1893,9 +1898,12 @@ function insertImproArray(){
   else if(midiFlag)
       index = midiArray.indexOf(tonica.data[1]);
   
+    indexTonica = index;        //global reference
+    
   if(modo=="Maj7"){
     improArray[0]=tonica;
-    
+    actualScale = Maj7;
+      
     for(i=1;i<7;i++){
       a += Maj7[i-1];
       if(!midiFlag)   
@@ -2119,7 +2127,78 @@ function findFirstLearnIndex(){
     else if (d7>0) learnIndex=6;
 }
 
+var prevIndexTraslation=0, prevSign=0;
+
+/*function changeImproArray(){
+    
+    var indexTraslation, sign=0;
+    
+    
+    if(accX>=-1024 && accX<-512)    {
+        indexTraslation=4;
+        sign=0;
+    }
+    
+    if(accX>=-512 && accX<0)    {
+        indexTraslation=3;
+        sign=0;
+    }
+        
+    
+    if(accX>=0 && accX<512)    {
+        indexTraslation=1;
+        sign=0;
+    }
+   
+    
+    else if(accX>=512 && accX<1024) {
+        indexTraslation=2;
+        sign=0;
+    }
+    
+    
+    if(indexTraslation!=prevIndexTraslation){
+        setNewImproArray(indexTraslation, sign);
+        prevIndexTraslation = indexTraslation;
+        prevSign = sign;
+    }
+    
+    
+    
+}
+
+function setNewImproArray(t, sign){
+    
+    console.log("TRANSLATION + " +t);
+    
+    var a=0, k=0, trans=0;
+    
+    
+    
+    for(i=0;i<7;i++){
+            
+            for(j=0;j<t+k;j++){
+                a += actualScale[j%7];
+            
+                }
+            
+        if(sign==0) improArray[i] = new KeyboardEvent("keydown",{key: keys[(indexTonica + a)%keys.length]})
+        
+        
+        
+            k+=1;
+            a=0;
+        }
+    
+    
+}*/
+
 function improSound(){
+    
+    if(microBit.connected){
+        //changeImproArray();
+    }
+    
   if (!fLI){
       findFirstLearnIndex();
       fLI=!fLI;
@@ -3287,7 +3366,7 @@ function initializeVariables(){
     
     
   
-  Maj7=[2, 2, 1, 2, 2, 2];
+  Maj7=[2, 2, 1, 2, 2, 2, 1];
   Seven=[2,2,1,2,2,1];
   Delta7=[2,1,2,2,2,2];
   SevenMin=[2,1,2,2,2,1];
@@ -5401,4 +5480,53 @@ function init(){
 
 window.addEventListener("load", init );
 
+
+
+
+
+
+microBit=new uBit();
+
+microBit.onConnect(function(){
+  console.log("connected");
+
+
+
+  microBit.setButtonACallback(function(){
+    console.log("buttonA pressed");
+  });
+
+  microBit.setButtonBCallback(function(){
+    console.log("buttonB pressed");
+  });
+});
+
+microBit.onDisconnect(function(){
+  console.log("disconnected");
+  
+});
+
+function searchDevice(){
+  microBit.searchDevice();
+}
+
+var accX=0;
+var accY=0;
+var accZ=0;
+var buttA;
+microBit.onBleNotify(function(){
+  //document.getElementById("buttonA").innerHTML=microBit.getButtonA();
+  //document.getElementById("buttonB").innerHTML=microBit.getButtonB();
+  //
+  //document.getElementById("acc_X").innerHTML=microBit.getAccelerometer().x;
+  //document.getElementById("acc_Y").innerHTML=microBit.getAccelerometer().y;
+  //document.getElementById("acc_Z").innerHTML=microBit.getAccelerometer().z;
+  //
+  //document.getElementById("temp").innerHTML=microBit.getTemperature();
+  //document.getElementById("bearing").innerHTML=microBit.getBearing();
+    
+    accX = microBit.getAccelerometer().x;
+    accY = microBit.getAccelerometer().y;
+    accZ = microBit.getAccelerometer().z;
+})
 
