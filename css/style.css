@@ -22,7 +22,7 @@ canvas{
 .bar{
   position:absolute;
   left: 70px;
-  top:1000px;
+  top:1050px;
   width:1080px;
   height:202.5px;
   margin-top: -400px;
@@ -90,7 +90,7 @@ canvas{
   background-color: red;
 }
 .synthMain{
-  height: 800px;
+  height: 850px;
   width: 1200px;
   background-color: #400040;
   border: solid black 2px;
@@ -824,21 +824,6 @@ canvas{
 }
 
 
-.midiButton{
-  position:relative;
-  border: solid black 2px;
-  height:40px;
-  width:60px;
-  left:10px;
-  top:7px;
-}
-
-.midiActive{
-  background-color:#00FF00;
-}
-
-
-
 .clickContainer{
   background-color:grey;
   position:relative;
@@ -863,21 +848,44 @@ canvas{
   
 }
 
-.arpButton{
-  background-color:white;
+.arpContainer{
+  background-color:grey;
   position:relative;
-  width:95px;
-  height:40px;
-  text-align:center;
-  top:7px;
-  left:30px;
+  //left: 50px;
+  width:200px;
+  height:100px;
+  margin-left:1px;
+  display:inline-block;
   border: solid black 2px;
   
+}
+
+
+.arpButton{
+  position:relative;
+  width:110px;
+  height:40px;
+  left: 42px;
+  text-align:center;
+  top:7px;
+  border: solid black 2px;
 }
 
 .arpActive{
   background-color:#00FF00;
   
+}
+
+#selectArp{
+    position: relative;
+    top:10px;
+    left: 5px;
+}
+
+#selectMood{
+    position: relative;
+    top:20px;
+    left: 5px;
 }
 
 .chordDisplay{
@@ -895,15 +903,74 @@ canvas{
 
 
 .specialContainer{
-  width:450px;
-  height:55px;
-  background-color:yellow;
+  width:600px;
+  height:100px;
   position:absolute;
-  top:544px;
-  left:400px;
-  display:inline-flex;
+  top:550px;
+  left:350px;
+  display:inline-flex; 
+}
+
+.midiContainer{
+  background-color:grey;
+  position:relative;
+  left: 50px;
+  width:100px;
+  height:80px;
+  margin-left:1px;
+  display:inline-block;
+  border: solid black 2px;
+  transform: translate(-50px);
+  top: 10px;
   
+}
+
+.midiButton{
+  position:relative;
+  border: solid black 2px;
+  height:40px;
+  width:60px;
+  left:20px;
+  top:20px;
+}
+
+.midiActive{
+  background-color:#00FF00;
+}
+
+.improContainer{
+  background-color:grey;
+  position:relative;
+  left: 50px;
+  width:215px;
+  height:80px;
+  margin-left:1px;
+  display:inline-block;
+  border: solid black 2px;
+  transform: translate(-50px);
+  top: 10px;
   
+}
+
+.improLearn{
+  width:84px;
+  height:40px;
+  top:20px;
+  position:relative;
+  left:10px;
+  border: solid black 2px;
+  text-align:center;
+    
+}
+
+.improButton{
+  width:100px;
+  height:40px;
+  top:20px;
+  position:relative;
+  left:20px;
+  border: solid black 2px;
+  text-align:center;
 }
 
 .improActive{
@@ -1012,28 +1079,7 @@ canvas{
     -webkit-user-select: none;
 }
 
-.improLearn{
-  //background-color:white;
-  width:84px;
-  height:40px;
-  top:7px;
-  position:relative;
-  left:90px;
-  border: solid black 2px;
-  text-align:center;
-    
-}
 
-.improButton{
-  //background-color:white;
-  width:84px;
-  height:40px;
-  top:7px;
-  position:relative;
-  left:100px;
-  border: solid black 2px;
-  text-align:center;
-}
 
 .timerContainer{
     position:absolute;

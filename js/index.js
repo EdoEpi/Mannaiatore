@@ -203,14 +203,15 @@ var unlocked = false;
 var isPlaying = false;      // Are we currently playing?
 var startTime;              // The start time of the entire sequence.
 var current16thNote;        // What note is currently last scheduled?
-var tempo = 120.0;          // tempo (in beats per minute)
+var tempo = 60.0;           // tempo (in beats per minute)
 var lookahead = 25.0;       // How frequently to call scheduling function 
                             //(in milliseconds)
 var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
                             // This is calculated from lookahead, and overlaps 
                             // with next interval (in case the timer is late)
 var nextNoteTime = 0.0;     // when the next note is due.
-var noteResolution = 0;     // 0 == 16th, 1 == 8th, 2 == quarter note
+var noteResolution = 0;     // 0 == 16th, 1 == 8th, 2 == quarter note (Click)
+var noteResolution2 = 0;    // 0 == 16th, 1 == 8th, 2 == quarter note (Arpeggiator)
 var noteLength = 0.05;      // length of "beep" (in seconds)
 var canvas,                 // the canvas element
     canvasContext;          // canvasContext is the canvas' context 2D
@@ -219,19 +220,22 @@ var notesInQueue = [];      // the notes that have been put into the web audio,
                             // and may or may not have played yet. {note, time}
 var timerWorker = null;     // The Web Worker used to fire timer messages
 var metric=0;
-var noteResolution=0;
 var max=28;
 var dotClicked1 = document.getElementById("dotClick1");
 var dotClicked2 = document.getElementById("dotClick2");
 var dotClicked3 = document.getElementById("dotClick3");
+var mood = 0;               // The mood of the arpeggiator (Up, Down, ...)
+var Up1=true;               // For mood Up&Down 
+var Down1=false;            // firstable Up and then Down
+var Up2=false;              // For mood Down&Up 
+var Down2=true;             // firstable Down and then Up
+var octave1=true;
+var octave2=false;
 
 
 
 
-
-
-
-setInterval(arpPlay, 200)
+//setInterval(arpPlay, 200)
 //setInterval(improPlay, 100)         //ogni 100ms vede riaggiorna l' accordo che si sta suonando e la relativa scala;
 
 
@@ -2274,23 +2278,177 @@ function arpeggiatorPlay(numNotes){
   if(!midiFlag){
     
       if(arpOrderedArray.length>0){
-        attackFunction(arpOrderedArray[arpIndex]);
-        releaseFunction(arpOrderedArray[arpIndex]);
+          if(mood==0) {
+              attackFunction(arpOrderedArray[arpIndex]);
+              releaseFunction(arpOrderedArray[arpIndex]);
+               arpIndex = (arpIndex+1)%numNotes;
+          }
+          if(mood==1) {
+              attackFunction(arpOrderedArray[numNotes-arpIndex-1]);
+              releaseFunction(arpOrderedArray[numNotes-arpIndex-1]);
+               arpIndex = (arpIndex+1)%numNotes;
+          }  
+          
+          if(mood==2) {
+              if(Up1==true) {
+                 
+                  attackFunction(arpOrderedArray[arpIndex]);
+                  releaseFunction(arpOrderedArray[arpIndex]); 
+                  if(arpIndex==numNotes-1){
+                      Up1=false;
+                      Down1=true;
+                      arpIndex=0;
+                  }
+                  else arpIndex = (arpIndex+1)%numNotes;
+              }
+             else if(Down1==true) {
+                  attackFunction(arpOrderedArray[numNotes-arpIndex-1]);
+                  releaseFunction(arpOrderedArray[numNotes-arpIndex-1]); 
+                  if(arpIndex==numNotes-1){
+                      Up1=true;
+                      Down1=false;
+                      arpIndex=0;
+                  }
+                 else arpIndex = (arpIndex+1)%numNotes;
+              }  
+          }
+          
+          if(mood==3) {
+              
+              if(Up2==true) {
+                  attackFunction(arpOrderedArray[arpIndex]);
+                  releaseFunction(arpOrderedArray[arpIndex]); 
+                  if(arpIndex==numNotes-1){
+                      Up2=false;
+                      Down2=true;
+                      arpIndex=0;
+                  }
+                  else arpIndex = (arpIndex+1)%numNotes;
+              } 
+              else if(Down2==true) {
+                  attackFunction(arpOrderedArray[numNotes-arpIndex-1]);
+                  releaseFunction(arpOrderedArray[numNotes-arpIndex-1]); 
+                  if(arpIndex==numNotes-1){
+                      Up2=true;
+                      Down2=false;
+                      arpIndex=0;
+                  }
+                 else arpIndex = (arpIndex+1)%numNotes;
+              } 
+          }
+          /*if(mood==4) {
+              
+              if(octave1==true) {
+                  attackFunction(arpOrderedArray[arpIndex]);
+                  releaseFunction(arpOrderedArray[arpIndex]); 
+                  if(arpIndex==numNotes-1){
+                      octave1=false;
+                      octave2=true;
+                      arpIndex=0;
+                  }
+                  else arpIndex = (arpIndex+1)%numNotes;
+              } 
+              else if(octave2==true) {
+                  attackFunction(arpOrderedArray[arpIndex]);
+                  releaseFunction(arpOrderedArray[arpIndex]); 
+                  if(arpIndex==numNotes-1){
+                      octave2=false;
+                      octave1=true;
+                      arpIndex=0;
+                  }
+                 else arpIndex = (arpIndex+1)%numNotes;
+              } 
+          }*/
       }
   }
+    
   
   if(midiFlag){
     if(arpMidiOrderedArray.length>0){
-      
+       if(mood==0) {
         attackMidi(arpMidiOrderedArray[arpIndex].data);
-        releaseMidi(arpMidiOrderedArray[arpIndex].data); 
+        releaseMidi(arpMidiOrderedArray[arpIndex].data);
+        arpIndex = (arpIndex+1)%numNotes;
+       }
+       if(mood==1) {
+        attackMidi(arpMidiOrderedArray[numNotes-arpIndex-1].data);
+        releaseMidi(arpMidiOrderedArray[numNotes-arpIndex-1].data);
+        arpIndex = (arpIndex+1)%numNotes;
+       }
+        if(mood==2) {
+              if(Up1==true) {
+                 
+                  attackMidi(arpMidiOrderedArray[arpIndex].data);
+                  releaseMidi(arpMidiOrderedArray[arpIndex].data); 
+                  if(arpIndex==numNotes-1){
+                      Up1=false;
+                      Down1=true;
+                      arpIndex=0;
+                  }
+                  else arpIndex = (arpIndex+1)%numNotes;
+              }
+             else if(Down1==true) {
+                  attackMidi(arpMidiOrderedArray[numNotes-arpIndex-1].data);
+                  releaseMidi(arpMidiOrderedArray[numNotes-arpIndex-1].data); 
+                  if(arpIndex==numNotes-1){
+                      Up1=true;
+                      Down1=false;
+                      arpIndex=0;
+                  }
+                 else arpIndex = (arpIndex+1)%numNotes;
+              }  
+          }
+          
+          if(mood==3) {
+              
+              if(Up2==true) {
+                  attackMidi(arpMidiOrderedArray[arpIndex].data);
+                  releaseMidi(arpMidiOrderedArray[arpIndex].data); 
+                  if(arpIndex==numNotes-1){
+                      Up2=false;
+                      Down2=true;
+                      arpIndex=0;
+                  }
+                  else arpIndex = (arpIndex+1)%numNotes;
+              } 
+              else if(Down2==true) {
+                  attackMidi(arpMidiOrderedArray[numNotes-arpIndex-1].data);
+                  releaseMidi(arpMidiOrderedArray[numNotes-arpIndex-1].data); 
+                  if(arpIndex==numNotes-1){
+                      Up2=true;
+                      Down2=false;
+                      arpIndex=0;
+                  }
+                 else arpIndex = (arpIndex+1)%numNotes;
+              } 
+          }
+        
+        if(mood==4) {
+              
+              if(octave1==true) {
+                  attackMidi(arpMidiOrderedArray[arpIndex].data);
+                  releaseMidi(arpMidiOrderedArray[arpIndex].data); 
+                  if(arpIndex==numNotes-1){
+                      octave1=false;
+                      octave2=true;
+                      arpIndex=0;
+                  }
+                  else arpIndex = (arpIndex+1)%numNotes;
+              } 
+              else if(octave2==true) {
+                  attackMidi(arpMidiOrderedArray[arpIndex].data);
+                  releaseMidi(arpMidiOrderedArray[arpIndex].data); 
+                  if(arpIndex==numNotes-1){
+                      octave2=false;
+                      octave1=true;
+                      arpIndex=0;
+                  }
+                 else arpIndex = (arpIndex+1)%numNotes;
+              } 
+          }
       }
   }
       
-    
-    arpIndex = (arpIndex+1)%numNotes;
-  
-
 }
 
 document.onkeydown = function(e) {
@@ -3559,12 +3717,10 @@ navigator.requestMIDIAccess()
 
 
 function attackMidi(data){
-  
-    
-    
     k=data[1];
   
-    freqM = midiArrayFreq[midiArray.indexOf(k)];
+    if(octave2==true) freqM = midiArrayFreq[midiArray.indexOf(k)+12];
+    else freqM = midiArrayFreq[midiArray.indexOf(k)];
   
     if(turnOn1 && !turnOn2 && !turnOn3){
       
@@ -3617,7 +3773,8 @@ function attackMidi(data){
 function releaseMidi(data){
 
   k=data[1];
-  freqM=midiArrayFreq[midiArray.indexOf(k)];
+  if(octave2==true) freqM = midiArrayFreq[midiArray.indexOf(k)+12];
+    else freqM = midiArrayFreq[midiArray.indexOf(k)];
   index = midiArrayFreq.indexOf(freqM);
   
   
@@ -5410,6 +5567,7 @@ function scheduleNote( beatNumber, time ) {
         osc.stop( time + noteLength );
     }
     
+    if (noteResolution2==0 || (noteResolution2==1 && beatNumber%2==0) || (noteResolution2==2 && beatNumber%4==0)) arpPlay();
     
     if(improFlag && improArray.length>0){      
         if(learnTimeIndex == 0) learnFlag=true;
