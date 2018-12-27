@@ -1922,7 +1922,8 @@ function insertImproArray(){
   
   else if(modo=="Seven"){
     improArray[0]=tonica;
-    
+    actualScale = Seven;
+      
     for(i=1;i<7;i++){
       a += Seven[i-1];
       if(!midiFlag)   
@@ -1937,7 +1938,8 @@ function insertImproArray(){
   
   else if(modo=="Delta7"){
     improArray[0]=tonica;
-    
+    actualScale = Delta7;
+      
     for(i=1;i<7;i++){
       a += Delta7[i-1];
       if(!midiFlag)   
@@ -1953,7 +1955,8 @@ function insertImproArray(){
   
   else if(modo=="SevenMin"){
     improArray[0]=tonica;
-    
+    actualScale = SevenMin;
+      
     for(i=1;i<7;i++){
       a += SevenMin[i-1];
       if(!midiFlag)   
@@ -1969,7 +1972,8 @@ function insertImproArray(){
   
   else if(modo=="Maj7Aug"){
     improArray[0]=tonica;
-    
+    actualScale = Maj7Aug;
+      
     for(i=1;i<7;i++){
       a += Maj7Aug[i-1];
       if(!midiFlag)   
@@ -1985,7 +1989,8 @@ function insertImproArray(){
   
   else if(modo=="SevenAug"){
     improArray[0]=tonica;
-    
+    actualScale = SevenAug;
+      
     for(i=1;i<7;i++){
       a += SevenAug[i-1];
       if(!midiFlag)   
@@ -2001,7 +2006,8 @@ function insertImproArray(){
   
   else if(modo=="Delta7Aug"){
     improArray[0]=tonica;
-    
+    actualScale = Delta7Aug;
+      
     for(i=1;i<7;i++){
       a += Delta7Aug[i-1];
       if(!midiFlag)   
@@ -2017,7 +2023,8 @@ function insertImproArray(){
   
   else if(modo=="SevenMinAug"){
     improArray[0]=tonica;
-    
+    actualScale = SevenMinAug;
+      
     for(i=1;i<7;i++){
       a += SevenMinAug[i-1];
       if(!midiFlag)   
@@ -2033,7 +2040,8 @@ function insertImproArray(){
   
   else if(modo=="Maj7Bem"){
     improArray[0]=tonica;
-    
+    actualScale = Maj7Bem;
+      
     for(i=1;i<7;i++){
       a += Maj7Bem[i-1];
       if(!midiFlag)   
@@ -2049,7 +2057,8 @@ function insertImproArray(){
   
   else if(modo=="SevenBem"){
     improArray[0]=tonica;
-    
+    actualScale = SevenBem;
+      
     for(i=1;i<7;i++){
       a += SevenBem[i-1];
       if(!midiFlag)   
@@ -2065,7 +2074,8 @@ function insertImproArray(){
   
   else if(modo=="Delta7Bem"){
     improArray[0]=tonica;
-    
+    actualScale = Delta7Bem;
+      
     for(i=1;i<7;i++){
       a += Delta7Bem[i-1];
       if(!midiFlag)   
@@ -2081,7 +2091,8 @@ function insertImproArray(){
   
   else if(modo=="Semidim"){
     improArray[0]=tonica;
-    
+    actualScale = Semidim;
+      
     for(i=1;i<7;i++){
       a += Semidim[i-1];
       if(!midiFlag)   
@@ -2097,7 +2108,8 @@ function insertImproArray(){
   
   else if(modo=="Dim"){
     improArray[0]=tonica;
-    
+    actualScale = Dim;
+      
     for(i=1;i<7;i++){
       a += Dim[i-1];
       if(!midiFlag)   
@@ -2132,35 +2144,80 @@ function findFirstLearnIndex(){
 
 var prevIndexTraslation=0, prevSign=0;
 
-/*function changeImproArray(){
+function changeImproArray(){
     
     var indexTraslation, sign=0;
-    
-    
-    if(accX>=-1024 && accX<-512)    {
-        indexTraslation=4;
-        sign=0;
-    }
-    
-    if(accX>=-512 && accX<0)    {
-        indexTraslation=3;
-        sign=0;
-    }
         
     
-    if(accX>=0 && accX<512)    {
+    if(accX>=-1024 && accX<-900){
+        indexTraslation=6;
+        sign=1;
+    }
+    
+    else if(accX>=-900 && accX<-750){
+        indexTraslation=5;
+        sign=1;
+    }
+    
+    else if(accX>=-750 && accX<-600){
+        indexTraslation=4;
+        sign=1;
+    }
+    
+    else if(accX>=-600 && accX<-450){
+        indexTraslation=3;
+        sign=1;
+    }
+    
+    else if(accX>=-450 && accX<-300){
+        indexTraslation=2;
+        sign=1;
+    }
+    
+    else if(accX>=-300 && accX<-150){
+        indexTraslation=1;
+        sign=1;
+    }
+    
+    
+    
+    else if(accX>=-150 && accX<150)    {
+        indexTraslation=0;
+        sign=0;
+    }
+    
+    else if(accX>=150 && accX<300) {
         indexTraslation=1;
         sign=0;
     }
-   
     
-    else if(accX>=512 && accX<1024) {
+    else if(accX>=300 && accX<450) {
         indexTraslation=2;
         sign=0;
     }
     
+    else if(accX>=450 && accX<600) {
+        indexTraslation=3;
+        sign=0;
+    }
     
-    if(indexTraslation!=prevIndexTraslation){
+    else if(accX>=600 && accX<750) {
+        indexTraslation=4;
+        sign=0;
+    }
+    
+    else if(accX>=750 && accX<900) {
+        indexTraslation=5;
+        sign=0;
+    }
+    
+    else if(accX>=900 && accX<=1024) {
+        indexTraslation=6;
+        sign=0;
+    }
+    
+    
+    if(indexTraslation!=prevIndexTraslation || sign!=prevSign){
         setNewImproArray(indexTraslation, sign);
         prevIndexTraslation = indexTraslation;
         prevSign = sign;
@@ -2170,36 +2227,69 @@ var prevIndexTraslation=0, prevSign=0;
     
 }
 
+
+
 function setNewImproArray(t, sign){
     
-    console.log("TRANSLATION + " +t);
+    console.log("TRANSLATION + " +t + " SIGN: " +sign);
     
-    var a=0, k=0, trans=0;
+    var a=0, k=0, trans=0, actTonica=0, changedScale=[];
+    
+    if(sign==1){
+        for(i=0;i<t;i++) trans += actualScale[(7-t+i)%actualScale.length];
+        
+        actTonica = indexTonica - trans;
+        
+        for(i=0;i<7;i++) changedScale[i] = actualScale[(7-t+i)%actualScale.length];
+        
+        
+    } 
+    
+    else if(sign==0) {
+        actTonica = indexTonica
+        changedScale = actualScale;
+    }
     
     
     
+    
+    //load the scale
     for(i=0;i<7;i++){
             
+        
+        if(sign==0){
             for(j=0;j<t+k;j++){
-                a += actualScale[j%7];
-            
+                a += changedScale[j%7];
+                
                 }
+        }
+        
+        else{
+            for(j=0;j<k;j++)
+                a+=changedScale[j%7];
+        }
             
-        if(sign==0) improArray[i] = new KeyboardEvent("keydown",{key: keys[(indexTonica + a)%keys.length]})
+            
+        console.log(actTonica + " " + a)
         
-        
-        
+        //if(!midiFlag) improArray[i] = new KeyboardEvent("keydown",{key: keys[(actTonica + a)%keys.length]})
+        if(midiFlag) improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[actTonica+a]%midiArray.length,64])});
+        //console.log(midiArray[actTonica+a]);
             k+=1;
             a=0;
         }
     
     
-}*/
+    
+    
+    
+    
+}
 
 function improSound(){
     
-    if(microBit.connected){
-        //changeImproArray();
+    if(microBit.connected && midiFlag){
+        changeImproArray();
     }
     
   if (!fLI){
@@ -3524,21 +3614,21 @@ function initializeVariables(){
     
   
   Maj7=[2, 2, 1, 2, 2, 2, 1];
-  Seven=[2,2,1,2,2,1];
-  Delta7=[2,1,2,2,2,2];
-  SevenMin=[2,1,2,2,2,1];
+  Seven=[2,2,1,2,2,1, 2];
+  Delta7=[2,1,2,2,2,2, 1];
+  SevenMin=[2,1,2,2,2,1, 2];
   
-  Maj7Aug=[2,2,1,3,1,3];
-  SevenAug=[2,2,1,3,1,1];
-  Delta7Aug=[2,1,2,3,1,2];
-  SevenMinAug=[2,1,2,3,1,1];
+  Maj7Aug=[2,2,1,3,1,3, 1];
+  SevenAug=[2,2,1,3,1,1, 2];
+  Delta7Aug=[2,1,2,3,1,2, 1];
+  SevenMinAug=[2,1,2,3,1,1, 2];
   
-  Maj7Bem = [2,2,1,1,3,2];
-  SevenBem = [2,2,1,1,3,1];
-  Delta7Bem = [2,1,2,1,3,2];
-  Semidim = [2,1,2,1,3,1];
+  Maj7Bem = [2,2,1,1,3,2,1];
+  SevenBem = [2,2,1,1,3,1,2];
+  Delta7Bem = [2,1,2,1,3,2,1];
+  Semidim = [2,1,2,1,3,1,2,2];
   
-  Dim=[2,1,2,1,1,2];
+  Dim=[2,1,2,1,1,2,3];
   
   delayGain.gain.value=delayGainArray[dGain];
   delay.delayTime.value = delayTimeArray[dTime];
