@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" >
 
+        <style> body { 
+            background-color: black;
+            width:100%; 
+            margin:0; 
+            }
+    </style>
+    
+    
 <head>
   <meta charset="UTF-8">
-  <title>midi 3</title>
-    
+  <title>MANNAIATOR</title>
     <script language="javascript" type="text/javascript" src="microBit.js/src/microBit.js"></script>
-    
-     <script language="javascript" type="text/javascript" src="sketch.js"></script>
-  
-      <link rel="stylesheet" href="css/style.css">
-    
-  
+    <script language="javascript" type="text/javascript" src="sketch.js"></script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-
-  
-
-  <div class="synthMain">
+    <div class="theTitle">MANNAIATOR</div>
+    
+  <div class="synthMain"> 
   <div class="bar">
   <div class="white-steps">
     <div class="step white-step" id="s0"></div>
@@ -39,24 +41,49 @@
     <div class="step white-step" id="s24"></div>
     <div class= "black-steps1">   
       <div class="step black-step" id="s1"></div>
-      <div class="step black-step" id="s3"></div>       </div>
+      <div class="step black-step" id="s3"></div>       
+      </div>
     <div class= "black-steps2">   
       <div class="step black-step" id="s6"></div>
       <div class="step black-step" id="s8"></div>
-      <div class="step black-step" id="s10"></div>       </div>
+      <div class="step black-step" id="s10"></div>       
+      </div>
     <div class= "black-steps3">   
       <div class="step black-step" id="s13"></div>
-      <div class="step black-step" id="s15"></div>       </div>
+      <div class="step black-step" id="s15"></div>       
+      </div>
       <div class= "black-steps4">   
       <div class="step black-step" id="s18"></div>
       <div class="step black-step" id="s20"></div>
-      <div class="step black-step" id="s22"></div>       </div>
+      <div class="step black-step" id="s22"></div>       
+      </div>
 </div>
 </div>
+      
+      
+      <div class="bottomLeftContainer"> 
+          <div class="octaveContainer">
+            <button class="octaveButton" onclick="changeOctave('+')">⬆</button>
+            <div id="octaveDisp" class="octaveDisplay">2</div>
+            <button class="octaveButton" onclick="changeOctave('-')">⬇</button>
+        </div>
+          <div class="externalButtonContainer"> 
+              <button id="midiButt" class="midiButton" onclick="activateMidi()">MIDI</button>
+              <button class="microbitButton" onclick="searchDevice()">micro:bit</button>        
+          </div>
+      </div>
+      
   <div class="mainWindowContainer">
-  <div class="oscContainer">
+  <div class="oscContainer">     
+      
+        <div class="bigLabelContainer">  
+          <div class=oscillatorsLabel>OSCILLATORS</div> 
+          <div class=controlLabel>CONTROL</div>
+      <div class=effectsLabel>EFFECTS</div>
+      </div>
+      
     <div class="osc" id="osc1">
-      <div class = "oscZone" id="oscZone1">
+      <div class = "oscZone" id="oscZone1"> 
         <div class="buttonOscContainer" >
             <span id="dot1"class="onOffOsc"></span>
           <button id="butt1" onclick="activateAudio(1)">OSC1</button>
@@ -70,21 +97,28 @@
           <input type="hidden" name="select_flag" id="select_flag1" value="0">
           </div>
           
-          <div class="knobVolContainer">
-            <div id="volLabel" class="attackLabel">VOL</div>
-          <div id="vol1"  class="knob volKnob" >
-            <div class="knobLabel"></div>  
-          </div>
-          </div>
-          
-          
         </div>
         
         <div class="canvasKnobsContainer">
-        <canvas height="100px" width="190px" style="border: solid black 1px" id="canv1"></canvas>
+        <canvas height="100px" width="240px" style="border: solid black 0.1px" id="canv1"></canvas>
           
           
-          <div class="attackReleaseContainer">
+
+        </div>
+        
+        
+        
+      </div>
+      
+      <div class = "oscZone" id="oscZone2">
+          
+                    <div class="knobsContainer">
+                                    
+                        
+        <div id="volLabel" class="attackLabel">VOL</div>
+          <div id="vol1"  class="knob volKnob" >
+            <div class="knobLabel"></div>  
+          </div>
             <div class="attackLabel" >ATT</div>
             <div id="att1" class="knob attackKnob">
             <div class="knobLabel"></div>  
@@ -95,29 +129,13 @@
           </div>
           </div>
           
-        </div>
-        
-        
-        
-      </div>
-      
-      <div class = "oscZone" id="oscZone2">
+          
+          
         <div id="firstLfoRow" class="rowLfo">
           <button id="lfoButton1" class="lfoButton" onclick="activateLfo(1)">LFO1</button>
-        </div>
         
-        <div id="secondLfoRow" class="rowLfo">
-          <div id="lfoKnob1" class="knob lfoKnob">
-            <div class="knobLabel"></div>  
-          </div>
-          
-          <div id="dispLfo1" class="displayLfoKnob">0.5 Hz</div>
-        </div>
-        
-        
-        <div id="thirdLfoRow" class="rowLfo">
-          
-          <div id="container">
+        <div id="container">
+            
             <select class="selectorLfo" name="select_box" id="selLfo1" >
                <option value="">Sine</option>
                <option value="">Triangle</option>
@@ -126,8 +144,18 @@
             </select>
           <input type="hidden" name="select_flag" id="select_flag1" value="0">
           </div>
+            </div>
+
+        <div id="secondLfoRow" class="rowLfo">
+                      <div class="lfoFreqLabel" >LFO FREQ</div>
+          <div id="lfoKnob1" class="knob lfoKnob">
+            <div class="knobLabel"></div>  
+          </div>
           
+          <div id="dispLfo1" class="displayLfoKnob">0.5 Hz</div>
         </div>
+        
+        
       </div>
       
       
@@ -157,49 +185,41 @@
           <input type="hidden" name="select_flag" id="select_flag2" value="0">
           </div>
           
-          <div class="knobVolContainer">
+</div>
+        
+        <div class="canvasKnobsContainer">
+        <canvas height="100px" width="240px" style="border: solid black 0.1px" id="canv2"></canvas>
+          
+ 
+          
+        </div>
+      </div>  
+      
+      <div class = "oscZone" id="oscZone2">
+          
+                           <div class="knobsContainer">
             <div id="volLabel" class="attackLabel">VOL</div>
           <div id="vol2" class="knob volKnob">
             <div class="knobLabel"></div>  
           </div>
-          </div>
-        </div>
         
-        <div class="canvasKnobsContainer">
-        <canvas height="100px" width="190px" style="border: solid black 1px" id="canv2"></canvas>
+        
           
-          
-          <div class="attackReleaseContainer">
+    
             <div class="attackLabel" >ATT</div>
             <div id="att2" class="knob attackKnob">
             <div class="knobLabel"></div>  
           </div>
-            <div class=releaseLabel>REL</div>
+            <div class=releaseLabel>DEC</div>
             <div id="rel2" class="knob releaseKnob">
             <div class="knobLabel"></div>  
           </div>
           </div>
           
-        </div>
-      </div>
-      
-      <div class = "oscZone" id="oscZone2">
         <div id="firstLfoRow" class="rowLfo">
           <button id="lfoButton2" class="lfoButton" onclick="activateLfo(2)">LFO2</button>
-        </div>
         
-        <div id="secondLfoRow" class="rowLfo">
-          <div id="lfoKnob2" class="knob lfoKnob">
-            <div class="knobLabel"></div>  
-          </div>
-          
-          <div id="dispLfo2" class="displayLfoKnob">0.5 Hz</div>
-        </div>
-        
-        
-        <div id="thirdLfoRow" class="rowLfo">
-          
-          <div id="container">
+        <div id="container">
             <select class="selectorLfo" name="select_box" id="selLfo2" >
                <option value="">Sine</option>
                <option value="">Triangle</option>
@@ -208,8 +228,19 @@
             </select>
           <input type="hidden" name="select_flag" id="select_flag1" value="0">
           </div>
+      </div>
+
+        <div id="secondLfoRow" class="rowLfo">
+              <div class="lfoFreqLabel" >LFO FREQ</div>
+          <div id="lfoKnob2" class="knob lfoKnob">
+            <div class="knobLabel"></div>  
+          </div>
           
+          <div id="dispLfo2" class="displayLfoKnob">0.5 Hz</div>
         </div>
+        
+        
+        
         
       </div>
       
@@ -246,31 +277,15 @@
           
          </div>
           
-         <div class="knobVolContainer">
-            <div id="volLabel" class="attackLabel">VOL</div> 
-       <div id="vol3" class="knob volKnob">
-            <div class="knobLabel"></div>  
-          </div>
-          </div>
+         
         </div>
         
         
         
         
        <div class="canvasKnobsContainer">
-        <canvas height="100px" width="190px" style="border: solid black 1px" id="canv3"></canvas>
+        <canvas height="100px" width="240px" style="border: solid black 0.11px" id="canv3"></canvas>
           
-          
-          <div class="attackReleaseContainer">
-            <div class="attackLabel" >ATT</div>
-            <div id="att3" class="knob attackKnob">
-            <div class="knobLabel"></div>  
-          </div>
-            <div class=releaseLabel>REL</div>
-            <div id="rel3" class="knob releaseKnob">
-            <div class="knobLabel"></div>  
-          </div>
-          </div>
           
         </div>
         
@@ -280,22 +295,26 @@
       </div>
       
       <div class = "oscZone" id="oscZone2">
-        
-        <div id="firstLfoRow" class="rowLfo">
-          <button id="lfoButton3" class="lfoButton" onclick="activateLfo(3)">LFO3</button>
-        </div>
-        
-        <div id="secondLfoRow" class="rowLfo">
-          <div id="lfoKnob3" class="knob lfoKnob">
+               <div class="knobsContainer">
+              
+            <div id="volLabel" class="attackLabel">VOL</div> 
+       <div id="vol3" class="knob volKnob">
             <div class="knobLabel"></div>  
           </div>
           
-          <div id="dispLfo3" class="displayLfoKnob">0.5 Hz</div>
-        </div>
+            <div class="attackLabel" >ATT</div>
+            <div id="att3" class="knob attackKnob">
+            <div class="knobLabel"></div>  
+          </div>
+            <div class=releaseLabel>REL</div>
+            <div id="rel3" class="knob releaseKnob">
+            <div class="knobLabel"></div>  
+          </div>
+          </div>
         
+        <div id="firstLfoRow" class="rowLfo">
+          <button id="lfoButton3" class="lfoButton" onclick="activateLfo(3)">LFO3</button>
         
-        <div id="thirdLfoRow" class="rowLfo">
-          
           <div id="container">
             <select class="selectorLfo" name="select_box" id="selLfo3" >
                <option value="">Sine</option>
@@ -305,8 +324,20 @@
             </select>
           <input type="hidden" name="select_flag" id="select_flag1" value="0">
           </div>
+            </div>
+              
+
+        <div id="secondLfoRow" class="rowLfo">
+                <div class="lfoFreqLabel" >LFO FREQ</div>
+          <div id="lfoKnob3" class="knob lfoKnob">
+            <div class="knobLabel"></div>  
+          </div>
           
+          <div id="dispLfo3" class="displayLfoKnob">0.5 Hz</div>
         </div>
+        
+        
+
       </div>
       
       
@@ -317,16 +348,9 @@
     
     </div>
     
-    <div class="effectsContainer">
+    <div class="effectsContainer"> 
       
-        <div class="presetRow">  
-            <div class="presetContainer">
-            <select id="presetListID" onclick="addItemstoList()" ><option value="">Default Preset</option></select>
-            <button id="preset" onclick="loadSelectedPreset()"class="presetButton">Load</button>
-            <button id="preset" onclick="DeleteSelectedPreset()"class="presetButton">Delete</button>
-            <button id="preset" onclick="checkBeforeSaving()"class="presetButton">Create New Preset</button>
-            </div>
-        </div>
+
                 
         
       <div class="delayRow">
@@ -343,7 +367,7 @@
           </div>
           
           <div class="delayFeatureContainer">
-            <div id="dGainLabel" class="delayLabel">GAIN</div>
+            <div id="dGainLabel" class="delayLabel">LEVEL</div>
             <div id="dGainKnob"  class="knob" >
             <div class="knobLabel"></div>  
           </div>
@@ -362,12 +386,9 @@
             <div class="knobLabel"></div>  
           </div>
         </div>
-        
-         
-          
-        
-       
-               
+              
+          <div id="filterType" class="filterLabel">TYPE</div>
+  
         <select class="selectorFilt" class="select_box" id="selFilt" >
           <option value="">Lowpass</option>
           <option value="">Highpass</option>
@@ -396,25 +417,55 @@
             <button id="reverb" onclick="activateReverb()" class="reverbButton">REVERB</button>
         </div>
         <div class="reverbFeatureContainer">
-          <div id="revDWLabel" class="reverbLabel">DRY/WET</div>
-          <div id="reverbDWKnob"  class="knob" >
+          <div id="revDWLabel" class="reverbLabel">LEVEL</div>
+          <div id="reverbDWKnob"  class="knob revDWKnob" >
             <div class="knobLabel"></div>  
           </div>
         </div>
       </div>
         
+
+        <div class="masterVolContainer">
+      <div class="masterLabel">MASTER</div>
+      <div id="mKnob" class="masterKnob">
+        <div class="knobLabel"></div> 
+      </div>
+      
+      <button id="muteBut2" class="muteButton" onclick="activateMute()">MUTE</button>
+      
     </div>
+        
+                    <div class="presetRow">  
+            <div class="presetContainer">
+                      <div class="presetLabel">PRESET</div>
+
+            <select id="presetListID" class="selectPreset" onclick="addItemstoList()" ><option value="">Default Preset</option></select>
+                
+                <div class = presetButtons> 
+            <button id="presetLoad" onclick="loadSelectedPreset()"class="presetButton">Load</button>
+            <button id="presetDelete" onclick="DeleteSelectedPreset()"class="presetButton">Delete</button>
+            <button id="presetNew" onclick="checkBeforeSaving()"class="presetButton">Create New</button>
+                    
+                
+                </div>
+                
+            </div>
+        </div>
+         
+        
+    </div>
+      
     
-    </div>
+      </div>
     
    
     
   
   
-  <canvas id="canvFreq"  width="480px" height= "250px" style="border: solid white 1px">
+  <canvas id="canvFreq"  width="480px" height= "250px" style="border: #404040 1px">
   </canvas>
   
-  <div class="masterKnobsContainer">
+  <div class="rightContainer">
 
     
     <div class="clickContainer">
@@ -442,32 +493,19 @@
       
       <div id="chordDisp" class="chordDisplay">-</div>
       <div id="noteDisp" class="noteDisplay">-</div>
+                  
+        <div class="timerContainer">
+        <div class="timerLabel">TIMER</div>
+        <div id="timerDisplay" class="timerDisplay">-</div>
+    </div>    
       
     </div>
-    
-    <div class="masterVolContainer">
-      <div class="masterLabel">MASTER</div>
-      <div id="mKnob" class="masterKnob">
-        <div class="knobLabel"></div> 
-      </div>
       
-      <button id="muteBut2" class="muteButton" onclick="activateMute()">MUTE</button>
-      
-    </div>
-    
-   
-    
-  </div>
-  
-    
-    
-    
-</div>
-  
 
-<div class="specialContainer">
-  <div class="midiContainer"> 
-      <button id="midiButt" class="midiButton" onclick="activateMidi()">MIDI</button></div>
+    
+    
+    <div class="specialContainer">
+
   <div class="arpContainer">
   <button id="arpButton" class="arpButton" onclick="activateArp()">ARPEGGIATOR</button>
     <div id="selectArp">Resolution:<select onchange="noteResolution2 = this.selectedIndex;"><option> 16th notes<option>8th notes<option>Quarter notes</select></div>
@@ -479,20 +517,16 @@
      <button id="improviserButton" class="improButton" onclick="activateImpro()">IMPROVISER</button>
     </div>
     
-    
-    
+
+    </div>
     
    
-  
+    
+  </div>
+      
 </div>
+  
 
-<div class="octaveContainer">
-  <button class="octaveButton" onclick="changeOctave('+')">⬆</button>
-  <button class="octaveButton" onclick="changeOctave('-')">⬇</button>
-  <div id="octaveDisp" class="octaveDisplay">2</div>
-</div>
-  
-        
     <script src="js/metroworker.js"></script>
     <script src='https://www.gstatic.com/firebasejs/5.5.7/firebase.js'></script>
     <script src="js/index.js"></script>
@@ -500,13 +534,8 @@
     <script src="js/databaze.js"></script>
 
 
-<div class="timerContainer">
-    <div class="timerLabel">TIMER</div>
-    <div id="timerDisplay" class="timerDisplay">-</div>
-    </div>    
+
     
-    
-    <button class="microbitButton" onclick="searchDevice()">MICROBIT</button> 
     
 </body>
     
