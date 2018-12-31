@@ -147,9 +147,9 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/Osc1Vol");  
   ref.on("value", function(snapshot) {
     f1 = snapshot.val(); 
-    presetVol1.style.transform = `translateY(-50%)rotate(${gradi[f1]}deg)`})
-  
-  
+    presetVol1.style.transform = 'translateY(-50%)rotate('+gradi[f1]+'deg)'}) 
+
+    
   var ref = db.ref("presets/"+ presetName + "/Osc1Att");
   ref.on("value", function(snapshot) {
     atk1 = snapshot.val(); 

@@ -3,18 +3,24 @@
   margin-top: 5px;
   border: 2px solid black;
   border-radius: 5px;
+            font-family: "Verdana"; 
+font-size: 15px; 
 }
 #butt2 {
   height: 30px;
   margin-top: 5px;
   border: 2px solid black;
   border-radius: 5px;
+            font-family: "Verdana"; 
+font-size: 15px; 
 }
 #butt3 {
   height: 30px;
   margin-top: 5px;
   border: 2px solid black;
   border-radius: 5px;
+            font-family: "Verdana"; 
+font-size: 15px; 
 }
 canvas{
   background-color: black;
@@ -104,7 +110,6 @@ canvas{
     text-align: center; 
     position:relative; 
     left:8%; 
-    
     margin: 0;
 }
 
@@ -114,6 +119,20 @@ canvas{
     text-align: center; 
     font-size: 50px; 
     font-family: "verdana"; 
+    
+  width: 1200px;
+  //background-color: #595e66;
+  //border: solid white 2px;
+  //border-radius: 5px;
+  display:inline-block;
+
+    text-align: center; 
+    position:relative; 
+    left:8%; 
+    margin: 0;
+    
+    
+    
 }
 
 .mainWindowContainer{
@@ -239,6 +258,8 @@ canvas{
   width:200px;
   height:40px;
   display:inline-flex;
+    position: relative; 
+    top:10px; 
 }
 
 #oscButton{
@@ -248,6 +269,7 @@ canvas{
   border-radius: 15px;
   width:50px;
   position:relative;
+
 }
 
 .onOffOsc{
@@ -266,7 +288,7 @@ canvas{
     height: 20px;
     width: 100px;
     display: inline-flex;
-    top: 10px;
+    left: 35px;
     transform: translate(-35px);
     
 }
@@ -331,10 +353,10 @@ canvas{
 
 #volLabel{
   position:relative;
-    left:28px; 
+    left:26px; 
   text-align:center;
-  font-size:14px;
-  font-family: "Arial";
+  font-size:12px;
+  font-family: "verdana";
   color:white;
     
 }
@@ -343,8 +365,8 @@ canvas{
         left:28px; 
 
   text-align:center;
-  font-size:14px;
-  font-family: "Arial";
+  font-size:12px;
+  font-family: "verdana";
   color:white;
 }
 
@@ -353,8 +375,8 @@ canvas{
         left:28px; 
 
   text-align:center;
-  font-size:14px;
-  font-family: "Arial";
+  font-size:12px;
+  font-family: "verdana";
   color:white;
 }
 
@@ -382,9 +404,9 @@ canvas{
   height:30px;
   border-radius:50px;
   position:relative;
-  left:105px;
+  left:40px;
   transform:translateY(-50%);
-    top: -10px;
+  bottom: 10px;
   
 }
 
@@ -394,28 +416,32 @@ canvas{
   background-color:red;
   position:relative;
   transform:translateX(-40%);
-  left:10%; 
-  top:-2px;
+  left:50%; 
+  top:0px;
 }
 
 .volClickLabel{
   position:relative;
-  top:-8px;
+  top:-1px;
+  left:31px;
   text-align:center;
   font-size:12px;
-  font-family: "Arial";
+  font-family: "verdana";
   color:white;
-  left: 10px;
+    height: 40px; 
+    width: 50px; 
 }
 
 .clickLabel{
   position: relative;
-  width:60px;
-  height:30px;
+  width:140px;
+  height:20px;
   text-align:center;
-  background-color:grey;
   color: white;
-  left: 45px;
+  left: 5px;
+      font-family: "verdana";
+  border-bottom: 2px solid #404040;
+
 }
 
 .knobLabel{
@@ -425,6 +451,8 @@ canvas{
   position:relative;
   transform:translateX(-50%);
   left:50%;
+      font-family: "verdana";
+
 }
 
 
@@ -433,6 +461,8 @@ canvas{
   width:250px;
   background-color:#595e66;
   display:inline-flex;
+    position: relative; 
+    top:17px; 
 }
 
 #canv1{
@@ -459,8 +489,8 @@ canvas{
 
 
 .knobsContainer{
-  height:55px;
-  width:200px;
+  height:56px;
+  width:190px;
   display:inline-flex;
   position:relative;
   border-bottom: 2px solid #404040;
@@ -500,15 +530,19 @@ canvas{
 }
 
 .rowLfo{
-  width:200px;
-  height:30px;
+  width:280px;
+  height:50px;
   display:inline-flex;
+    position: relative; 
+// background-color: fuchsia; 
+    top: 35px; 
+    left: 13px; 
 }
 
 .lfoKnob{
   transform:translateY(-50%);
-  top:75%;
-  right:2%;
+  top:12px;
+  right:47px;
 }
 
 .lfoFreqLabel{
@@ -520,8 +554,8 @@ canvas{
     font-family: "verdana"; 
     font-size: 12px; 
     position:relative; 
-    bottom:10px;
-    left:70px; 
+    bottom:20px;
+    left:17px; 
     height: 23px; 
 }
 
@@ -529,16 +563,18 @@ canvas{
 .displayLfoKnob{
   display:center;
   position:relative;
-  background-color:#2d2d2d; 
+  //background-color:#2d2d2d; 
   height:23px;
   width:60px;
   //transform:translateY(-50%);
   text-align:center;
-  font-size: 17px;
+  font-size: 14px;
   color: white; 
   border-radius:10%;
-  top:40%;
-  right:1px;
+  top:29px;
+  right:90px;
+      font-family: "verdana";
+
   
 }
 
@@ -548,9 +584,18 @@ canvas{
     //padding-top: 17px; 
     //background-color: fuchsia; 
     top:20px; 
+    
 
 }
 
+#firstLfoRow{
+    //display:inline-flex;
+    //position: relative; 
+    //top: 35px; 
+    //right:35px; 
+    
+    
+}
 
 
 #selLfo1{}
@@ -572,14 +617,15 @@ canvas{
 .selectorLfo{
   position:relative;
   //transform:translateX(-50%) translateY(-50%);
-  left:70%;
+  //left:70%;
   //top:50%;
   width:65px;
   height:25px;
   border-radius:10%;
   border:solid black 2px;
   font-size:14px;
-  margin-top: 10px; 
+  //margin-top: 10px; 
+    font-family: "Verdana"; 
 }
 
 
@@ -592,7 +638,9 @@ canvas{
   height:35px;
   border-radius:10%;
   border:solid black 3px;
-  font-size:12px;
+  font-size:14px;
+        font-family: "Verdana"; 
+
 }
 
 
@@ -600,14 +648,14 @@ canvas{
 .lfoButton{
   position:relative;
   //transform:translateX(-50%) translateY(-50%);
-  left:20%;
+  //left:20%;
   //top:50%;
   width:50px;
   height:25px;
   border-radius:10%;
   border:solid black 2px;
   font-size:14px;
-  margin-top: 10px; 
+  margin-right: 4px; 
     
 }
 
@@ -645,7 +693,9 @@ canvas{
   height:30px;
   border-radius:10%;
   border:solid black 2px;
-  font-size:12px;
+  font-size:14px;
+        font-family: "Verdana"; 
+
 }
 
 
@@ -690,7 +740,7 @@ canvas{
 
 #filtFreqKnob{
   top:20px;
-  left:18px;
+  left:13px;
   position:relative;
   
 }
@@ -712,7 +762,7 @@ canvas{
   top:1px;
   text-align:center;
   font-size:12px;
-  font-family: "Arial";
+  font-family: "verdana";
   color:white;
 }
 
@@ -736,6 +786,7 @@ canvas{
   position:relative;
   left:-2px;
   top:2px;
+    
 }
 
 
@@ -791,7 +842,7 @@ canvas{
   left:90px; 
   text-align:center;
   font-size:12px;
-  font-family: "Arial";
+  font-family: "Verdana";
   color:white;
 }
 
@@ -865,7 +916,7 @@ canvas{
   top:2%;
   text-align:center;
   font-size:12px;
-  font-family: "Arial";
+  font-family: "verdana";
   color:white;
 }
 
@@ -890,8 +941,8 @@ canvas{
   position:relative;
   width:480px;
   height:245px;
-  left:63px;
-  top:55px;
+  left:65px;
+  top:58px;
   display:inline-flex;
   border: 2px solid #404040;
   border-radius: 5px;  
@@ -934,7 +985,7 @@ canvas{
   top:2%;
   text-align:center;
   font-size:12px;
-  font-family: "Arial";
+  font-family: "Verdana";
   color:white;
 }
 
@@ -956,16 +1007,17 @@ canvas{
 
 .masterVolContainer{
   position:relative;
-  width:130px;
+  width:200px;
   height:175px;
   display:inline-block;
 }
 
 .masterLabel{
-  width:130px;
+  width:200px;
   color: white; 
   height:20px;
   text-align:center; 
+    font-family: "Verdana"
 }
 
 .masterKnob{
@@ -975,7 +1027,7 @@ canvas{
   height:100px;
   border-radius:50px;
   top:55px;
-  left:17px;
+  left:25%;
   transform:translateY(-50%);
     
 }
@@ -983,18 +1035,28 @@ canvas{
 .muteButton{
   background-color:white;
   position:relative;
-  width:70px;
+  width:80px;
   height:30px;
   text-align:center;
   top:10px;
   //left:33px;
-  border: solid black 2px;
+    border:solid black 2px;
+    border-radius: 5px;
+        font-family: "Verdana"; 
+
   
 }
 
-#muteBut1{
-  top:3px;
-  //left:40px;
+.clickMuteButton{
+  position: relative; 
+  display: inline-flex; 
+  bottom:55px;
+  left:30px;
+  width:50px;
+  height:25px;
+    
+    border:solid black 2px;
+    border-radius: 5px;
   
 }
 
@@ -1020,6 +1082,7 @@ canvas{
     padding-top: 5px; 
     bottom: 8px; 
     position: relative; 
+    font-family: "Verdana"; 
 }
 
 .selectPreset{
@@ -1030,6 +1093,9 @@ canvas{
   border-radius:10%;
   border:solid black 2px;
   font-size:12px;
+    bottom:5px; 
+        font-family: "Verdana"; 
+
     
 }
 
@@ -1037,12 +1103,43 @@ canvas{
     position:relative;
     display: inline-block; 
     text-align:center;
-    width:180px;
+    width:205px;
     height:30px;
     margin-top: 5px; 
+    bottom:5px; 
+    right:2px;
+        font-family: "Verdana"; 
+
+
 }
 
+.presetButton{
+    border-radius:7%;
+      width:60px;
+  height:22px;
+  text-align:center;
+        font-size: 12px; 
+          border:solid black 2px;
+
+}
        
+#presetLoad{
+    
+    width:50px;
+    
+}
+
+#presetDelete{
+    
+    width:52px;
+    
+}
+
+#presetNew{
+    
+    width:90px;
+    
+}
 
 
 .clickContainer{
@@ -1054,49 +1151,81 @@ canvas{
   //margin-left:5px;
   display:inline-block;
     //top: -50px;
+    
   
 }
 
-.dispChordContainer{
-  //background-color:#595e66;
-    //background-color: red; 
+.clickBottomContainer{
   position:relative;
-  //left: 12px;
-  width:150px;
-  height:245px;
-  padding-right:30px;
   display:inline-block;
-  //bottom: 39px;
-     border-left: 3px solid #404040;
-     border-right: 3px solid #404040;
+  width:150px;
+  height:40px;
     
+}
 
-    
-  
+.specialContainer{
+  width:170px;
+  height:245px;
+  position:relative;
+  display:inline-block; 
+}
+
+
+.improContainer{
+  position:relative;
+  width:160px;
+  height:80px;
+  display:inline-block;
+  border-top: 2px solid #404040;
+  top:5px; 
+  padding-top: 10px; 
 }
 
 .arpContainer{
-  //background-color:grey;
   position:relative;
-  //left: 50px;
   width:150px;
   height:150px;
   margin-left:1px;
   display:inline-block;
-  
-         border-bottom: 3px solid #404040;
+}
 
+
+.improLearn{
+  position:relative;
+  width:110px;
+  height:30px;
+  text-align:center;
+  border: solid black 2px;
+  border-radius:5%;
+  font-size:14px;    
+}
+
+.improButton{
+  position:relative;
+  width:110px;
+  height:30px;
+  text-align:center;
+  border: solid black 2px;
+  border-radius:5%;
+  font-size:14px;
+  margin-top: 7px; 
+}
+
+.improActive{
+  background-color:#00FF00;
+  
 }
 
 
 .arpButton{
   position:relative;
   width:110px;
-  height:40px;
-  //left: 42px;
+  height:30px;
   text-align:center;
-  //top:7px;
+  top:10px;
   border: solid black 2px;
+  border-radius:5%;
+  font-size:14px;
 }
 
 .arpActive{
@@ -1106,40 +1235,49 @@ canvas{
 
 #selectArp{
     position: relative;
-    top:10px;
-    left: 5px;
+    top:15px;
+    width:160px;
+    
+    font-family:"Verdana";
+	font-size:12px;
+    color:white; 
 }
 
 #selectMood{
     position: relative;
-    top:20px;
-    left: 5px;
-}
+    top:25px;
+    width:160px;
 
-.chordDisplay{
-  
-  background-color:black;
-  height:80px;
-  width:120px;
-  position:relative;
-  top:30px;
-  left:17px;
-  color:white;
-  text-align:center;
-  font-size:20px;
+    
+    font-family:"Verdana";
+	font-size:12px;
+    color:white; 
 }
 
 
-.specialContainer{
-  width:550px;
-  height:240px;
-  position:relative;
-  //top:550px;
-  //right:100px;
-  display:inline; 
-    //background-color: green; 
-
+.arpResList{
+    position:relative;
+    width:90px;
+    height:30px;
+    border-radius:10%;
+    border:solid black 2px;
+    font-size:12px;
+    font-family: "Verdana"; 
 }
+
+
+.arpMoodList{
+    position:relative;
+    width:80px;
+    height:30px;
+    border-radius:10%;
+    border:solid black 2px;
+    font-size:12px;
+    font-family: "Verdana"; 
+    margin-left: 25px;
+    right:12px;
+}
+
 
 .midiContainer{
   background-color:grey;
@@ -1167,57 +1305,8 @@ canvas{
   background-color:#00FF00;
 }
 
-.improContainer{
-  //background-color:grey;
-  position:relative;
-  left: 50px;
-  width:100px;
-  height:80px;
-  margin-left:1px;
-  display:inline-block;
-  //border: solid black 2px;
-  transform: translate(-50px);
-  top: 10px;
-  
-}
 
-.improLearn{
-  width:100px;
-  height:40px;
-  //top:20px;
-  position:relative;
-  //left:10px;
-  border: solid black 2px;
-  text-align:center;
-    
-}
 
-.improButton{
-  width:100px;
-  height:40px;
-  //top:20px;
-  position:relative;
-//  left:20px;
-  border: solid black 2px;
-  text-align:center;
-}
-
-.improActive{
-  background-color:#00FF00;
-  
-}
-
-.noteDisplay{
-  width:50px;
-  height:50px;
-  background-color:black;
-  position:relative;
-  top:40px;
-  left:53px;
-  color:white;
-  text-align:center;
-  
-}
 
 
 .bottomLeftContainer{
@@ -1262,6 +1351,8 @@ canvas{
   text-align:center;
   color:white;
     font-size: 25px; 
+      font-family: "verdana";
+
 }
 
 .improLearnActive{
@@ -1270,42 +1361,36 @@ canvas{
 
 
 #controls {
-	font-family:arial;
-	font-size:10px;
-	font-weight:bold;
-    //background-color: darkgrey;
-
+	font-family:"Verdana";
+	font-size:12px;
+    color:white; 
 }
 
 #controls * {
-
 	margin: 2px;
 	display:inline-block;
 	
 }
 
 .play {
-	-moz-box-shadow:inset 0px 20px 26px 0px #b6cde3;
-	-webkit-box-shadow:inset 0px 20px 26px 0px #b6cde3;
-	box-shadow:inset 0px 20px 26px 0px #b6cde3;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
-	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
-	background-color:#79bbff;
-	-moz-border-radius:20px;
-	-webkit-border-radius:20px;
-	border-radius:20px;
-	color:#ffffff;
-	padding:8px 24px;
-	text-decoration:none;
-	text-shadow:1px 1px 6px #000000;
-	width: 40px;
-	text-align: center;
+    position: relative; 
+    display: inline-flex; 
+    width:50px;
+    height:20px;
+    
+
+    background-color: white; 
+    color:black; 
+
+    //font-size: 13px; 
+    border:solid black 2px;
+    border-radius: 5px;
+    text-align: center; 
+    
 }
 
 .play:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
-	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
-	background-color:#378de5;
+
 }
 
 .play:active {
@@ -1328,38 +1413,113 @@ canvas{
 }
 
 
+.dispContainer{
+
+    position:relative;  
+    width:160px;
+    height:245px;
+    display:inline-block;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #404040;
+}
+
 
 .timerContainer{
     position:relative;
-    width:100px;
-    height:80px;
-    background-color:#595e66;
-    top:30px;
-    //right:80px;
-    display:inline-block;
-    
+    width:160px;
+    height:75px;
+    display:inline-block;    
+    text-align:center;   
 }
 
-.timerLabel{
-    position:relative;
-    width:100px;
-    height:10px;
-    color:white;
-    text-align:center;
+
+.chordDispContainer{
     
+    position:relative;
+    width:160px;
+    height:100px;
+    display:inline-block;    
+    text-align:center;   
+}
+
+.noteDispContainer{
+
+    position:relative;
+    width:160px;
+    height:70px;
+    display:inline-block;    
+    text-align:center;   
+}
+
+
+
+.chordDisplay{
+  
+  background-color:black;
+  height:80px;
+  width:110px;
+  left:25px;
+  position:relative;
+  color:white;
+  text-align:center;
+  font-size:20px;
+  font-family: "verdana";
 }
 
 .timerDisplay{
-    
-    position:relative;
-    top:20px;
-    left:25px;
-    width:50px;
-    height:40px;
-    background-color:black;
-    color:white;
-    text-align:center;
+  width:50px;
+  height:50px;
+  left:55px;
+  background-color:black;
+  color:white;
+  position:relative;
+  text-align:center;    
+  font-family: "verdana";
 }
+
+
+.noteDisplay{
+  width:50px;
+  height:50px;
+  left:55px;
+  background-color:black;
+  color:white;
+  position:relative;
+  text-align:center;
+  font-family: "verdana";
+    
+  
+}
+
+
+.timerLabel{
+    height:20px;
+    position: relative;
+    text-align:center;
+    color: white;    
+    font-family: "verdana";
+}
+
+
+.chordDispLabel{
+    height:20px;
+    position: relative;
+    text-align:center;
+    color: white;    
+    font-family: "verdana";
+}
+
+
+.noteDispLabel{
+    height:20px;
+    position: relative;
+    text-align:center;
+    color: white;    
+    font-family: "verdana";
+}
+
+
+
 
 .microbitButton{
   position:relative;
