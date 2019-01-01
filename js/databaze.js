@@ -41,6 +41,13 @@ var PresetTurnOnDist;
 var PresetTurnOnReverb;
 var PresetTurnOnFilter; 
 var PresetMuteFlag;
+var PresetClickMuteFlag
+var PresetMidiFlag; 
+var PresetArpFlag;
+
+var PresetOctave; 
+
+var PresetTempo; 
 
 var presetName = "Default Preset"
 var presetsArray = []; 
@@ -58,7 +65,7 @@ function deletePreset (presetName){
     
     if (confirm("Are you sure?") == true) {
         refDelete.remove();     
-        alert("DELETED");  
+        alert("PRESET DELETED");  
      } 
     }
      
@@ -124,8 +131,22 @@ function savePreset(presetName){
 
     refSave.update({ MuteOn: muteFlag });
     refSave.update({ MasterVol: masterGainIndex });
-   
-    txt = "Saved" + presetName + "! YAAY";   
+       
+    refSave.update({ MidiOn: midiFlag });
+    
+    refSave.update({ ArpOn: arpFlag });
+    refSave.update({ ArpResolution: arpResID.options.selectedIndex });    
+    refSave.update({ ArpPattern: arpPatternID.options.selectedIndex });
+    
+    refSave.update({ ClickTempo: tempo });    
+    refSave.update({ ClickMetric: clickMetricID.options.selectedIndex });    
+    refSave.update({ ClickResolution: clickResID.options.selectedIndex });
+    refSave.update({ ClickMuteOn: muteFlag1 });
+
+    
+    refSave.update({ OctNumber: octaveIndex });
+
+    txt = "Saved" + presetName + "! YAAAAY";   
       
 }
 
@@ -137,7 +158,8 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/Osc1");
   ref.on("value", function(snapshot) {
     PresetTurnOn1 = snapshot.val();
-    if (PresetTurnOn1) {activateAudio(1); }} ) 
+      if (PresetTurnOn1 && !turnOn1) {activateAudio(1);} 
+      if (!PresetTurnOn1 && turnOn1) {activateAudio(1);}}) 
       
   var ref = db.ref("presets/"+ presetName +"/Osc1Type");
   ref.on("value", function(snapshot) {
@@ -153,7 +175,7 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName + "/Osc1Att");
   ref.on("value", function(snapshot) {
     atk1 = snapshot.val(); 
-    presetAtk1.style.transform = `translateY(-50%)rotate(${gradi[atk1]}deg)`})
+    presetAtk1.style.transform = 'translateY(-50%)rotate('+gradi[atk1]+'deg)'}) 
   
   var ref = db.ref("presets/"+ presetName + "/Osc1Rel");
   ref.on("value", function(snapshot) {
@@ -168,11 +190,16 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/Lfo1");
   ref.on("value", function(snapshot) {
     PresetTurnOnLfo1 = snapshot.val();
-    if (PresetTurnOnLfo1) {activateLfo(1); 
+    if (PresetTurnOnLfo1 && !turnOnLfo1) {activateLfo(1); 
                            dispLfo1.removeChild(dispLfo1.childNodes[0]);
                            var n1 = Number((lfoFreqArray[lfoFreq1]).toFixed(2));
-                           var textnode =document.createTextNode(String(n1)+ " Hz") ;
-                           dispLfo1.appendChild(textnode);   }}) ;  
+                           var textnode =document.createTextNode(String(n1)+ "Hz") ;
+                           dispLfo1.appendChild(textnode);}
+      
+      if (!PresetTurnOnLfo1 && turnOnLfo1) {activateLfo(1);
+                                            dispLfo1.removeChild(dispLfo1.childNodes[0]);
+                                            var textnode = document.createTextNode("0.5Hz") ;
+                                            dispLfo1.appendChild(textnode);}}) 
   
   var ref = db.ref("presets/"+ presetName +"/Lfo1Type");
   ref.on("value", function(snapshot) {
@@ -183,7 +210,8 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/Osc2");
   ref.on("value", function(snapshot) {
     PresetTurnOn2 = snapshot.val();
-    if (PresetTurnOn2) {activateAudio(2); }})
+      if (PresetTurnOn2 && !turnOn2) {activateAudio(2);} 
+      if (!PresetTurnOn2 && turnOn2) {activateAudio(2);}}) 
   
    var ref = db.ref("presets/"+ presetName +"/Osc2Type");
   ref.on("value", function(snapshot) {
@@ -213,12 +241,16 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/Lfo2");
   ref.on("value", function(snapshot) {
     PresetTurnOnLfo2 = snapshot.val();
-    if (PresetTurnOnLfo2) {activateLfo(2); 
+    if (PresetTurnOnLfo2 && !turnOnLfo2) {activateLfo(2); 
                            dispLfo2.removeChild(dispLfo2.childNodes[0]);
                            var n2 = Number((lfoFreqArray[lfoFreq2]).toFixed(2));
-                           var textnode =document.createTextNode(String(n2)+ " Hz") ;
-                           dispLfo2.appendChild(textnode);   }}) ;  
-   
+                           var textnode =document.createTextNode(String(n2)+ "Hz") ;
+                           dispLfo2.appendChild(textnode);}
+       
+      if (!PresetTurnOnLfo2 && turnOnLfo2) {activateLfo(2);
+                                            dispLfo2.removeChild(dispLfo2.childNodes[0]);
+                                            var textnode =document.createTextNode("0.5Hz") ;
+                                            dispLfo2.appendChild(textnode);}}) 
   
   var ref = db.ref("presets/"+ presetName +"/Lfo2Type");
   ref.on("value", function(snapshot) {
@@ -228,7 +260,8 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/Osc3");
   ref.on("value", function(snapshot) {
     PresetTurnOn3 = snapshot.val();
-    if (PresetTurnOn3) {activateAudio(3); }})
+      if (PresetTurnOn3 && !turnOn3) {activateAudio(3);} 
+      if (!PresetTurnOn3 && turnOn3) {activateAudio(3);}}) 
   
   var ref = db.ref("presets/"+ presetName +"/Osc3Type");
   ref.on("value", function(snapshot) {
@@ -257,22 +290,28 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/Lfo3");
   ref.on("value", function(snapshot) {
     PresetTurnOnLfo3 = snapshot.val();
-    if (PresetTurnOnLfo3) {activateLfo(3); 
-                           dispLfo3.removeChild(dispLfo3.childNodes[0]);
-                           var n3 = Number((lfoFreqArray[lfoFreq3]).toFixed(2));
-                           var textnode =document.createTextNode(String(n3)+ " Hz") ;
-                           dispLfo3.appendChild(textnode);   }}) ;
-  
-  var ref = db.ref("presets/"+ presetName +"/Lfo3Type");
+      if (PresetTurnOnLfo3 && !turnOnLfo3) {activateLfo(3); 
+                                            dispLfo3.removeChild(dispLfo3.childNodes[0]);
+                                            var n3 = Number((lfoFreqArray[lfoFreq3]).toFixed(2));
+                                            var textnode =document.createTextNode(String(n3)+ "Hz") ;
+                                            dispLfo3.appendChild(textnode);}
+      if (!PresetTurnOnLfo3 && turnOnLfo3) {activateLfo(3);
+                                            dispLfo3.removeChild(dispLfo3.childNodes[0]);
+                                            var n3 = Number((lfoFreqArray[lfoFreq3]).toFixed(2));
+                                            var textnode =document.createTextNode("0.5Hz") ;
+                                            dispLfo3.appendChild(textnode);}}) 
+    
+  var ref = db.ref("presets/"+ presetName +"/Lfo3Type")
   ref.on("value", function(snapshot) {
     selLfo3.options.selectedIndex = snapshot.val(); })
   
   //DLY
   var ref = db.ref("presets/"+ presetName +"/DlyOn");
   ref.on("value", function(snapshot) {
-    PresetTurnOnDly = snapshot.val();
-    if (PresetTurnOnDly) {activateDelay(); }} )  
-  
+    PresetTurnOnDly = snapshot.val();    
+      if (PresetTurnOnDly && !effectDelay) {activateDelay();} 
+      if (!PresetTurnOnDly && effectDelay) {activateDelay();}}) 
+    
   var ref = db.ref("presets/"+ presetName +"/DlyTime");
   ref.on("value", function(snapshot) {
     dTime = snapshot.val(); 
@@ -287,9 +326,10 @@ function loadPreset(presetName){
   //FILTER
   var ref = db.ref("presets/"+ presetName +"/FilterOn");
   ref.on("value", function(snapshot) {
-    PresetTurnOnFilter = snapshot.val();
-    if (PresetTurnOnFilter) {activateFilter(); }} )  
-  
+    PresetTurnOnFilter = snapshot.val();  
+      if (PresetTurnOnFilter && !effectFilter) {activateFilter();} 
+      if (!PresetTurnOnFilter && effectFilter) {activateFilter();}})   
+    
   var ref = db.ref("presets/"+ presetName +"/FilterFreq");
   ref.on("value", function(snapshot) {
     freqFiltIndex = snapshot.val(); 
@@ -306,18 +346,21 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/DistOn");
   ref.on("value", function(snapshot) {
     PresetTurnOnDist = snapshot.val();
-    if (PresetTurnOnDist) {activateDistortion(); }} )  
-  
+      if (PresetTurnOnDist && !effectDistortion) {activateDistortion();} 
+      if (!PresetTurnOnDist && effectDistortion) {activateDistortion();}})   
+    
   var ref = db.ref("presets/"+ presetName +"/DistGain");
   ref.on("value", function(snapshot) {
     driveIndex = snapshot.val(); 
     presetDistortionKnob.style.transform = `translateY(-50%)rotate(${gradi[driveIndex]}deg)`})
     
     
+    //REVERB
     var ref = db.ref("presets/"+ presetName +"/ReverbOn");
     ref.on("value", function(snapshot) {
     PresetTurnOnReverb = snapshot.val();
-    if (PresetTurnOnReverb) {activateReverb(); }} ) 
+      if (PresetTurnOnReverb && !effectReverb) {activateReverb();} 
+      if (!PresetTurnOnReverb && effectReverb) {activateReverb();}})   
     
      var ref = db.ref("presets/"+ presetName +"/ReverbVal");
   ref.on("value", function(snapshot) {
@@ -340,9 +383,78 @@ function loadPreset(presetName){
   var ref = db.ref("presets/"+ presetName +"/MuteOn");
   ref.on("value", function(snapshot) {
       PresetMuteFlag = snapshot.val();
-      if(PresetMuteFlag) {activateMute(); }} )  
+      if(PresetMuteFlag && !muteFlag) {activateMute();} 
+        if (!PresetMuteFlag && muteFlag) {activateMute();}})    
     
     
+    //MIDI  
+    
+    var ref = db.ref("presets/"+ presetName +"/MidiOn");
+    ref.on("value", function(snapshot) {
+        PresetMidiFlag = snapshot.val();
+        if (PresetMidiFlag && !midiFlag) {activateMidi();} 
+        if (!PresetMidiFlag && midiFlag) {activateMidi();}})    
+      
+    
+    //ARP 
+    
+    var ref = db.ref("presets/"+ presetName +"/ArpOn");
+    ref.on("value", function(snapshot) {
+        PresetArpFlag = snapshot.val();
+        if (PresetArpFlag && !arpFlag) {activateArp();} 
+        if (!PresetArpFlag && arpFlag) {activateArp();}}) 
+      
+    var ref = db.ref("presets/"+ presetName +"/ArpResolution");
+    ref.on("value", function(snapshot) {
+        arpResID.options.selectedIndex = snapshot.val(); })
+  
+    var ref = db.ref("presets/"+ presetName +"/ArpPattern");
+    ref.on("value", function(snapshot) {
+        arpPatternID.options.selectedIndex = snapshot.val(); })
+    
+
+    //OCTAVE
+      
+    var ref = db.ref("presets/"+ presetName +"/OctNumber");
+    ref.on("value", function(snapshot) { 
+       {PresetOctave = snapshot.val();
+        if (PresetOctave!= null) {
+            octaveIndex = PresetOctave;
+            changeOctaveDisplay(); 
+            changeOctaveTones(); }
+       else octaveIndex=2; 
+       }}) 
+    
+    
+    //CLICK 
+    
+     
+    var ref = db.ref("presets/"+ presetName +"/ClickTempo");
+    ref.on("value", function(snapshot) {
+        tempo = snapshot.val();
+        document.getElementById('showTempo').innerText=tempo;
+        document.getElementById("tempo").value = tempo;
+    
+    })
+    
+    
+    var ref = db.ref("presets/"+ presetName +"/ClickMetric");
+    ref.on("value", function(snapshot) {
+        clickMetricID.options.selectedIndex = snapshot.val();
+        metric = snapshot.val(); })
+  
+    var ref = db.ref("presets/"+ presetName +"/ClickResolution");
+    ref.on("value", function(snapshot) {
+        clickResID.options.selectedIndex = snapshot.val();  
+        noteResolution = snapshot.val(); })
+ 
+    
+    
+    var ref = db.ref("presets/"+ presetName +"/ClickMuteOn");
+    ref.on("value", function(snapshot) {
+      PresetClickMuteFlag = snapshot.val();
+      if(PresetClickMuteFlag && !muteFlag1) {muteFlag1=!muteFlag1; changeColorMute(1);} 
+      if (!PresetClickMuteFlag && muteFlag1) {muteFlag1=!muteFlag1; changeColorMute(1);}})   
 }
   
 function snapshotToArray(snapshot) {

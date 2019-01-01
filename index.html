@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" >
-
-        <style> body { 
-            background-color: black;
-            width:100%; 
-            margin:0; 
-            }
-    </style>
-    
     
 <head>
   <meta charset="UTF-8">
-  <title>MANNAIATOR</title>
+  <title>MANNAIATOR SYNTH 1.0</title>
     <script language="javascript" type="text/javascript" src="microBit.js/src/microBit.js"></script>
     <script language="javascript" type="text/javascript" src="sketch.js"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -19,7 +11,7 @@
 
 <body>
 
-    <div class="theTitle">MANNAIATOR</div>
+    <div class="theTitle">MANNAIATO®</div>
     
   <div class="synthMain"> 
   <div class="bar">
@@ -130,30 +122,30 @@
           </div>
           
           
+                     
+          <div class="lfoLabel">LFO</div>
           
-        <div id="firstLfoRow" class="rowLfo">
-          <button id="lfoButton1" class="lfoButton" onclick="activateLfo(1)">LFO1</button>
-        
-        <div id="container">
-            
-            <select class="selectorLfo" name="select_box" id="selLfo1" >
-               <option value="">Sine</option>
-               <option value="">Triangle</option>
-               <option value="">Square</option>
-               <option value="">SawTooth</option>
-            </select>
-          <input type="hidden" name="select_flag" id="select_flag1" value="0">
-          </div>
-            
-                              <div class="lfoFreqLabel" >FREQ</div>
-          <div id="lfoKnob1" class="knob lfoKnob">
-            <div class="knobLabel"></div>  
-          </div>
-            <div id="dispLfo1" class="displayLfoKnob">0.5 Hz</div>
-        </div>
-        
-            
+          <div id="firstLfoRow" class="rowLfo">
+            <button id="lfoButton1" class="lfoButton" onclick="activateLfo(1)">LFO1</button>
+            <div id="container">  
+                <select class="selectorLfo" name="select_box" id="selLfo1" >
+                    <option value="">Sine</option>
+                    <option value="">Triangle</option>
+                    <option value="">Square</option>
+                    <option value="">SawTooth</option>
+                </select>
+                <input type="hidden" name="select_flag" id="select_flag1" value="0">
             </div>
+            
+            
+            
+            <div class="lfoFreqLabel" >FREQ</div>
+            <div id="lfoKnob1" class="knob lfoKnob">
+                <div class="knobLabel"></div>  
+            </div>
+            <div id="dispLfo1" class="displayLfoKnob">0.5Hz</div>
+          </div>
+        </div>
 
  
       
@@ -208,12 +200,13 @@
             <div id="att2" class="knob attackKnob">
             <div class="knobLabel"></div>  
           </div>
-            <div class=releaseLabel>DEC</div>
+            <div class=releaseLabel>REL</div>
             <div id="rel2" class="knob releaseKnob">
             <div class="knobLabel"></div>  
           </div>
           </div>
-          
+                    <div class="lfoLabel">LFO</div>
+
         <div id="firstLfoRow" class="rowLfo">
           <button id="lfoButton2" class="lfoButton" onclick="activateLfo(2)">LFO2</button>
         
@@ -231,7 +224,7 @@
             <div class="knobLabel"></div>  
           </div>
           
-          <div id="dispLfo2" class="displayLfoKnob">0.5 Hz</div>
+          <div id="dispLfo2" class="displayLfoKnob">0.5Hz</div>
       </div>
 
     
@@ -306,7 +299,8 @@
             <div class="knobLabel"></div>  
           </div>
           </div>
-        
+                  <div class="lfoLabel">LFO</div>
+
         <div id="firstLfoRow" class="rowLfo">
           <button id="lfoButton3" class="lfoButton" onclick="activateLfo(3)">LFO3</button>
         
@@ -324,7 +318,7 @@
             <div class="knobLabel"></div>  
           </div>
           
-          <div id="dispLfo3" class="displayLfoKnob">0.5 Hz</div>
+          <div id="dispLfo3" class="displayLfoKnob">0.5Hz</div>
             </div>
               
         
@@ -459,9 +453,7 @@
   <div class="rightContainer">
 
     
-    
       <div class="clickContainer">
-      
           <div class="clickLabel">METRONOME</div>
           <div id="controls">
               <div><a class="play" onclick="this.innerText = play();">PLAY</a></div>
@@ -476,20 +468,25 @@
                   <span id="showTempo">60</span>
                   <input id="tempo" type="range" min="10.0" max="470.0" step="1" value="60" style="height: 20px; width: 140px" onInput="tempo = event.target.value; document.getElementById('showTempo').innerText=tempo;">
               </div>
-        
-              <div>RESOLUTION
-                  <select onchange="noteResolution = this.selectedIndex;">
+              
+            <div class="clickMiddleContainer">    
+                
+              
+                <div class ="clickResolutionLabel">RESOLUTION</div>
+                <div class ="clickMetricLabel">METRIC</div>
+                
+                <select id="clickResID" class ="clickResolutionSelect" onchange="noteResolution = this.selectedIndex;">
                       <option>16th notes
                       <option>8th notes
                       <option>Quarter notes
                   </select>
-              </div>
-              
-              <div>METRIC
-                  <select onchange="metric = this.selectedIndex; current16thNote=0"><option>1/1<option>1/4<option>1/2<option>3/4<option>4/4<option>5/4<option>7/4
-                  </select>
+                
+                <select id="clickMetricID" class ="clickMetricSelect" onchange="metric = this.selectedIndex; current16thNote=0">
+                    <option>1/1<option>1/4<option>1/2<option>3/4<option>4/4<option>5/4<option>7/4  
+                </select>
               </div>
           </div>
+          
               
         
           <div class="clickBottomContainer">
@@ -520,14 +517,14 @@
           <div class="arpContainer">
               <button id="arpButton" class="arpButton" onclick="activateArp()">ARPEGGIATOR</button>
               <div id="selectArp">RESOLUTION
-                  <select class="arpResList" onchange="noteResolution2 = this.selectedIndex;">
+                  <select id="arpResID" class="arpResList" onchange="noteResolution2 = this.selectedIndex;">
                       <option> 16th notes
                       <option>8th notes
                       <option>Quarter notes
                   </select>
               </div>
               <div id="selectMood">PATTERN
-                  <select class="arpMoodList" onchange="mood = this.selectedIndex;">
+                  <select id="arpPatternID" class="arpMoodList" onchange="mood = this.selectedIndex;">
                       <option>Up
                       <option>Down
                       <option>Up and Down

@@ -1,3 +1,12 @@
+body { 
+         
+    background-color: black;
+    width:100%; 
+    margin:0px;     
+}
+
+
+
 #butt1 {
   height: 30px;
   margin-top: 5px;
@@ -14,6 +23,7 @@ font-size: 15px;
             font-family: "Verdana"; 
 font-size: 15px; 
 }
+
 #butt3 {
   height: 30px;
   margin-top: 5px;
@@ -120,12 +130,10 @@ canvas{
     font-size: 50px; 
     font-family: "verdana"; 
     
-  width: 1200px;
-  //background-color: #595e66;
-  //border: solid white 2px;
-  //border-radius: 5px;
-  display:inline-block;
+    width: 1200px;
 
+
+    display:inline-block;
     text-align: center; 
     position:relative; 
     left:8%; 
@@ -150,11 +158,7 @@ canvas{
   height:30px;
   display:inline-flex;
   position:absolute;
-    
-    //background: linear-gradient(270deg,#8e3011,#BC4016);
-    //border-top-left-radius: 10px; 
-    //border-top-right-radius: 10px; 
-
+ 
 }
 
 .effectsContainer{
@@ -166,7 +170,6 @@ canvas{
   border-radius: 5px;  
     position: relative; 
     top:25px; 
-    //right:115px; 
 
 }
 
@@ -260,6 +263,7 @@ canvas{
   display:inline-flex;
     position: relative; 
     top:10px; 
+    right:7px; 
 }
 
 #oscButton{
@@ -362,7 +366,7 @@ canvas{
 }
 .attackLabel{
   position: relative; 
-        left:28px; 
+        left:27px; 
 
   text-align:center;
   font-size:12px;
@@ -372,7 +376,7 @@ canvas{
 
 .releaseLabel{
   position: relative; 
-        left:28px; 
+        left:27px; 
 
   text-align:center;
   font-size:12px;
@@ -435,7 +439,8 @@ canvas{
 .clickLabel{
   position: relative;
   width:140px;
-  height:20px;
+  height:23px;
+    margin-bottom: 3px; 
   text-align:center;
   color: white;
   left: 5px;
@@ -443,6 +448,48 @@ canvas{
   border-bottom: 2px solid #404040;
 
 }
+
+.clickResolutionSelect{
+    
+    position:relative;
+    height: 20px;
+    width: 90px; 
+      border-radius:10%;
+  border:solid black 2px;
+  font-family: "Verdana"; 
+        display: inline-block; 
+    
+
+}
+
+
+.clickMetricSelect{
+    
+    position:relative;
+    height: 20px;
+          border-radius:10%;
+  border:solid black 2px;
+  font-family: "Verdana"; 
+    display: inline-block; 
+}
+
+
+.clickResolutionLabel{
+    
+    position:relative;
+      font-family: "Verdana"; 
+   
+}
+
+
+.clickMetricLabel{
+
+    position:relative; 
+      font-family: "Verdana"; 
+
+    
+}
+
 
 .knobLabel{
   width:4px;
@@ -469,6 +516,7 @@ canvas{
     
     position: relative; 
     left: 2%; 
+    bottom: 5px; 
 
 }
 
@@ -476,6 +524,8 @@ canvas{
     
     position: relative; 
     left: 2%;
+        bottom: 5px; 
+
 }
 
 
@@ -483,6 +533,8 @@ canvas{
     
     position: relative; 
     left: 2%;
+        bottom: 5px; 
+
 
 }
 
@@ -531,13 +583,30 @@ canvas{
 
 .rowLfo{
   width:280px;
-  height:50px;
+  height:80px;
   display:inline-flex;
     position: relative; 
 // background-color: fuchsia; 
-    top: 35px; 
+margin-top: 17px;
     left: 13px; 
+    top:8px; 
 }
+
+
+.lfoLabel{
+      width:200px;
+  color: white; 
+  height:25px;
+
+  text-align:center; 
+    font-family: "Verdana"; 
+        font-size:18px; 
+    position: relative; 
+    top:10px; 
+    
+    
+}
+
 
 .lfoKnob{
   transform:translateY(-50%);
@@ -555,7 +624,7 @@ canvas{
     font-size: 12px; 
     position:relative; 
     bottom:20px;
-    left:17px; 
+    left:11px; 
     height: 23px; 
 }
 
@@ -619,13 +688,14 @@ canvas{
   //transform:translateX(-50%) translateY(-50%);
   //left:70%;
   //top:50%;
-  width:65px;
+  width:80px;
   height:25px;
   border-radius:10%;
   border:solid black 2px;
-  font-size:14px;
+  font-family: "Verdana"; 
+  font-size:11px;
   //margin-top: 10px; 
-    font-family: "Verdana"; 
+ 
 }
 
 
@@ -652,7 +722,7 @@ canvas{
   //top:50%;
   width:50px;
   height:25px;
-  border-radius:10%;
+  border-radius:5px;
   border:solid black 2px;
   font-size:14px;
   margin-right: 4px; 
@@ -682,18 +752,18 @@ canvas{
 
 .selectOscContainer{
   position:relative;
-  left:5%;
+  left:5px;
   
 }
 
 .select_box{
   position:relative;
   top:13%;
-  width:90px;
+  width:100px;
   height:30px;
   border-radius:10%;
   border:solid black 2px;
-  font-size:14px;
+  font-size:13px;
         font-family: "Verdana"; 
 
 }
@@ -880,6 +950,9 @@ canvas{
   height: 20px;
   right:20px;
   top:35px;
+          border-radius:10%;
+  border:solid black 2px;
+  font-family: "Verdana"; 
 }
 
 .distortionRow{
@@ -1114,7 +1187,7 @@ canvas{
 }
 
 .presetButton{
-    border-radius:7%;
+    border-radius:5px;
       width:60px;
   height:22px;
   text-align:center;
@@ -1158,8 +1231,15 @@ canvas{
 .clickBottomContainer{
   position:relative;
   display:inline-block;
+    top:12px; 
   width:150px;
   height:40px;
+    
+}
+
+.clickMiddleContainer{
+    width:150px;
+    height:40px;
     
 }
 
@@ -1196,8 +1276,8 @@ canvas{
   height:30px;
   text-align:center;
   border: solid black 2px;
-  border-radius:5%;
-  font-size:14px;    
+  font-size:14px;     
+  border-radius: 5px;
 }
 
 .improButton{
@@ -1206,9 +1286,9 @@ canvas{
   height:30px;
   text-align:center;
   border: solid black 2px;
-  border-radius:5%;
   font-size:14px;
   margin-top: 7px; 
+  border-radius: 5px;
 }
 
 .improActive{
@@ -1224,7 +1304,7 @@ canvas{
   text-align:center;
   top:10px;
   border: solid black 2px;
-  border-radius:5%;
+  border-radius:5px;
   font-size:14px;
 }
 
@@ -1258,18 +1338,17 @@ canvas{
 .arpResList{
     position:relative;
     width:90px;
-    height:30px;
+    height:25px;
     border-radius:10%;
     border:solid black 2px;
-    font-size:12px;
-    font-family: "Verdana"; 
+    font-family: "Verdana";  
 }
 
 
 .arpMoodList{
     position:relative;
     width:80px;
-    height:30px;
+    height:25px;
     border-radius:10%;
     border:solid black 2px;
     font-size:12px;
@@ -1298,7 +1377,9 @@ canvas{
   border: solid black 2px;
   height:40px;
   width:60px;
-    font-size: 14px;
+    font-size: 15px;
+    border-radius: 5px; 
+    font-family: "verdana"; 
 }
 
 .midiActive{
@@ -1340,7 +1421,10 @@ canvas{
   width:35px;
   height:35px;
   text-align:center;
-        font-size: 20px; 
+  font-size: 20px;     
+  border-radius: 5px; 
+  font-family: "verdana"; 
+  background-color: white; 
 
 }
 
@@ -1350,8 +1434,9 @@ canvas{
   background-color:black;
   text-align:center;
   color:white;
-    font-size: 25px; 
-      font-family: "verdana";
+  font-size: 25px; 
+  font-family: "verdana";
+  border-radius: 5px; 
 
 }
 
@@ -1375,17 +1460,21 @@ canvas{
 .play {
     position: relative; 
     display: inline-flex; 
-    width:50px;
+    width:70px;
     height:20px;
     
 
     background-color: white; 
-    color:black; 
+    color:black; 	
+    font-family:"Verdana";
+	font-size:14px;
+    
 
-    //font-size: 13px; 
     border:solid black 2px;
     border-radius: 5px;
     text-align: center; 
+    
+
     
 }
 
@@ -1528,4 +1617,7 @@ canvas{
     margin-top:2px; 
   height:40px;
   width:60px;
+    
+        border-radius: 5px; 
+    font-family: "verdana"; 
 }
