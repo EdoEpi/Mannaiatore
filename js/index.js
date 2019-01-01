@@ -3926,6 +3926,11 @@ function activateArp(){
   }
   changeColorArp();
   
+    if(!isPlaying)
+        play();
+    
+    if(isPlaying && !arpFlag)
+        play();
 }
 
 function changeColorArp(){
@@ -5536,7 +5541,7 @@ function scheduleNote( beatNumber, time ) {
     metronomeGain.connect(audioContext.destination);
     metronomeGain.gain.value=metronomeActValue;
     
-    
+    if (noteResolution2==0 || (noteResolution2==1 && beatNumber%2==0) || (noteResolution2==2 && beatNumber%4==0)) arpPlay();
     
     if(metric==0){          
          osc.frequency.value = 880.0;
@@ -5651,12 +5656,12 @@ function scheduleNote( beatNumber, time ) {
         }
      }
 
-    if(muteFlag1==false && !improFlag){
+    if(muteFlag1==false && !improFlag &&!arpFlag){
         osc.start( time );
         osc.stop( time + noteLength );
     }
     
-    if (noteResolution2==0 || (noteResolution2==1 && beatNumber%2==0) || (noteResolution2==2 && beatNumber%4==0)) arpPlay();
+    
     
     if(improFlag && improArray.length>0){      
         if(learnTimeIndex == 0) learnFlag=true;
