@@ -155,7 +155,10 @@ var improviserButton=document.getElementById("improviserButton");
 var improLearnButton=document.getElementById("improLearn");
 var noteDisplay = document.getElementById("noteDisp");
 var octaveDisplay = document.getElementById("octaveDisp");
+var modeDisplay; 
 var timerDisplay;
+
+
 
 var firstTime=true;
 var turnOn1=false, turnOn2=false, turnOn3=false;
@@ -2149,7 +2152,7 @@ function changeImproArray(){
     var indexTraslation, sign=0;
         
     
-    if(accX>=-1024 && accX<-900){
+    if(accX>=-1023 && accX<-900){
         indexTraslation=6;
         sign=1;
     }
@@ -2211,7 +2214,7 @@ function changeImproArray(){
         sign=0;
     }
     
-    else if(accX>=900 && accX<=1024) {
+    else if(accX>=900 && accX<=2023) {
         indexTraslation=6;
         sign=0;
     }
@@ -2219,6 +2222,7 @@ function changeImproArray(){
     
     if(indexTraslation!=prevIndexTraslation || sign!=prevSign){
         setNewImproArray(indexTraslation, sign);
+        changeModeDisplay(indexTraslation, sign);
         prevIndexTraslation = indexTraslation;
         prevSign = sign;
     }
@@ -2230,8 +2234,6 @@ function changeImproArray(){
 
 
 function setNewImproArray(t, sign){
-    
-    console.log("TRANSLATION + " +t + " SIGN: " +sign);
     
     var a=0, k=0, trans=0, actTonica=0, changedScale=[];
     
@@ -2270,11 +2272,10 @@ function setNewImproArray(t, sign){
         }
             
             
-        console.log(actTonica + " " + a)
         
         //if(!midiFlag) improArray[i] = new KeyboardEvent("keydown",{key: keys[(actTonica + a)%keys.length]})
         if(midiFlag) improArray[i] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,midiArray[actTonica+a]%midiArray.length,64])});
-        //console.log(midiArray[actTonica+a]);
+        
             k+=1;
             a=0;
         }
@@ -2285,6 +2286,35 @@ function setNewImproArray(t, sign){
     
     
 }
+
+function changeModeDisplay(index, sign){
+    
+    modeDisplay = document.getElementById("modeDisp");
+    
+    var textnode;
+    
+    if      (index==0 && sign==0)                               textnode = document.createTextNode("IONIAN") ;      
+    else if ((index==1 && sign==0) || (index==6 && sign==1))    textnode = document.createTextNode("DORIAN") ;
+    
+    else if ((index==2 && sign==0) || (index==5 && sign==1))    textnode = document.createTextNode("PHRYGIAN") ;
+    
+    else if ((index==3 && sign==0) || (index==4 && sign==1))    textnode = document.createTextNode("LYDIAN") ;
+    
+    else if ((index==4 && sign==0) || (index==3 && sign==1))    textnode = document.createTextNode("MIXOLYDIAN") ;
+    
+    else if ((index==5 && sign==0) || (index==2 && sign==1))    textnode = document.createTextNode("AEOLIAN") ;
+    
+    else if ((index==6 && sign==0) || (index==1 && sign==1))    textnode = document.createTextNode("LOCRIAN") ;
+    
+    else if (index==-1 && sign==-1)                             textnode = document.createTextNode("-") ;
+    
+        
+        modeDisplay.removeChild(modeDisplay.childNodes[0]);   
+        modeDisplay.appendChild(textnode);
+    
+    
+}
+
 
 function improSound(){
     
@@ -3949,7 +3979,7 @@ function activateImpro(){
   }
   
   changeColorImpro();
-  
+  changeModeDisplay(-1,-1);
 }
 
 function changeColorImpro(){
@@ -4180,7 +4210,9 @@ function changeOctaveTones(){
 function activateImproLearn(){
     improLearnFlag = !improLearnFlag; 
     changeColorImproLearn();
-
+    
+    
+    changeModeDisplay(-1,-1);
 }
 
 function changeColorImproLearn(){

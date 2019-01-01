@@ -1621,3 +1621,17 @@ margin-top: 17px;
         border-radius: 5px; 
     font-family: "verdana"; 
 }
+
+
+
+.modeDisplay{
+    position:absolute;
+    text-align:center;
+    background-color:white;
+    border:solid yellow 2px;
+    width:100px;
+    height:100px;
+    color:black;
+    
+    
+}
