@@ -13,6 +13,7 @@
 
     <div class="theTitle">MANNAIATO®</div>
     
+    
   <div class="synthMain"> 
   <div class="bar">
   <div class="white-steps">
@@ -447,12 +448,13 @@
     
   
   
-  <canvas id="canvFreq"  width="480px" height= "250px" style="border: #404040 1px">
-  </canvas>
+
+      <canvas id="canvFreq"  width="480px" height= "250px" style="border: #404040 1px"></canvas>    
+      <div id="modeDisp" class="modeDisplay"> </div>
+
   
   <div class="rightContainer">
 
-    
       <div class="clickContainer">
           <div class="clickLabel">METRONOME</div>
           <div id="controls">
@@ -478,7 +480,7 @@
                 <select id="clickResID" class ="clickResolutionSelect" onchange="noteResolution = this.selectedIndex;">
                       <option>16th notes
                       <option>8th notes
-                      <option>Quarter notes
+                      <option>1/4 notes
                   </select>
                 
                 <select id="clickMetricID" class ="clickMetricSelect" onchange="metric = this.selectedIndex; current16thNote=0">
@@ -520,7 +522,7 @@
                   <select id="arpResID" class="arpResList" onchange="noteResolution2 = this.selectedIndex;">
                       <option> 16th notes
                       <option>8th notes
-                      <option>Quarter notes
+                      <option>1/4 notes
                   </select>
               </div>
               <div id="selectMood">PATTERN
@@ -546,7 +548,6 @@
     <script src="js/impulse.js"></script>
     <script src="js/databaze.js"></script>
     
-    <div id="modeDisp" class="modeDisplay">-</div>
 </body>
     
 

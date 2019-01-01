@@ -2293,20 +2293,21 @@ function changeModeDisplay(index, sign){
     
     var textnode;
     
-    if      (index==0 && sign==0)                               textnode = document.createTextNode("IONIAN") ;      
-    else if ((index==1 && sign==0) || (index==6 && sign==1))    textnode = document.createTextNode("DORIAN") ;
+    if      (index==0 && sign==0)                               textnode = document.createTextNode("MODE IONIAN") ;  
     
-    else if ((index==2 && sign==0) || (index==5 && sign==1))    textnode = document.createTextNode("PHRYGIAN") ;
+    else if ((index==1 && sign==0) || (index==6 && sign==1))    textnode = document.createTextNode("MODE DORIAN") ;
     
-    else if ((index==3 && sign==0) || (index==4 && sign==1))    textnode = document.createTextNode("LYDIAN") ;
+    else if ((index==2 && sign==0) || (index==5 && sign==1))    textnode = document.createTextNode("MODE PHRYGIAN") ;
     
-    else if ((index==4 && sign==0) || (index==3 && sign==1))    textnode = document.createTextNode("MIXOLYDIAN") ;
+    else if ((index==3 && sign==0) || (index==4 && sign==1))    textnode = document.createTextNode("MODE LYDIAN") ;
     
-    else if ((index==5 && sign==0) || (index==2 && sign==1))    textnode = document.createTextNode("AEOLIAN") ;
+    else if ((index==4 && sign==0) || (index==3 && sign==1))    textnode = document.createTextNode("MODE MIXOLYDIAN") ;
     
-    else if ((index==6 && sign==0) || (index==1 && sign==1))    textnode = document.createTextNode("LOCRIAN") ;
+    else if ((index==5 && sign==0) || (index==2 && sign==1))    textnode = document.createTextNode("MODE AEOLIAN") ;
     
-    else if (index==-1 && sign==-1)                             textnode = document.createTextNode("-") ;
+    else if ((index==6 && sign==0) || (index==1 && sign==1))    textnode = document.createTextNode("MODE LOCRIAN") ;
+    
+    else if (index==-1 && sign==-1)                             textnode = document.createTextNode(" ") ;
     
         
         modeDisplay.removeChild(modeDisplay.childNodes[0]);   

@@ -1627,11 +1627,13 @@ margin-top: 17px;
 .modeDisplay{
     position:absolute;
     text-align:center;
-    background-color:white;
-    border:solid yellow 2px;
-    width:100px;
-    height:100px;
-    color:black;
+    left:1078px; 
+    bottom:680px; 
+    width: 100px; 
+    color:white;
+    font-family: "Verdana"; 
+    font-size: 15px; 
+    
     
     
 }
