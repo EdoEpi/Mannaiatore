@@ -2152,7 +2152,7 @@ function changeImproArray(){
     var indexTraslation, sign=0;
         
     
-    if(accX>=-1023 && accX<-900){
+    if(accX>=-2023 && accX<-900){
         indexTraslation=6;
         sign=1;
     }
