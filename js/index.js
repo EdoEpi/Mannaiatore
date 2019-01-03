@@ -118,6 +118,7 @@ var time=0;
 var thisTime;
 var indexTonica;
 var actualScale;
+var numOctaves;
 
 var t11=[], t12=[], t13=[], t14=[], t15=[], t16=[], t17=[];
 var t21=[], t22=[], t23=[], t24=[], t25=[], t26=[], t27=[];
@@ -2632,7 +2633,7 @@ document.onkeydown = function(e) {
           insertNotes();
           improLearnChord();
           if(improArray.length==7 && !isPlaying){
-              console.log("we"); 
+              
               play();
               changeImproChordFlag=false;
               
@@ -2989,7 +2990,7 @@ function triggerChordFunction(){
     
     
 }
-
+var countActualNotes;
 function insertNotes(){
   cleanOrdered();   //delete everything from the notesArray everytime we change the array of the events
   var count=0;
@@ -3016,13 +3017,51 @@ function insertNotes(){
             arpMidiOrderedArray[count]=arpMidiEventsArray[i];
             count++;
             }
-    
-        }   
+            
+            countActualNotes=count;
+         
+        } 
+        
+        addOctaveNotes();
     }
   
     
+        
+    
   arpIndex=0;   //everytime we add a note, the arp starts from the beginning
   chordFlag=false;
+}
+
+
+
+function changeArpOctave(){
+    
+    var x = document.getElementById("selectOctaveArp").value;
+    numOctaves = parseInt(x);
+    
+}
+function addOctaveNotes(){
+    
+    
+    tempOct = numOctaves;
+    tempInitialSize = arpMidiOrderedArray.length;
+    tempSize = tempInitialSize;
+    oct = 1;
+    
+    while (tempOct>1){
+        
+        for(i=0; i<tempInitialSize; i++){
+            
+            arpMidiOrderedArray[i+tempSize] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,arpMidiOrderedArray[i].data[1]+(12*oct),64])});
+        }
+        
+        tempSize += tempInitialSize;
+        tempOct--;
+        oct++;
+    }
+    
+    
+    
 }
 
 function cleanOrdered(){
@@ -3033,7 +3072,7 @@ function cleanOrdered(){
     
     
     if(midiFlag){
-        arpMidiOrderedArray = arpOrderedArray.splice(0,0);   
+        arpMidiOrderedArray = arpMidiOrderedArray.splice(0,0);   
     }
 }
 
@@ -3094,6 +3133,7 @@ document.onkeyup = function(e) {
 
 function deleteNotes(e){
    
+    
     if(!midiFlag){
         for(i=0;i<arpOrderedArray.length;i++){
             if(arpOrderedArray[i].key==e.key){
@@ -3103,13 +3143,58 @@ function deleteNotes(e){
         }
     }
     
+    
+    
     else if(midiFlag){
-        for(i=0;i<arpMidiOrderedArray.length;i++){
-            if(arpMidiOrderedArray[i].data[1]==e.data[1]){
-                arpMidiOrderedArray.splice(i,1);
-      
+        if(!arpFlag){
+            
+            for(i=0;i<arpMidiOrderedArray.length;i++){
+                if(arpMidiOrderedArray[i].data[1]==e.data[1]){
+                    arpMidiOrderedArray.splice(i,1);
+                
+                }
             }
         }
+        
+        else{
+            
+            for(i=0;i<(arpMidiOrderedArray.length)/numOctaves;i++){
+                
+                
+                if(arpMidiOrderedArray[i].data[1]==e.data[1]){
+                    
+                    actData = e.data[1];
+                    arpMidiOrderedArray.splice(i,1);
+                    
+                    for(j=0;j<arpMidiOrderedArray.length;j++){
+                        
+                        if(arpMidiOrderedArray[j].data[1] == actData+12)
+                            arpMidiOrderedArray.splice(j,1);   
+                        
+                    }
+                    
+                    for(j=0;j<arpMidiOrderedArray.length;j++){
+                        
+                        if(arpMidiOrderedArray[j].data[1] == actData+24)
+                            arpMidiOrderedArray.splice(j,1);   
+                        
+                    }
+                    
+                    for(j=0;j<arpMidiOrderedArray.length;j++){
+                        
+                        if(arpMidiOrderedArray[j].data[1] == actData+36)
+                            arpMidiOrderedArray.splice(j,1);   
+                        
+                    }
+                    
+                    
+                }
+            }
+            
+            
+            
+        }
+        
     }
   
   
@@ -3672,6 +3757,8 @@ function initializeVariables(){
   qFilt=filterQArray[qFiltIndex];
   DW=reverbDWArray[reverbDWIndex];
   
+  numOctaves = 1;
+    
   filter.type = "lowpass";
   filter.frequency.value = filterFreqArray[10];
   filter.Q.value = 20;
