@@ -1148,13 +1148,14 @@ function activateLfo(x){
 
 function drawSamplesFreq(){
   analyserF.getByteFrequencyData(dataArray);//spettro di frequenza, mentre se fosse getByteTimeDomainData vedrei invece il segnale nel tempo
+
   analyserF.maxDecibels=0;
   ctxF.clearRect(0,0,canvasFreq.width,canvasFreq.height);
   ctxF.beginPath();
   var gradient= ctxF.createLinearGradient(0,0,canvasFreq.width,0);
   for (var i=0; i<canvasFreq.width; i++) {
-    ctxF.moveTo(i,canvasFreq.height)
-    ctxF.lineTo(i,canvasFreq.height-dataArray[i])
+    ctxF.moveTo(Math.log10(i)*150,canvasFreq.height)
+    ctxF.lineTo(Math.log10(i)*150,canvasFreq.height-dataArray[i])
     ctxF.lineWidth = 1;
     ctxF.strokeStyle=gradient;
     gradient.addColorStop("0","white");
@@ -2581,8 +2582,9 @@ document.onkeydown = function(e) {
     if(e.key=="CapsLock")
       capsLockFunction(e);
         
+     
     
-  if(!e.repeat){
+  if(!e.repeat && keysTriggered[keys.indexOf(e.key)]==undefined){
       
       
         
@@ -3905,6 +3907,7 @@ function getMIDIMessage(midiMessage) {
             arpMidiEventsArray[k]=-1;
             deleteNotes(midiMessage);
             changeDisplayChord("-");
+            
         }
         
     }
@@ -3985,7 +3988,7 @@ function releaseMidi(data){
   index = midiArrayFreq.indexOf(freqM);
   
   
-  release1(freqM, index, releaseArray[rel1]);
+ 
   
   if(turnOn1 && !turnOn2 && !turnOn3){
         release1(freqM, index, releaseArray[rel1]);
