@@ -632,7 +632,6 @@ function changeParametDistortion(drive){
 function changeParametFilter(){
   if (selFilt.options.selectedIndex=="0") {filter.type = "lowpass"}
   if (selFilt.options.selectedIndex=="1") {filter.type = "highpass"}
-  if (selFilt.options.selectedIndex=="2") {filter.type = "bandpass"}
   
 }
 
@@ -2452,29 +2451,7 @@ function arpeggiatorPlay(numNotes){
                  else arpIndex = (arpIndex+1)%numNotes;
               } 
           }
-          /*if(mood==4) {
-              
-              if(octave1==true) {
-                  attackFunction(arpOrderedArray[arpIndex]);
-                  releaseFunction(arpOrderedArray[arpIndex]); 
-                  if(arpIndex==numNotes-1){
-                      octave1=false;
-                      octave2=true;
-                      arpIndex=0;
-                  }
-                  else arpIndex = (arpIndex+1)%numNotes;
-              } 
-              else if(octave2==true) {
-                  attackFunction(arpOrderedArray[arpIndex]);
-                  releaseFunction(arpOrderedArray[arpIndex]); 
-                  if(arpIndex==numNotes-1){
-                      octave2=false;
-                      octave1=true;
-                      arpIndex=0;
-                  }
-                 else arpIndex = (arpIndex+1)%numNotes;
-              } 
-          }*/
+          
       }
   }
     
@@ -2538,30 +2515,7 @@ function arpeggiatorPlay(numNotes){
                  else arpIndex = (arpIndex+1)%numNotes;
               } 
           }
-        
-        if(mood==4) {
-              
-              if(octave1==true) {
-                  attackMidi(arpMidiOrderedArray[arpIndex].data);
-                  releaseMidi(arpMidiOrderedArray[arpIndex].data); 
-                  if(arpIndex==numNotes-1){
-                      octave1=false;
-                      octave2=true;
-                      arpIndex=0;
-                  }
-                  else arpIndex = (arpIndex+1)%numNotes;
-              } 
-              else if(octave2==true) {
-                  attackMidi(arpMidiOrderedArray[arpIndex].data);
-                  releaseMidi(arpMidiOrderedArray[arpIndex].data); 
-                  if(arpIndex==numNotes-1){
-                      octave2=false;
-                      octave1=true;
-                      arpIndex=0;
-                  }
-                 else arpIndex = (arpIndex+1)%numNotes;
-              } 
-          }
+    
       }
   }
       
@@ -3062,7 +3016,9 @@ function addOctaveNotes(){
         
         for(i=0; i<tempInitialSize; i++){
             
-            arpMidiOrderedArray[i+tempSize] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,arpMidiOrderedArray[i].data[1]+(12*oct),64])});
+            newVal=arpMidiOrderedArray[i].data[1]+(12*oct); 
+            if(newVal<=midiArray[midiArray.length-1])
+                arpMidiOrderedArray[i+tempSize] = new MIDIMessageEvent('eventType', { data: new Uint8Array([144,newVal,64])});
         }
         
         tempSize += tempInitialSize;
