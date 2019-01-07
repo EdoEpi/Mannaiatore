@@ -238,10 +238,6 @@ var octave2=false;
 
 
 
-//setInterval(arpPlay, 200)
-//setInterval(improPlay, 100)         //ogni 100ms vede riaggiorna l' accordo che si sta suonando e la relativa scala;
-
-
 initializeVariables();
 
 
@@ -2130,9 +2126,7 @@ function insertImproArray(){
   
   
   
-    
-  //if (!(improLearnFlag && !startLearn))
-  //    improSound();
+
   
   
 }
@@ -2577,12 +2571,13 @@ document.onkeydown = function(e) {
   
     
     var capsLock = e.getModifierState("CapsLock");
-        
+     
+    
     
     if(e.key=="CapsLock")
       capsLockFunction(e);
         
-     
+    if(isAKey(e)==true){ 
     
   if(!e.repeat && keysTriggered[keys.indexOf(e.key)]==undefined){
       
@@ -2652,8 +2647,21 @@ document.onkeydown = function(e) {
    
   }
   
-  
+    }
 }
+
+function isAKey(e){
+    
+    for(i=0;i<keys.length;i++){
+        if(e.key==keys[i])  return true;
+    }
+    
+    return false;
+    
+}
+
+
+
 
 var changeImproChordFlag=true;
 
@@ -3084,7 +3092,8 @@ document.onkeyup = function(e) {
     
   if(e.key=="CapsLock")
       capsLockFunction(e);
-      
+
+    if(isAKey(e)==true){
   chordFlag = false;
   
   k=keys.indexOf(e.key);
@@ -3128,7 +3137,7 @@ document.onkeyup = function(e) {
     }
   
   
-  
+    }
   
   
 }
@@ -4052,6 +4061,12 @@ function activateArp(){
     
     if(isPlaying && !arpFlag)
         play();
+    
+    if(!arpFlag){
+        document.getElementById("selectOctaveArp").value = 1;
+        numOctaves = parseInt(1);
+    }
+        
 }
 
 function changeColorArp(){
@@ -4067,6 +4082,10 @@ function activateImpro(){
     
   if(improFlag && arpFlag){
     activateArp();          //se è accesso l' impro, è spento l' arpeggiatore
+  }
+    
+    if(improFlag && improLearnFlag){
+    activateImproLearn();          //se è accesso l' impro, è spento l' arpeggiatore
   }
   
   changeColorImpro();
@@ -4304,6 +4323,15 @@ function activateImproLearn(){
     
     
     changeModeDisplay(-1,-1);
+    
+    if(!improLearnFlag){
+        endLearningTime();
+        changeDisplayTimer();
+    }
+    
+    if(improFlag && improLearnFlag){
+        activateImpro();          //se è accesso l' impro, è spento l' arpeggiatore
+  }
 }
 
 function changeColorImproLearn(){
@@ -4323,36 +4351,50 @@ function activateClock(){
 
 
 function timeFunction(){
-    thisTime=60-time;
-    if(time<=10){
+    thisTime=59-time;
+    if(time<=59){
         changeDisplayTimer();
         time++;
     }
     
-    if(time==11){
+    if(time==60){
         
+        endLearningTime();
+        activateImproLearn()
+    }
+        
+}
+
+function endLearningTime(){
         clearInterval(timeInterval);            
         startLearn=false;
         triggerChord=false;
         
         calculateProbabilities();
         
-        activateImproLearn()
-        //learnInterval = setInterval(improLearnPlay,200);
+        
+        
         
         changeDisplayChord("-");
         
         cleanOrdered();     //cancella l'improArray;
-    }
-        
+    
 }
 
 function changeDisplayTimer(){
     timerDisplay= document.getElementById("timerDisplay");
     
    timerDisplay.removeChild(timerDisplay.childNodes[0]);
-   var textnode = document.createTextNode(String(thisTime)) ;         
+   
+    if(!improLearnFlag){
+        var textnode = document.createTextNode("-") ; 
+    }
+    else{
+        var textnode = document.createTextNode(String(thisTime)) ; 
+    }
    timerDisplay.appendChild(textnode);
+    
+    
   
     
 }
@@ -4797,23 +4839,7 @@ function calculateTimeProbabilities(){
 
 
 
-function improLearnPlay(){
-    
-    //prevLearnIndex = learnIndex;
-    
-    //attackFunction(improArray[learnIndex]);
-    //changeDisplayNote(improArray[learnIndex]);
-    //releaseFunction(improArray[learnIndex]);
-   
-  
-    
-    
-    //learnIndex = improvvisatorLearn()
-    
-    //learnTimeIndex = improvvisatorLearnTime(prevLearnIndex, learnIndex);
-    
-    //console.log(learnTimeIndex);
-}
+
 
 
 function improvvisatorLearnTime(prev, act){
@@ -5641,10 +5667,6 @@ function nextNote() {
 }
 
 
-/*function changeColorClickDot(x) {
-    if(x==1) 
-    else if(x==2) dotClicked2.classList.toggle("clicked");
-}*/
 
 
 
