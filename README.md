@@ -146,6 +146,7 @@ The scale is composed of 7 notes, and it starts from the tonic of the chord reco
 
 
 #### MICROBIT MODE
+<p align="center"> <img src="./img/microbit1.png" height="200"></p>
 You can use a Microbit to change in real time the mode of the scale used during the improvisation. 
 This mode works thanks to accelerometer of the microbit and the microbit.js library.
 
@@ -157,7 +158,7 @@ This mode works thanks to accelerometer of the microbit and the microbit.js libr
 
 4.Move the microbit on left and right. You will see a new display on the top-right part of the frequency canvas that shows the current  mode of the scale. So by moving it, you can move the scale used by the improviser in a range of an octave up and down. This enables us to change the mode of the scale, while the scale remains the same. It’s just transposed up and down.
 
-<p align="center"> <img src="./img/microbit1.png" height="200"></p>
+<p align="center"> <img src="./img/modes.png" position height="200"></p>
 
 
 
