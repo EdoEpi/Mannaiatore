@@ -10,10 +10,10 @@ Mannaiator is a digital synthesizer, based on the classic sound functionalities 
 mannaiatorproject.surge.sh
 
 ## CREATORS
-Carmelo Fascella
-Matteo Acerbi
-Edoardo Epifani 
-Husain Taqi
+- Carmelo Fascella
+- Matteo Acerbi
+- Edoardo Epifani 
+- Husain Taqi
 
 ## MAIN FEATURES
 Sound Synthesis 
