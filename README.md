@@ -35,20 +35,20 @@ Find it online: mannaiatorproject.surge.sh
 KNOBS: Each knob works in the same way. It has got 20 steps and each step assumes a different value in base of its function. Moving the knob, a function calculates the current grade of the knob, and according to it, the value referred to that knob is changed in real time.
 
 ## Effect Panel
-- The chain of effect is built in serie with the three oscillators and it can be built in real time choosing a combination of the following effects: 
+- The chain of effects is built in serie with the three oscillators and it can be built in real time choosing a combination of the following effects: 
 
     - DELAY: It can be managed using a TIME knob and a LEVEL knob. The first one controls the delay time and the second one the delay volume.
 
-    - FILTER: There are two kind of filters: LOWPASS and HIGHPASS, that are controlled by a frequency cutoff that ranges from 20Hz to 20khZ
+    - FILTER: There are two kind of filters: LOWPASS and HIGHPASS, that are controlled by a frequency cutoff that ranges from 20Hz to 20kHz
 
-    - DISTORTION: This is a distorsion built mathematically by a function. Its drive can be controlled by the knob DRIVE
+    - DISTORTION: This is a distortion built mathematically by a function. Its drive can be controlled by the knob DRIVE
 
     - REVERB: The dry/wet level can be controlled by knob LEVEL.
     
     <p align="center"> <img src="./img/effects.png" height="300"> </p>
     
 ## Onscreen Keyboard
-- Can be used either with the mouse, PC keyboard or MIDI controller.
+- It can be used either with the mouse, PC keyboard or MIDI controller.
 
 - With the following button, you can change the octave range if you play with the mouse or with PC keyboard.
 
@@ -61,7 +61,9 @@ KNOBS: Each knob works in the same way. It has got 20 steps and each step assume
 - You can change the octave directly from your device.
 
 ## Timing Module
-- The Metronome has variable, selectable speeds within the range 10-470 BPM. To activate it, press the PLAY button, and press STOP to stop it. The RESOLUTION option allows the user to set a metronome that clicks on each 16th note, 8th note or quarter note. It also offers the option METRIC which allows the user to choose which metric pattern to follow. Here we have the most commonly used metric patterns, such as: 1/1, 1/2, 1/4, 3/4 ,4/4, 5/4, 7/4. 
+- The Metronome has variable, selectable speeds within the range 10-470 BPM. To activate it, press the PLAY button, and press STOP to stop it. 
+
+- The RESOLUTION option allows the user to set a metronome that clicks on each 16th note, 8th note or quarter note. It also offers the option METRIC which allows the user to choose which metric pattern to follow. Here we have the most commonly used metric patterns, such as: 1/1, 1/2, 1/4, 3/4 ,4/4, 5/4, 7/4. 
 
 - It is also possible to mute the metronome using the MUTE button, while maintaining the three blinking LEDs as a timing reference. They also permit the user to have a constant indication of the speed of both the metric pattern set by the metronome, as well as a repetitive sound that could be annoying to the user. Therefore, this feature could be very useful for better performances. 
 
@@ -154,6 +156,9 @@ This mode works thanks to accelerometer of the microbit and the microbit.js libr
 3.Pair the microbit with your pc.
 
 4.Move the microbit on left and right. You will see a new display on the top-right part of the frequency canvas that shows the current  mode of the scale. So by moving it, you can move the scale used by the improviser in a range of an octave up and down. This enables us to change the mode of the scale, while the scale remains the same. It’s just transposed up and down.
+
+<p align="center"> <img src="./img/microbit.png" height="200"></p>
+
 
 
 
