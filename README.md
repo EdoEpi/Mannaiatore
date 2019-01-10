@@ -9,13 +9,13 @@ Mannaiator is a digital synthesizer, based on the classic sound functionalities 
 
 Find it online: mannaiatorproject.surge.sh
 
-## CREATORS
+## Creators
 - Carmelo Fascella
 - Matteo Acerbi
 - Edoardo Epifani 
 - Husain Taqi
 
-## MAIN FEATURES
+## Main Features
 - Sound Synthesis 
 - Effects Panel
 - Midi and bluetooth microbit connections 
@@ -34,7 +34,7 @@ Find it online: mannaiatorproject.surge.sh
 
 KNOBS: Each knob works in the same way. It has got 20 steps and each step assumes a different value in base of its function. Moving the knob, a function calculates the current grade of the knob, and according to it, the value referred to that knob is changed in real time.
 
-## CHAIN OF EFFECTS
+## Effect Panel
 - The chain of effect is built in serie with the three oscillators and it can be built in real time choosing a combination of the following effects: 
 
     - DELAY: It can be managed using a TIME knob and a LEVEL knob. The first one controls the delay time and the second one the delay volume.
@@ -47,7 +47,7 @@ KNOBS: Each knob works in the same way. It has got 20 steps and each step assume
     
     <p align="center"> <img src="./img/effects.png" height="300"> </p>
     
-## Onscreen keyboard
+## Onscreen Keyboard
 - Can be used either with the mouse, PC keyboard or MIDI controller.
 
 - With the following button, you can change the octave range if you play with the mouse or with PC keyboard.
