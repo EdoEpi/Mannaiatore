@@ -75,6 +75,9 @@ KNOBS: Each knob works in the same way. It has got 20 steps and each step assume
 
 - The name of the chord recognized is displayed on the display CHORD.
 
+<p align="center"> <img src="./img/chordrecog.png" height="220"></p>
+
+
 ## Arpeggiator
 - The arpeggiator follows the tempo set by the metronome. It also allows to set a different resolution. Different arpeggiator modes are available as follows: 
     - Up
