@@ -1,6 +1,9 @@
-<a href="https://aimeos.org/">
-    <img src="https://aimeos.org/fileadmin/template/icons/logo.png" alt="Aimeos logo" title="Aimeos" align="right" height="60" />
-</a>
+<p align="center">
+  <img src="./img/example.png" alt="Size Limit example"
+       width="654" height="450">
+</p>
+
+
 
 
 ## MANNAIATOR SYNTH 1.0
