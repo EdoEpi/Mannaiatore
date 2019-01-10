@@ -119,6 +119,13 @@ var thisTime;
 var indexTonica;
 var actualScale;
 var numOctaves;
+var prevIndexTraslation=0, prevSign=0;
+var counterLearnedNotes=0;
+var prevTime, actTime;
+var accX=0;
+var accY=0;
+var accZ=0;
+var buttA;
 
 var t11=[], t12=[], t13=[], t14=[], t15=[], t16=[], t17=[];
 var t21=[], t22=[], t23=[], t24=[], t25=[], t26=[], t27=[];
@@ -183,7 +190,7 @@ var triggerChord = false;
 var startLearn=false;
 var fLI=false;
 var learnFlag=true;
-
+var changeImproChordFlag=true;
 
 var cMaster = new AudioContext();
 var gainMaster= cMaster.createGain();
@@ -234,6 +241,8 @@ var Up2=false;              // For mood Down&Up
 var Down2=true;             // firstable Down and then Up
 var octave1=true;
 var octave2=false;
+
+
 
 
 
@@ -1066,11 +1075,10 @@ function changeColorDotLfo(x){
 
 function drawSamples1(){
   analyser1.getByteTimeDomainData(dataArray);
-  analyser1.maxDecibels=50;
   ctx1.clearRect(0,0,canvas1.width,canvas1.height);
   ctx1.beginPath();
   for (var i=0; i<canvas1.width; i++) {
-    ctx1.lineTo(i,dataArray[i]-canvas1.height*0.8)
+    ctx1.lineTo(i,dataArray[i]/2-canvas1.height*0.15)
   }
   ctx1.strokeStyle = "#00FF00";
   ctx1.stroke();
@@ -1082,7 +1090,7 @@ function drawSamples2(){
   ctx2.clearRect(0,0,canvas2.width,canvas2.height);
   ctx2.beginPath();
   for (var i=0; i<canvas2.width; i++) {
-    ctx2.lineTo(i,dataArray[i]-canvas2.height*0.8)
+    ctx2.lineTo(i,dataArray[i]/2-canvas2.height*0.15)
   }
   ctx2.strokeStyle = "#00FF00";
   ctx2.stroke();
@@ -1094,7 +1102,7 @@ function drawSamples3(){
   ctx3.clearRect(0,0,canvas3.width,canvas3.height);
   ctx3.beginPath();
   for (var i=0; i<canvas3.width; i++) {
-    ctx3.lineTo(i,dataArray[i]-canvas3.height*0.8)
+    ctx3.lineTo(i,dataArray[i]/2-canvas3.height*0.15)
   }
   ctx3.strokeStyle = "#00FF00";
   ctx3.stroke();
@@ -1149,9 +1157,9 @@ function drawSamplesFreq(){
   ctxF.beginPath();
   var gradient= ctxF.createLinearGradient(0,0,canvasFreq.width,0);
   for (var i=0; i<canvasFreq.width; i++) {
-    ctxF.moveTo(Math.log10(i)*150,canvasFreq.height)
-    ctxF.lineTo(Math.log10(i)*150,canvasFreq.height-dataArray[i])
-    ctxF.lineWidth = 1;
+    ctxF.moveTo(Math.log10(i)*185 -80 ,canvasFreq.height)
+    ctxF.lineTo(Math.log10(i)*185 -80 ,canvasFreq.height-dataArray[i])
+    ctxF.lineWidth = 27;
     ctxF.strokeStyle=gradient;
     gradient.addColorStop("0","white");
     gradient.addColorStop("0.5","blue");
@@ -2140,7 +2148,7 @@ function findFirstLearnIndex(){
     else if (d7>0) learnIndex=6;
 }
 
-var prevIndexTraslation=0, prevSign=0;
+
 
 function changeImproArray(){
     
@@ -2617,10 +2625,7 @@ function isAKey(e){
 
 
 
-var changeImproChordFlag=true;
 
-var counterLearnedNotes=0;
-var prevTime, actTime;
 
 
 function capsLockFunction(e){
@@ -5863,10 +5868,7 @@ function searchDevice(){
   microBit.searchDevice();
 }
 
-var accX=0;
-var accY=0;
-var accZ=0;
-var buttA;
+
 microBit.onBleNotify(function(){
   //document.getElementById("buttonA").innerHTML=microBit.getButtonA();
   //document.getElementById("buttonB").innerHTML=microBit.getButtonB();
