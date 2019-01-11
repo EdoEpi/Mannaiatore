@@ -7,7 +7,7 @@
 # MANNAIATOR SYNTH 1.0
 Mannaiator is a digital synthesizer, based on the classic sound functionalities of a synthesizer with the added feature of an innovative improviser algorithm that utilises Markov Chains to play new and interesting melodies. 
 
-Find it online: mannaiatorproject.surge.sh
+Find it online: http://mannaiatorproject.surge.sh/
 
 ## Creators
 - Carmelo Fascella
@@ -37,12 +37,11 @@ KNOBS: Each knob works in the same way. It has got 20 steps and each step assume
 ## Effect Panel
 - The chain of effects is built in serie with the three oscillators and it can be built in real time choosing a combination of the following effects: 
 
-    - DELAY: It can be managed using a TIME knob and a LEVEL knob. The first one controls the delay time and the second one the delay volume.
+    - DELAY: It can be managed using TIME and LEVEL knob. The first one controls the delay time and the second one the delay volume.
 
     - FILTER: There are two kind of filters: LOWPASS and HIGHPASS, that are controlled by a frequency cutoff that ranges from 20Hz to 20kHz
 
-    - DISTORTION: This is a distortion built mathematically by a function. Its drive can be controlled by the knob DRIVE
-
+    - DISTORTION: This is a distortion built mathematically by a function. Its drive can be controlled by DRIVE knob.
     - REVERB: This effect is based on an impulse response loaded in the "impulse.js" file. The dry/wet level can be controlled by knob LEVEL.
     
 - The MASTER VOLUME is the general volume of the synthetizer.
@@ -89,7 +88,7 @@ KNOBS: Each knob works in the same way. It has got 20 steps and each step assume
     - Up and Down
     - Down and Up
 
-- With the OCTAVE button, you can choose the number of octaves that the arpeggiator goes through, going from one octave, up to four. This allows us to have a total of 16 different types of arpeggiator. 
+- With the OCTAVE button, you can choose the number of octaves that the arpeggiator goes through, going from one octave, up to four. This allows us to have a total of 16 different types of arpeggiator for every chord played. 
 - The aforementioned CHORD RECOGNITION display shows the current chord performed by the arpeggiator. 
 
 <p align="center"> <img src="./img/arp.png" height="200"></p>
@@ -112,7 +111,7 @@ The improviser works as follows:
 
 
 #### Learning Mode 
-1.Press the button LEARNING
+1.Press the LEARNING button.
  
 2.Play a 4-note chord, then the chord-recognition algorithm will recognize it, the key 
 and a proper scale that matches with the chord.
@@ -133,7 +132,7 @@ The scale is composed of 7 notes, and it starts from the tonic of the chord reco
 
 
 #### Improvisation Mode
-1.Press the button IMPROVISER
+1.Press the IMPROVISER button.
 
 2.After you play a note, the Mannaiator starts playing, improvising on what you played before.
 
@@ -152,9 +151,9 @@ The scale is composed of 7 notes, and it starts from the tonic of the chord reco
 You can use a Microbit to change in real time the mode of the scale used during the improvisation. 
 This mode works thanks to accelerometer of the microbit and the microbit.js library.
 
-1.Turn on the Bluetooth of your pc
+1.Turn on the Bluetooth of your pc.
 
-2.Press the button MICROBIT
+2.Press the MICROBIT button.
 
 3.Pair the microbit with your pc.
 
