@@ -96,8 +96,8 @@ KNOBS: Each knob works in the same way. It has got 20 steps and each step assume
 
 
 ## Preset Selection
-- The preset selector is based on Firebase database. The SAVE button allows to save the current state of the synth, including all knobs, selectors, buttons, etc. to be recalled at any time in the future. 
-- Pressing SAVE will show a prompt, allowing the user to pick a name for the preset. 
+- The preset selector is based on Firebase database. The CREATE NEW button allows to save the current state of the synth, including all knobs, selectors, buttons, etc. to be recalled at any time in the future. 
+- Pressing CREATE NEW will show a prompt, allowing the user to pick a name for the preset. 
 - The LOAD button loads the currently selected preset from the list. 
 - DELETE can be used to delete the currently selected preset from the database, and therefore from the selection list.
 
