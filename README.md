@@ -32,19 +32,20 @@ Find it online: http://mannaiatorproject.surge.sh/
 
 <p align="center"> <img src="./img/osc.png"  height="180"> </p>
 
-KNOBS: Each knob works in the same way. It has got 20 steps and each step assumes a different value in base of its function. Moving the knob, a function calculates the current grade of the knob, and according to it, the value referred to that knob is changed in real time.
+#### Knobs
+- Each knob works in the same way. It has got 20 steps and each step assumes a different value in base of its function. Moving the knob, a function calculates the current grade of the knob, and according to it, the value referred to that knob is changed in real time.
 
-## Effect Panel
+## Effects Panel
 - The chain of effects is built in serie with the three oscillators and it can be built in real time choosing a combination of the following effects: 
 
-    - DELAY: It can be managed using TIME and LEVEL knob. The first one controls the delay time and the second one the delay volume.
+    - **Delay**: It can be managed using TIME and LEVEL knob. The first one controls the delay time and the second one the delay volume.
 
-    - FILTER: There are two kind of filters: LOWPASS and HIGHPASS, that are controlled by a frequency cutoff that ranges from 20Hz to 20kHz
+    - **Filter**: There are two kind of filters: LOWPASS and HIGHPASS, that are controlled by a frequency cutoff that ranges from 20Hz to 20kHz
 
-    - DISTORTION: This is a distortion built mathematically by a function. Its drive can be controlled by DRIVE knob.
-    - REVERB: This effect is based on an impulse response loaded in the "impulse.js" file. The dry/wet level can be controlled by knob LEVEL.
+    - **Distortion**: This is a distortion built mathematically by a function. Its drive can be controlled by DRIVE knob.
+    - **Reverb**: This effect is based on an impulse response loaded in the "impulse.js" file. The dry/wet level can be controlled by knob LEVEL.
     
-- The MASTER VOLUME is the general volume of the synthetizer.
+    - The **Master Volume** knob controls the general volume of the synthetizer.
 
     <p align="center"> <img src="./img/effects.png" height="300"> </p>
     
@@ -95,7 +96,7 @@ KNOBS: Each knob works in the same way. It has got 20 steps and each step assume
 
 
 ## Preset Selection
-- The preset selector is based on Firebase database. The CREATE NEW button allows to save the current state of the synth, including all knobs, selectors, buttons, etc. to be recalled at any time in the future. 
+- The preset selector is based on Firebase realtime database. The CREATE NEW button allows to save the current state of the synth, including all knobs, selectors, buttons, etc. to be recalled at any time in the future. 
 - Pressing CREATE NEW will show a prompt, allowing the user to pick a name for the preset. 
 - The LOAD button loads the currently selected preset from the list. 
 - DELETE can be used to delete the currently selected preset from the database, and therefore from the selection list.
@@ -104,8 +105,7 @@ KNOBS: Each knob works in the same way. It has got 20 steps and each step assume
 
 
 ## Improviser
-The main feature of the Mannaiator is the improviser.
-The improviser works as follows:
+**The main feature of the Mannaiator is the improviser. The improviser works as follows:**
 
 <p align="center"> <img src="./img/learning.png" height="100"></p>
 
@@ -146,7 +146,7 @@ The scale is composed of 7 notes, and it starts from the tonic of the chord reco
 
 
 
-#### MICROBIT MODE
+#### Microbit Mode
 <p align="center"> <img src="./img/microbit1.png" height="200"></p>
 You can use a Microbit to change in real time the mode of the scale used during the improvisation. 
 This mode works thanks to accelerometer of the microbit and the microbit.js library.
