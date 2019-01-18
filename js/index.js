@@ -1494,7 +1494,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==3 && fifth==4 && seventh==4){
-    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7");
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " -Δ7");
      if(!midiFlag) tonica=arpOrderedArray[0];
     else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Delta7";
@@ -1522,7 +1522,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==3 && fifth==5 && seventh==3){
-    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7 aug");
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " -Δ7 aug");
      if(!midiFlag) tonica=arpOrderedArray[0];
     else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Delta7Aug";
@@ -1550,7 +1550,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==3 && fifth==3 && seventh==5){
-    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " Δ7 (5b)");
+    changeDisplayChord(notesNamesArray[primo%notesNamesArray.length] + " -Δ7 (5b)");
      if(!midiFlag) tonica=arpOrderedArray[0];
     else if(midiFlag)  tonica=arpMidiOrderedArray[0];
     modo="Delta7Bem";
@@ -1581,7 +1581,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==4 && fifth==4 && seventh==1){
-    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 1st inversion");
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " -Δ7 1st inversion");
     if(!midiFlag) tonica=arpOrderedArray[3];
     else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Delta7";
@@ -1609,7 +1609,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==5 && fifth==3 && seventh==1){
-    changeDisplayChordchangeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 aug 1st inversion");
+    changeDisplayChordchangeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " -Δ7 aug 1st inversion");
     if(!midiFlag) tonica=arpOrderedArray[3];
     else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Delta7Aug";
@@ -1637,7 +1637,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==3 && fifth==5 && seventh==1){
-    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " Δ7 (5b) 1st inversion");
+    changeDisplayChord(notesNamesArray[quarto%notesNamesArray.length] + " -Δ7 (5b) 1st inversion");
     if(!midiFlag) tonica=arpOrderedArray[3];
     else if(midiFlag)  tonica=arpMidiOrderedArray[3];
     modo="Delta7Bem";
@@ -1670,7 +1670,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==4 && fifth==1 && seventh==3){
-    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 2nd inversion");
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " -Δ7 2nd inversion");
     if(!midiFlag) tonica=arpOrderedArray[2];
     else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Delta7";
@@ -1698,7 +1698,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==3 && fifth==1 && seventh==3){
-    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 aug 2nd inversion");
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " -Δ7 aug 2nd inversion");
     if(!midiFlag) tonica=arpOrderedArray[2];
     else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Delta7Aug";
@@ -1723,7 +1723,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==5 && fifth==1 && seventh==3){
-    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " Δ7 (5b) 2nd  inversion");
+    changeDisplayChord(notesNamesArray[terzo%notesNamesArray.length] + " -Δ7 (5b) 2nd  inversion");
     if(!midiFlag) tonica=arpOrderedArray[2];
     else if(midiFlag)  tonica=arpMidiOrderedArray[2];
     modo="Delta7Bem";
@@ -1755,7 +1755,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==1 && fifth==3 && seventh==4){
-    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 3rd inversion");
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " -Δ7 3rd inversion");
     if(!midiFlag) tonica=arpOrderedArray[1];
     else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Delta7";
@@ -1783,7 +1783,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==1 && fifth==3 && seventh==5){
-    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 aug 3rd inversion");
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " -Δ7 aug 3rd inversion");
     if(!midiFlag) tonica=arpOrderedArray[1];
     else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Delta7Aug";
@@ -1808,7 +1808,7 @@ function chordRecognitionTertian(){
   }
   
   else if (third==1 && fifth==3 && seventh==3){
-    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " Δ7 dim 3rd inversion");
+    changeDisplayChord(notesNamesArray[secondo%notesNamesArray.length] + " -Δ7 dim 3rd inversion");
     if(!midiFlag) tonica=arpOrderedArray[1];
     else if(midiFlag)  tonica=arpMidiOrderedArray[1];
     modo="Delta7Bem";
