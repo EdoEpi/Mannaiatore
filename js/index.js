@@ -3704,12 +3704,12 @@ function initializeVariables(){
   Maj7=[2, 2, 1, 2, 2, 2, 1];
   Seven=[2,2,1,2,2,1, 2];
   Delta7=[2,1,2,2,2,2, 1];
-  SevenMin=[2,1,2,2,2,1, 2];
+  SevenMin=[2,1,2,2,1,2, 2];
   
   Maj7Aug=[2,2,1,3,1,3, 1];
   SevenAug=[2,2,1,3,1,1, 2];
   Delta7Aug=[2,1,2,3,1,2, 1];
-  SevenMinAug=[2,1,2,3,1,1, 2];
+  SevenMinAug=[2,1,2,3,0,2, 2];
   
   Maj7Bem = [2,2,1,1,3,2,1];
   SevenBem = [2,2,1,1,3,1,2];
