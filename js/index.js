@@ -1445,7 +1445,7 @@ function chordRecognitionTriad(){
   
   
   
-  chordFlag=true;
+  //chordFlag=true;
   
 }
 
@@ -1828,7 +1828,7 @@ function chordRecognitionTertian(){
       modo="Dim";
   }
   
-  chordFlag=true;
+  //chordFlag=true;
 
 }
 
@@ -1840,10 +1840,46 @@ function changeDisplayChord(nameChord){
   
 }
 
+  var numNotes;
+var chordFlag2 = false;
+
+
+function activateChordRecognition(){
+    if((!improLearnFlag && !improFlag)==true) {
+        chordFlag2=!chordFlag2;
+        changeColorChordRec();
+    }
+}
+
+function chordRec(){
+        
+        if(!midiFlag) {
+          numNotes=arpOrderedArray.length;
+        }
+  
+        else if(midiFlag)
+          numNotes=arpMidiOrderedArray.length;
+     
+        if(numNotes==3){
+          chordRecognitionTriad();
+        }
+    
+        if(numNotes==4){
+          chordRecognitionTertian();}
+        
+}
+
+
+function changeColorChordRec(){
+    
+ chordRecButton.classList.toggle("arpActive"); 
+    
+}
+
 
 function arpPlay(){
    
-  var numNotes;
+  //var numNotes;
   
   
   if(arpFlag){
@@ -1855,14 +1891,8 @@ function arpPlay(){
      numNotes=arpMidiOrderedArray.length;
     
     
-    if(numNotes==4 && !chordFlag){
-    chordRecognitionTertian();
-    
-  }
-  
-  if(numNotes==3 && !chordFlag){
-    chordRecognitionTriad();
-    
+  if(chordFlag2){
+      chordRec();
   }
     
     arpeggiatorPlay(numNotes);  
@@ -1873,15 +1903,17 @@ function arpPlay(){
 
 
 function improSetting(numNotes){
-  if(numNotes==4 && !chordFlag){
+  
+   if(numNotes==4 /*&& !chordFlag2*/){
     chordRecognitionTertian();
     
   }
   
-  if(numNotes==3 && !chordFlag){
+  if(numNotes==3 /*&& !chordFlag2*/){
     chordRecognitionTriad();
     
   }
+  
   
   if(numNotes==4 && !improLearnFlag){
     insertImproArray();
@@ -2240,6 +2272,8 @@ function setNewImproArray(t, sign){
     
     var a=0, k=0, trans=0, actTonica=0, changedScale=[];
     
+    removeColorImproScale();
+    
     if(sign==1){
         for(i=0;i<t;i++) trans += actualScale[(7-t+i)%actualScale.length];
         
@@ -2285,7 +2319,7 @@ function setNewImproArray(t, sign){
     
     
     
-    
+    changeColorImproScale();
     
     
 }
@@ -2531,7 +2565,7 @@ function arpeggiatorPlay(numNotes){
 
 document.onkeydown = function(e) {
   
-    
+    if(!midiFlag){
     var capsLock = e.getModifierState("CapsLock");
      
     
@@ -2546,11 +2580,22 @@ document.onkeydown = function(e) {
       
         
       
-      if(!midiFlag &&!arpFlag &&!improFlag && !improLearnFlag){
+      if(!midiFlag &&!arpFlag &&!improFlag && !improLearnFlag && !chordFlag2){
     attackFunction(e);
+  }
       
+    else if(!midiFlag &&!arpFlag &&!improFlag && !improLearnFlag && chordFlag2){
+    
+        k=keys.indexOf(e.key);
+        arpEventsArray[k] = e;
+        clickOnKeyBoard(steps[k])
+        changeDisplayChord("-");
+        insertNotes();
+        chordRec();
+        attackFunction(e);
   }
   
+      
       else if(arpFlag && !improLearnFlag){
     k=keys.indexOf(e.key);
     arpEventsArray[k] = e;
@@ -2558,12 +2603,10 @@ document.onkeydown = function(e) {
     changeDisplayChord("-");
     insertNotes();
     
-    
-    
   }
       
       else if(improLearnFlag && !startLearn){
-          
+          chordRec();
           noteToReleaseCount++;
           if(!triggerChord){
             k=keys.indexOf(e.key);
@@ -2609,6 +2652,8 @@ document.onkeydown = function(e) {
    
   }
   
+    }
+        
     }
 }
 
@@ -2919,6 +2964,7 @@ function improLearnChord(){
         else if(arpOrderedArray.length==4 && improFlag){
             chordRecognitionTertian();   
             insertImproArray();
+            changeColorImproScale();
             changeImproChordFlag=false;
             }
         }
@@ -2929,13 +2975,16 @@ function improLearnChord(){
         if(arpMidiOrderedArray.length==4 && improLearnFlag && !triggerChord){       //start learn
         chordRecognitionTertian();   //triggero l' accordo appena raggiungo 4 note
         insertImproArray();         //triggero la scala su cui far riferimento
+        changeColorImproScale();
         triggerChordFunction();
         }
         
         else if(arpMidiOrderedArray.length==4 && improFlag){
+            removeColorImproScale();            //rimuovo la scala che c' era prima del cambio
             chordRecognitionTertian();   
             insertImproArray();
             changeImproChordFlag=false;
+            changeColorImproScale();            //disegno la nuova scala
             }
         }
     
@@ -3050,6 +3099,9 @@ function cleanOrdered(){
 
 
 document.onkeyup = function(e) {
+
+    if(!midiFlag){
+        
     
   if(e.key=="CapsLock")
       capsLockFunction(e);
@@ -3068,6 +3120,14 @@ document.onkeyup = function(e) {
     arpIndex=0;   //everytime we delete a note, the arp starts from the beginning
     improIndex=0;
   }
+        
+    else if (chordFlag2 && !improLearnFlag && !improFlag) {
+       clickOnKeyBoard(steps[k])
+       arpEventsArray[k] = -1;
+       deleteNotes(e);
+       changeDisplayChord("-"); 
+        releaseFunction(e);
+    }
   
     else if(!arpFlag && !improFlag && !improLearnFlag){
     releaseFunction(e);
@@ -3100,7 +3160,7 @@ document.onkeyup = function(e) {
   
     }
   
-  
+    }
 }
 
 function deleteNotes(e){
@@ -3777,7 +3837,7 @@ function getMIDIMessage(midiMessage) {
      if(midiMessage.data[0]==144){
          
        k = midiArray.indexOf(midiMessage.data[1])
-       if(!arpFlag && !improFlag && !improLearnFlag){
+       if(!arpFlag && !improFlag && !improLearnFlag && !chordFlag2){
            
          attackMidi(midiMessage.data);
          clickOnKeyBoard(steps[k%24])
@@ -3795,10 +3855,20 @@ function getMIDIMessage(midiMessage) {
          
        }
          
-         
+        else if (chordFlag2 && !improLearnFlag && !improFlag && !arpFlag) {
+            arpMidiEventsArray[k] = midiMessage;
+            clickOnKeyBoard(steps[k%24])
+            changeDisplayChord("-");
+            insertNotes();
+            chordRec();
+            attackMidi(midiMessage.data);
+            
+        } 
          
          
          else if(improLearnFlag && !startLearn){
+             
+          chordRec();
           
           noteToReleaseCount++;
              
@@ -3842,11 +3912,20 @@ function getMIDIMessage(midiMessage) {
   
     if(midiMessage.data[0]==128){
        k = midiArray.indexOf(midiMessage.data[1])
-      if(!arpFlag && !improFlag && !improLearnFlag){
+      if(!arpFlag && !improFlag && !improLearnFlag && !chordFlag2){
         releaseMidi(midiMessage.data);
         clickOnKeyBoard(steps[k%24])
       }
       
+       else if(chordFlag2 && !improFlag && !improLearnFlag){
+            clickOnKeyBoard(steps[k%24])
+            arpMidiEventsArray[k] = -1;
+            deleteNotes(midiMessage);
+            changeDisplayChord("-");
+            releaseMidi(midiMessage.data);
+      }
+        
+        
       else if(arpFlag && !improLearnFlag){
         
         
@@ -4035,6 +4114,9 @@ function changeColorArp(){
 }
 
 function activateImpro(){
+    
+    
+    
     if(improFlag && isPlaying)   play();    //se è acceso spengo pure il metronomo
     
     improFlag=!improFlag;
@@ -4043,6 +4125,10 @@ function activateImpro(){
     
   if(improFlag && arpFlag){
     activateArp();          //se è accesso l' impro, è spento l' arpeggiatore
+  }
+    
+  if(!improLearnFlag && !chordFlag2){
+      changeColorChordRec();
   }
     
     if(improFlag && improLearnFlag){
@@ -4280,9 +4366,13 @@ function changeOctaveTones(){
 }
 
 function activateImproLearn(){
+    
     improLearnFlag = !improLearnFlag; 
     changeColorImproLearn();
     
+    if(!improFlag && !chordFlag2){
+    changeColorChordRec();
+    }
     
     changeModeDisplay(-1,-1);
     
@@ -4292,7 +4382,11 @@ function activateImproLearn(){
     }
     
     if(improFlag && improLearnFlag){
-        activateImpro();          //se è accesso l' impro, è spento l' arpeggiatore
+        activateImpro();          //se è acceso l' impro, è spento l' arpeggiatore
+  }
+    
+      if(improLearnFlag && arpFlag){
+    activateArp();          //se è accesso il learning, è spento l' arpeggiatore
   }
 }
 
@@ -4335,7 +4429,7 @@ function endLearningTime(){
         calculateProbabilities();
         
         
-        
+        removeColorImproScale();
         
         changeDisplayChord("-");
         
@@ -5887,3 +5981,50 @@ microBit.onBleNotify(function(){
     accZ = microBit.getAccelerometer().z;
 })
 
+function changeColorImproScale()
+{
+    for(i=0;i<improArray.length;i++){
+        if(!midiFlag)
+            k = keys.indexOf(improArray[i].key);
+        else
+            k = (midiArray.indexOf(improArray[i].data[1]))%24;
+        
+        
+            onColorImpro(steps[k%24]);
+        
+        
+            
+    
+    }
+    
+}
+
+function removeColorImproScale()
+{
+    for(i=0;i<improArray.length;i++){
+        if(!midiFlag)
+            k = keys.indexOf(improArray[i].key);
+        else
+            k = (midiArray.indexOf(improArray[i].data[1]))%24;
+        
+        
+            offColorImpro(steps[k%24]);
+        
+        
+            
+    
+    }
+    
+}
+
+function onColorImpro(step){
+    element = document.createElement("div");
+    element.classList.add("impro-step")
+    step.appendChild(element);
+    
+}
+
+function offColorImpro(step){
+    if(step.hasChildNodes()==true)
+        step.removeChild(step.childNodes[0]);
+}

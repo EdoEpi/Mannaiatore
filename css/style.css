@@ -1532,11 +1532,36 @@ canvas{
     border-right: 2px solid #404040;
 }
 
+.chordRecLabel{
+  position: relative;
+  width:150px;
+  height:45px;
+    //margin-bottom: 3px; 
+  text-align:center;
+  color: white;
+  left: 5px;
+      font-family: "verdana";
+  border-bottom: 2px solid #404040;
+
+}
+
+.chordRecButton{
+  position:relative;
+  width:110px;
+  height:30px;
+  text-align:center;
+  top:5px;
+  border: solid black 2px;
+  border-radius:5px;
+  font-size:14px;
+}
+
 
 .timerContainer{
     position:relative;
-    width:160px;
+    width:55px;
     height:75px;
+    left: 5px;
     display:inline-block;    
     text-align:center;   
 }
@@ -1546,18 +1571,19 @@ canvas{
     
     position:relative;
     width:160px;
-    height:100px;
+    height:96px;
     display:inline-block;    
-    text-align:center;   
+    text-align:center; 
+    top:4px;
 }
 
 .noteDispContainer{
 
     position:relative;
-    width:160px;
+    width:50px;
     height:70px;
     display:inline-block;    
-    text-align:center;   
+    text-align:center; 
 }
 
 
@@ -1565,7 +1591,7 @@ canvas{
 .chordDisplay{
   
   background-color:black;
-  height:80px;
+  height:70px;
   width:110px;
   left:25px;
   position:relative;
@@ -1578,7 +1604,6 @@ canvas{
 .timerDisplay{
   width:50px;
   height:50px;
-  left:55px;
   background-color:black;
   color:white;
   position:relative;
@@ -1590,13 +1615,11 @@ canvas{
 .noteDisplay{
   width:50px;
   height:50px;
-  left:55px;
   background-color:black;
   color:white;
   position:relative;
   text-align:center;
   font-family: "verdana";
-    
   
 }
 
@@ -1654,6 +1677,19 @@ canvas{
     font-family: "Verdana"; 
     font-size: 15px; 
     
+    
+    
+}
+
+
+.impro-step{
+    position:relative;
+    background-color:green;
+    top:80%;
+    left:40%;
+    border-radius:50px;
+    height:10px;
+    width:10px;
     
     
 }
