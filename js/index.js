@@ -2588,7 +2588,7 @@ document.onkeydown = function(e) {
     
         k=keys.indexOf(e.key);
         arpEventsArray[k] = e;
-        clickOnKeyBoard(steps[k])
+        //clickOnKeyBoard(steps[k])
         changeDisplayChord("-");
         insertNotes();
         chordRec();
@@ -2958,14 +2958,16 @@ function improLearnChord(){
         if(arpOrderedArray.length==4 && improLearnFlag && !triggerChord){       //start learn
         chordRecognitionTertian();   //triggero l' accordo appena raggiungo 4 note
         insertImproArray();         //triggero la scala su cui far riferimento
+        changeColorImproScale();
         triggerChordFunction();
         }
     
         else if(arpOrderedArray.length==4 && improFlag){
+            removeColorImproScale();
             chordRecognitionTertian();   
             insertImproArray();
-            changeColorImproScale();
             changeImproChordFlag=false;
+            changeColorImproScale();
             }
         }
     
@@ -3122,7 +3124,7 @@ document.onkeyup = function(e) {
   }
         
     else if (chordFlag2 && !improLearnFlag && !improFlag) {
-       clickOnKeyBoard(steps[k])
+       //clickOnKeyBoard(steps[k])
        arpEventsArray[k] = -1;
        deleteNotes(e);
        changeDisplayChord("-"); 
