@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./img/mainsynth.png" alt="Size Limit example" width="754" height="550">
+  <img src="./img/mainsynth.png" alt="Size Limit example" width="900" height="500">
 </p>
 
 
