@@ -79,6 +79,8 @@ Find it online: http://mannaiatorproject.surge.sh/
 
 - The name of the chord recognized is displayed on the display CHORD.
 
+- To activate the chord recognition, you can click on the button ACTIVATE.
+
 <p align="center"> <img src="./img/chordrecog.png" height="220"></p>
 
 
@@ -89,7 +91,7 @@ Find it online: http://mannaiatorproject.surge.sh/
     - Up and Down
     - Down and Up
 
-- With the OCTAVE button, you can choose the number of octaves that the arpeggiator goes through, going from one octave, up to four. This allows us to have a total of 16 different types of arpeggiator for every chord played. 
+- With the OCTAVE button, you can choose the number of octaves that the arpeggiator goes through, going from one octave, up to four. This allows us to have a total of 16 different types of arpeggiator for every chord played. (This feature is available only in MIDI mode)
 - The aforementioned CHORD RECOGNITION display shows the current chord performed by the arpeggiator. 
 
 <p align="center"> <img src="./img/arp.png" height="200"></p>
@@ -119,11 +121,13 @@ The scale is composed of 7 notes, and it starts from the tonic of the chord reco
 
 3.Then it will start a 60 second timer where you can play everything you want. The improvisation algorithm recognizes only the notes that match with the scale of the chord triggered before.
 
-4.The algorithm learns how many times we play a certain note after another and the distance in time between each note played. When the time has run out or you press the LEARNING button again, the variables that will be used in the Markov-chain algorithm will be updated.
+<p align="center"> <img src="./img/timer.png" height="80"></p>
+
+4.The algorithm learns how many times we play a certain note after another, the difference in time from the attack to the release of a certain note (the duration of the note) and the distance in time between each note played. When the time has run out or you press the LEARNING button again, the variables that will be used in the Markov-chain algorithm will be updated.
 
 5.The algorithm that learns the distances in time between the notes has the BPM of the metronome as a reference, so during the learning time it is recommended to play with the metronome turned on, in order to have a precise timing.
 
-6.The distances that can be recognized, after a certain approximation, are:	
+6.The lengths of the notes and their distances that can be recognized, after a certain approximation, are:	
 - Whole note
 - Half note
 - Quarter note
@@ -136,13 +140,15 @@ The scale is composed of 7 notes, and it starts from the tonic of the chord reco
 
 2.After you play a note, the Mannaiator starts playing, improvising on what you played before.
 
-3.The improvisation is based on a Markov-chain algorithm, that calculates the next note to play and after how much time it can be played. This algorithm works on the probabilities calculated by the algorithm used in the learning mode.
+3.The improvisation is based on a Markov-chain algorithm, that calculates the next note to play, after how much time it can be played and its duration . This algorithm works on the probabilities calculated by the algorithm used in the learning mode.
 
 4.The current note performed by the improviser is displayed on the display NOTE.
 
+<p align="center"> <img src="./img/note.png" height="80"></p>
+
 5.During the improvisation, it is possible to play something alongside the improviser. The idea is to perform a duet with the Mannaiator. 
 
-6.If you play 4 notes together during the improvisation mode, Mannaiator will continue improvising in the scale of the new triggered chord, using the same variables learned before to decide what is the next note to play and the distance in time after that it can be played. So it will play the same improvisation in a different key.
+6.If you play 4 notes together during the improvisation mode, Mannaiator will continue improvising in the scale of the new triggered chord, using the same variables learned before to decide what is the next note to play, its duration and the distance in time after that it can be played. So it will play the same improvisation in a different key.
 
 
 
