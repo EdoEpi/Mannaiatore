@@ -2365,164 +2365,32 @@ async function improSound(){
     prevLearnIndex = learnIndex;
     
   if(!midiFlag){
-    attackFunction(improArray[learnIndex]);
-    notesToRelease[learnIndex]++;
-    if(lastFlag==false){
-        releaseFunction(improArray[learnIndex]);
-        notesToRelease[learnIndex]--;
-    }
-    
       
+    attackFunction(improArray[learnIndex]);
     changeDisplayNote(improArray[learnIndex]);
     currentDuration=improvvisatorDurationTime(learnIndex);
+    timeRel = convertNumToTime(currentDuration);
+    await sleep(timeRel);                               //aspetta il tempo relativo alla release
+    releaseFunction(improArray[learnIndex]);
     
-    if(lastFlag==true){
-          
-        lastFlag=false;
-        lastGlobal = improArray[learnIndex];
-        timeRel = convertNumToTime(currentDuration);
-        
       
-        durInterval = setTimeout(tryRelFunction, timeRel/1.45);  
-      
-        function tryRelFunction(){
-            releaseFunction(lastGlobal);
-            notesToRelease[learnIndex]--;
-            lastFlag=true;
-        }
-    }   
-    
   }
   
   else if(midiFlag){
       
-      
-    
-        
-        
-        /*actLearnIndex = learnIndex;
-        
-        attackMidi(improArray[actLearnIndex].data);
-        
-        
-        notesToRelease[actLearnIndex]++;
-      
-        if(lastFlag==false)   {
-            releaseMidi(improArray[actLearnIndex].data);
-            notesToRelease[actLearnIndex]--;
-        }
-          
-        
-          
-        changeDisplayNote(improArray[actLearnIndex]);
-        currentDuration=improvvisatorDurationTime(actLearnIndex);
-        
-        
-          
-          
-          if(lastFlag==true){
-              
-            
-            notesToRelease[actLearnIndex]--;
-            
-              
-            timeRel = convertNumToTime(currentDuration);
-            
-          
-            setTimeout(function(){tryRelFunctionMidi(actLearnIndex);}, timeRel/2);  
-          
-            function tryRelFunctionMidi(param1){
-                
-                    console.log(param1);
-                    lastFlag=false;
-                    releaseMidi(improArray[param1].data);
-                
-                
-                    //notesToRelease[actLearnIndex]++;
-                
-                    lastFlag=true;
-
-                
-                
-            }
-        } 
-      
-        
-    }*/  
-      
-        /*actLearnIndex = learnIndex;
-        attackMidi(improArray[actLearnIndex].data);
-        changeDisplayNote(improArray[actLearnIndex]);
-        currentDuration=improvvisatorDurationTime(actLearnIndex);
-        timeRel = convertNumToTime(currentDuration);
-        
-        if(arrayGlob[iG]==undefined)
-            arrayGlob[iG]=actLearnIndex;
-        
-        
-        setTimeout(function(){tryRelFunctionMidi(iG);}, timeRel/1.5);  
-          
-            function tryRelFunctionMidi(param1){
-                    
-                    console.log(param1);
-                    //lastFlag=false;
-                    
-                    releaseMidi(improArray[param1].data);
-                    arrayGlob.splice(0,param2);
-                    //iG--;
-                    iG++;
-                
-                    //notesToRelease[actLearnIndex]++;
-                
-                    lastFlag=true;
-
-                
-                
-            }*/
-        
-      /*else{
-          
-          attackMidi(improArray[learnIndex].data);
-          changeDisplayNote(improArray[learnIndex]);
-          releaseMidi(improArray[learnIndex].data);
-      }*/
-    
-     
+       
     attackMidi(improArray[learnIndex].data, 1);
     changeDisplayNote(improArray[learnIndex]);
     currentDuration=improvvisatorDurationTime(learnIndex);
     timeRel = convertNumToTime(currentDuration);
-    await sleep(timeRel);
+    await sleep(timeRel);                               //aspetta il tempo relativo alla release
     releaseMidi(improArray[learnIndex].data, 1);
-    
-    
-    //async function demo() {
-    //    console.log('Taking a break...');
-    //    await sleep(timeRel);
-    //    console.log('Two seconds later');
-    //}
-
-
       
-      
-    
-      
-    //if(midiFlag)    releaseAll();  
-    
-    
-  
-    
-    
-    
-    
-    
-    
-    learnIndex = improvvisatorLearn()
-    learnTimeIndex = improvvisatorLearnTime(prevLearnIndex, learnIndex);
-    
   }
     
-    
+
+    learnIndex = improvvisatorLearn()               //impara l' indice della nuova nota da suonare
+    learnTimeIndex = improvvisatorLearnTime(prevLearnIndex, learnIndex);        //impara la distanza tra una nota e l altra
     
     
 }
@@ -2530,28 +2398,6 @@ async function improSound(){
 function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
      }
-
-function releaseAll(){
-    
-    
-    
-    for(i=0;i<notesToRelease.length;i++){
-        
-        while(notesToRelease[i]>0){
-                notesToRelease[i]--;
-                releaseMidi(improArray[i].data, 0);
-                k = midiArray.indexOf(improArray[i].data[1]);
-                clickOnKeyBoard(steps[k%24])
-                
-            
-            
-            
-        }
-        
-    }
-    
-}
-
 
 
 function convertNumToTime(x){
@@ -2566,7 +2412,7 @@ function convertNumToTime(x){
     else if (x == 8)   return halfNote*1000;
     else if (x == 4)   return quarterNote*1000;
     else if (x == 2)   return eighthNote*1000;
-    else if (x == 1)   return 0;
+    else if (x == 1)   return sixteenthNote*300;
 }
 
 function changeDisplayNote(event){
@@ -2823,7 +2669,6 @@ document.onkeydown = function(e) {
           
           if(isPlaying) {
               attackFunction(e);
-              releaseFunction(e);
           }
           
           
@@ -3335,6 +3180,9 @@ document.onkeyup = function(e) {
         deleteNotes(e);
         changeDisplayChord("-");
         
+        if(isPlaying){
+            releaseFunction(e);
+        }
          
         
     }
@@ -4398,6 +4246,7 @@ function activateArp(){
         document.getElementById("selectOctaveArp").value = 1;
         numOctaves = parseInt(1);
     }
+    
         
 }
 
