@@ -4281,7 +4281,22 @@ function activateImpro(){
   changeModeDisplay(-1,-1);
     changeDisplayNote("-");
     
+    removeColorImproScale();            //rimuove i pallini che indicano l ultima scala
+    
+    removeColorClickedStep();       //rimuove i clicked step (se ci sono)
+        
     notesToRelease=[0,0,0,0,0,0,0];
+}
+
+function removeColorClickedStep(){      //funzione per colorare eventuali tasti che sono ancora rossi
+    
+    for (i=0; i<steps.length; i++){
+        
+        if(steps[i].classList.contains("clicked-step"))
+            steps[i].classList.remove("clicked-step");
+    }
+    
+    
 }
 
 function changeColorImpro(){
