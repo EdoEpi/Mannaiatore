@@ -1879,7 +1879,7 @@ function arpPlay(){
     if(!midiFlag)
     numNotes=arpOrderedArray.length;
   
-  else if(midiFlag)
+    else if(midiFlag)
      numNotes=arpMidiOrderedArray.length;
     
     
@@ -4228,9 +4228,15 @@ function changeColorMidi(){
   midiButton.classList.toggle("midiActive");
 }
 
+var bothFlag = false;
 
 function activateArp(){
   arpFlag=!arpFlag;
+    
+    
+    muteFlag1=true;
+    changeColorMute(1);
+    
   if(arpFlag && improFlag){
     activateImpro();
   }
@@ -4259,6 +4265,8 @@ function activateImpro(){
     
     improFlag=!improFlag;
     
+    muteFlag1=true;
+    changeColorMute(1);
    
     
   if(improFlag && arpFlag){
@@ -6159,10 +6167,6 @@ function scheduleNote( beatNumber, time ) {
         }
      }
 
-    if(muteFlag1==false && !improFlag &&!arpFlag){
-        osc.start( time );
-        osc.stop( time + noteLength );
-    }
     
     
     
@@ -6179,6 +6183,12 @@ function scheduleNote( beatNumber, time ) {
         learnTimeIndex--;
     }
     
+    if(muteFlag1==false){
+        osc.start( time );
+        osc.stop( time + noteLength );
+    }
+    
+
         
 }
 
