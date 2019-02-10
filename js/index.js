@@ -3164,7 +3164,7 @@ document.onkeyup = function(e) {
         
         else if (chordFlag2 && !improLearnFlag && !improFlag) {
        //clickOnKeyBoard(steps[k])
-      console.log("ECCOMI");
+     // console.log("ECCOMI");
        arpEventsArray[k] = -1;
        deleteNotes(e);
        changeDisplayChord("-"); 
@@ -6348,7 +6348,7 @@ function changeColorImproScale()
         else
             k = (midiArray.indexOf(improArray[i].data[1]))%24;
         
-            console.log(k)
+            //console.log(k)
             onColorImpro(steps[k%24]);
         
         
