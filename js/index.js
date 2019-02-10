@@ -2263,6 +2263,8 @@ function setNewImproArray(t, sign){
     
     removeColorImproScale();
     
+    magicFunction();
+    
     if(sign==1){
         for(i=0;i<t;i++) trans += actualScale[(7-t+i)%actualScale.length];
         
