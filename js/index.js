@@ -3026,6 +3026,12 @@ function magicFunction(){
     for(i=0;i<midiO1ImproArray.length; i++){
         if(midiO1ImproArray[i]!=undefined)
             midiO1ImproArray[i].stop();
+        
+        if(midiO2ImproArray[i]!=undefined)
+            midiO2ImproArray[i].stop();
+        
+        if(midiO3ImproArray[i]!=undefined)
+            midiO3ImproArray[i].stop();
     }
     
 }
