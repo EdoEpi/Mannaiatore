@@ -3270,6 +3270,7 @@ function deleteNotes(e){
 
 
 function attackFunction(e){
+    
   k=keys.indexOf(e.key);
     keysTriggered[k] = e;
   
@@ -4104,6 +4105,7 @@ function setDurationNote(note,i){
 }
 
 function attackMidi(data, zeta){           //zeta==1 roba suonata durante l' impro del pc
+    
     k=data[1];
     
     if((improFlag && isPlaying) || improLearnFlag){
@@ -6067,6 +6069,7 @@ function scheduleNote( beatNumber, time ) {
     metronomeGain.connect(audioContext.destination);
     metronomeGain.gain.value=metronomeActValue;
     
+    
     if (noteResolution2==0 || (noteResolution2==1 && beatNumber%2==0) || (noteResolution2==2 && beatNumber%4==0)) arpPlay();
     
     if(metric==0){          
@@ -6198,8 +6201,10 @@ function scheduleNote( beatNumber, time ) {
         learnTimeIndex--;
     }
     
+   time = time - 0.05;
+    console.log(time);
     if(muteFlag1==false){
-        osc.start( time );
+        osc.start( time  );
         osc.stop( time + noteLength );
     }
     
