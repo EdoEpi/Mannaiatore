@@ -3004,11 +3004,17 @@ function improLearnChord(){
         }
         
         else if(arpMidiOrderedArray.length==4 && improFlag){
+            magicFunction();            //stacco tutte le note
+            
+            
+            
             removeColorImproScale();            //rimuovo la scala che c' era prima del cambio 
-            chordRecognitionTertian();   
+            chordRecognitionTertian();
             insertImproArray();
             changeImproChordFlag=false;
             changeColorImproScale();            //disegno la nuova scala
+            
+            
             }
         }
     
@@ -3016,7 +3022,13 @@ function improLearnChord(){
 }
     
     
-
+function magicFunction(){
+    for(i=0;i<midiO1ImproArray.length; i++){
+        if(midiO1ImproArray[i]!=undefined)
+            midiO1ImproArray[i].stop();
+    }
+    
+}
 
 function triggerChordFunction(){
     triggerChord=true;
@@ -4003,6 +4015,7 @@ function getMIDIMessage(midiMessage) {
             if(isPlaying)
                 {
                     releaseMidi(midiMessage.data, 0);
+                    
                 }
             
         }
@@ -4216,6 +4229,9 @@ function releaseMidi(data, zeta){
         release3(freqM, index, releaseArray[rel3], zeta);
        
     }
+    
+    if(improFlag && isPlaying)
+        removeColorClickedStep();    //rimuovo eventuali colori
   
 }
 
@@ -6202,7 +6218,6 @@ function scheduleNote( beatNumber, time ) {
     }
     
    time = time - 0.05;
-    console.log(time);
     if(muteFlag1==false){
         osc.start( time  );
         osc.stop( time + noteLength );
