@@ -2174,7 +2174,8 @@ function findFirstLearnIndex(){
 function changeImproArray(){
     
     var indexTraslation, sign=0;
-        
+        magicFunction();
+    
     
     if(accX>=-2023 && accX<-900){
         indexTraslation=6;
@@ -2263,7 +2264,6 @@ function setNewImproArray(t, sign){
     
     removeColorImproScale();
     
-    magicFunction();
     
     if(sign==1){
         for(i=0;i<t;i++) trans += actualScale[(7-t+i)%actualScale.length];
