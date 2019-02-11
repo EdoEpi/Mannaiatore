@@ -178,6 +178,7 @@ This mode works thanks to accelerometer of the microbit and the microbit.js libr
 - The code is written in HTML5, CSS and JAVASCRIPT
 - The main IDEs to code are Brackets and Codepen.
 - We used microbit.js library for bluetooth microbit connection, and Firebase to save the sound presets.
+- The presentation video is available on https://www.youtube.com/watch?v=aa53g_rjSvI&t=1s
 
 
 
